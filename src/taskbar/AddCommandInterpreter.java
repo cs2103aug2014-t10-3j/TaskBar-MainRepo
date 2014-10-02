@@ -45,7 +45,7 @@ public class AddCommandInterpreter {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 			LocalDateTime deadline = LocalDateTime.parse(date, formatter);
 			
-			Task deadlineTask = new DeadlineTask(description, labels, importance, deadline);						
+			DeadlineTask deadlineTask = new DeadlineTask(description, labels, importance, deadline);						
 			
 			return deadlineTask;
 			
@@ -57,7 +57,7 @@ public class AddCommandInterpreter {
 			LocalDateTime startTime = LocalDateTime.parse(start, formatter);
 			LocalDateTime endTime = LocalDateTime.parse(end, formatter);
 			
-			Task event = new Event(description, labels, importance, startTime, endTime);
+			Event event = new Event(description, labels, importance, startTime, endTime);
 			
 			return event;			
 		} else return null;		
