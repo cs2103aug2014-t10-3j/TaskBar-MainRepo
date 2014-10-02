@@ -1,10 +1,10 @@
 /**
  * This class handles the input from user and translate the raw input into a task object.
- * Two backslashes are used to separate the information
+ * One backslash is used to separate the information
  * CURRENTLY FOR LABELS: USING ONE LABEL FOR EACH TASK, WILL CONTINUE TO WORK ON STRING ARRAYS FOR LABELS
- * TASK: Input format for user: add\\description\\labels\\importance
- * DEADLINETASK: Input format for user: add\\description\\labels\\importance\\dd.MM.yyyy HH.mm[deadline]
- * EVENT: Input format for user: add\\description\\labels\\importance\\dd.MM.yyyy HH:mm[start time]\\dd.MM.yyyy HH:mm[end time]
+ * TASK: Input format for user: add\description\labels\importance
+ * DEADLINETASK: Input format for user: add\description\labels\importance\dd.MM.yyyy HH.mm[deadline]
+ * EVENT: Input format for user: add\description\labels\importance\dd.MM.yyyy HH:mm[start time]\dd.MM.yyyy HH:mm[end time]
  * @author Xiaofan
  *
  */
