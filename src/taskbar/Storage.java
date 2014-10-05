@@ -15,18 +15,19 @@ public class Storage {
 		}
 		public int deleteTask(Task taskFromLogic){			
 			for(int i = 0 ; i < allTasks.size() ; i++) {
-				if ( allTasks.get(i).equals(taskFromLogic)) {  // how to check 2 tasks are equal? should have a toString() in Task to check?
+				if ( allTasks.get(i).equals(taskFromLogic)) {  
 					allTasks.remove(i);
 					return 1;
 				}
 			}			  
+			
 			return 0;   //means no such task found
 		}
 		
 		public int updateTask(Task taskA, Task taskB) {
 		//Overwrite taskA with taskB
 			for(int i = 0 ; i < allTasks.size() ; i++){
-				if (allTasks.get(i).equals(taskA)) {		//check with toString()
+				if (allTasks.get(i).equals(taskA)) {		
 					allTasks.set(i,taskB);
 					return 1;
 				}		  	 
