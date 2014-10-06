@@ -1,11 +1,10 @@
 package taskbar;
-
 import java.util.ArrayList;
+
 
 import taskbar.Task;
 
 public class StorageManager {
-	public class Storage {
 	
 		private ArrayList<Task> allTasks = new ArrayList<Task>();
 		 	
@@ -81,7 +80,5 @@ public class StorageManager {
 		}
 		
 		
-	}
-
 }
 
