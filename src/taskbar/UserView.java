@@ -52,9 +52,11 @@ public class UserView {
 	 */
 	void update(){
 		String toBeDisplayed = "";
+		
 		if(!displayData.listOfTasksIsNull()){
 			toBeDisplayed += displayData.getPrompt() + "\n";
 		}
+		
 		if(!displayData.promptIsNull()){
 			int counter = 1; //TODO refactor the listOfTasks to incoorperate 
 					//serial number, decouple this hidden coupling between 
@@ -65,6 +67,8 @@ public class UserView {
 			}
 		}
 		
+		ta.setText(toBeDisplayed);
+		jtf.selectAll();
 	}
 
 	public static void main(String[] args) {

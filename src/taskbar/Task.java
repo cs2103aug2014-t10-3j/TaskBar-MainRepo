@@ -3,17 +3,19 @@ package taskbar;
 import java.util.ArrayList;
 
 public class Task {
+	private String description;
+	private boolean isDone;
+	private ArrayList<String> labels;
+	private int importance;
+	
 	public Task(String description, ArrayList<String> labels, int importance) {
 		super();
 		this.description = description;
 		this.labels = labels;
 		this.importance = importance;
+		this.isDone = false;
 	}
-	
-	private String description;
-	private boolean isDone;
-	private ArrayList<String> labels;
-	private int importance;
+
 	
 	public String getDescription() {
 		return description;

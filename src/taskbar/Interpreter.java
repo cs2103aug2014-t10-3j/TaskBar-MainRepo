@@ -17,21 +17,13 @@ import java.util.ArrayList;
 
 public class Interpreter {
 	
-	private String description; //description of task
-	private ArrayList<String> labels; //category of task
-	private int importance; //importance of task, represented by integers
-	
-	//interpret the add command and return a Task or DeadlineTask or Event
-	public Interpreter() {
-		labels = new ArrayList<String>();
-	}
-	
-	public Task interpretAdd(String string) {
+	public static Task interpretAdd(String string) {
 		String unsplitString = string;
 		String[] itemsOfTask = unsplitString.split("\\\\");
-		description = itemsOfTask[1];
+		String description = itemsOfTask[1];
+		ArrayList<String> labels = new ArrayList<String>();
 		labels.add(itemsOfTask[2]);
-		importance = Integer.parseInt(itemsOfTask[3]);
+		int importance = Integer.parseInt(itemsOfTask[3]);
 		
 		if(itemsOfTask.length == 4){
 			

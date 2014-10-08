@@ -17,7 +17,19 @@ public class Controller implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-    	if (userView.jtf.getText().equals("view")) {
+    	String userInput = userView.jtf.getText();
+    	
+    	String command = userInput.split(" ", 2)[0];
+    	
+    	switch(command){
+    	case "view":
+    	case "delete":
+    		break;
+    	case "update":
+    	case "
+    	}
+		
+		if (userView.jtf.getText().equals("view")) {
     		userView.ta.setText(storage.displayTask());
     	} else {
     		String cmd =userView.jtf.getText();
@@ -26,7 +38,6 @@ public class Controller implements ActionListener {
     		storage.addTask(taskToAdd);
     		userView.ta.setText("TASK ADDED SUCCESSFULLY\n\n" + taskToAdd.getDescription());	
     	}
-    	userView.jtf.selectAll();
 	}
 
 }
