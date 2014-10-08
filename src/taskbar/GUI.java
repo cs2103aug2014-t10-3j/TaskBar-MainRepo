@@ -15,18 +15,7 @@ public class GUI implements ActionListener{
     private JTextField jtf;
     private JTextArea ta;
     
-    
-	public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                new GUI().createAndShowUI();
-            }
-        });
-    }
-
-    private void createAndShowUI() {
+    void createAndShowUI() {
         final JFrame frame = new JFrame("TaskBar");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
