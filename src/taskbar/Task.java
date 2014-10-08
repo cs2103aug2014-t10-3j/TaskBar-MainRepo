@@ -33,11 +33,30 @@ public class Task {
 	public void setLabels(ArrayList<String> labels) {
 		this.labels = labels;
 	}
+	public int getNumLabels(){
+		return labels.size();
+	}
 	public int getImportance() {
 		return importance;
 	}
 	public void setImportance(int importance) {
 		this.importance = importance;
+	}
+	public String toString()
+	{
+		String thisString = "";
+		thisString += Discription;
+		thisString += "\n";
+		thisString += Integer.toString(labels.size());
+		thisString += "\n";
+		for(int i=0; i<labels.size(); i++){
+			thisString += labels.get(i);
+			thisString += "\n";
+		}
+		thisString += "\n";
+		thisString += Integer.toString(importance);
+		
+		return thisString;
 	}
 	/* commented out because our intended equals() method agrees with java.lang.Object.
 	public boolean equals(Object obj) {

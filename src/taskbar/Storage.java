@@ -47,7 +47,7 @@ public class Storage {
 		public ArrayList<Task> searchTask(String keyWord) {
 			
 			ArrayList<Task> searchedTasks = new ArrayList<Task>();
-		  
+		
 			for (int i = 0; i < allTasks.size() ; i++){
 		  		if(allTasks.get(i).getDiscription().contains(keyWord)){
 		   		searchedTasks.add(allTasks.get(i));
