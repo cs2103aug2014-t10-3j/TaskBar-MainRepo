@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class FileHandler{
 	
 		
-		public ArrayList<Task> readTask(Task deleteTask)throws IOException{
+		public ArrayList<Task> readFromFile(Task deleteTask)throws IOException{
 			FileReader reader = new FileReader("database.txt");
 			BufferedReader br = new BufferedReader(reader);
 			ArrayList<Task> allTasks = new ArrayList<Task>();
@@ -41,7 +41,7 @@ public class FileHandler{
 		}
 	
 		
-		public void WriteFile(ArrayList<Task> taskAL) throws IOException{
+		public void writeToFile(ArrayList<Task> taskAL) throws IOException{
 			try {
 
 			    FileWriter outFile = new FileWriter("database.txt");
