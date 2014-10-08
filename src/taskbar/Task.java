@@ -3,23 +3,23 @@ package taskbar;
 import java.util.ArrayList;
 
 public class Task {
-	public Task(String discription, ArrayList<String> labels, int importance) {
+	public Task(String description, ArrayList<String> labels, int importance) {
 		super();
-		Discription = discription;
+		this.description = description;
 		this.labels = labels;
 		this.importance = importance;
 	}
 	
-	private String Discription;
+	private String description;
 	private boolean isDone;
 	private ArrayList<String> labels;
 	private int importance;
 	
-	public String getDiscription() {
-		return Discription;
+	public String getdescription() {
+		return description;
 	}
-	public void setDiscription(String discription) {
-		Discription = discription;
+	public void setdescription(String description) {
+		this.description = description;
 	}
 	public boolean isDone() {
 		return isDone;
@@ -43,7 +43,7 @@ public class Task {
 	public boolean equals(Object obj) {
 		if (obj instanceof Task) {
 			Task task = (Task) obj;
-			return this.getDiscription().equals(task.getDiscription());
+			return this.getdescription().equals(task.getdescription());
 		} else {
 			return false;
 		}
