@@ -2,7 +2,7 @@ package taskbar;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ReadWriteFiles{
+public class FileHandler{
 	
 		
 		public ArrayList<Task> readTask(Task deleteTask)throws IOException{
