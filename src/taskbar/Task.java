@@ -39,7 +39,7 @@ public class Task {
 	public void setImportance(int importance) {
 		this.importance = importance;
 	}
-	
+	/* commented out because our intended equals() method agrees with java.lang.Object.
 	public boolean equals(Object obj) {
 		if (obj instanceof Task) {
 			Task task = (Task) obj;
@@ -47,6 +47,6 @@ public class Task {
 		} else {
 			return false;
 		}
-	}
+	}*/
 }
 
