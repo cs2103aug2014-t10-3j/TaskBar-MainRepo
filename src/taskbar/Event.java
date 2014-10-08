@@ -7,9 +7,9 @@ public class Event extends Task {
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
 	
-	public Event(String discription, ArrayList<String> labels, int importance, LocalDateTime start, 
+	public Event(String description, ArrayList<String> labels, int importance, LocalDateTime start, 
 			LocalDateTime end) {
-		super(discription, labels, importance);
+		super(description, labels, importance);
 		startTime = start;
 		endTime = end;
 	}
