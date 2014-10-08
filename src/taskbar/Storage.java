@@ -39,7 +39,7 @@ public class Storage {
 			else {
 				String text = "";
 				for (int i=0; i<allTasks.size(); i++) {
-					text += allTasks.get(i).getdescription() + "\n";
+					text += allTasks.get(i).getDescription() + "\n";
 				}
 				return text;
 			}			
@@ -49,7 +49,7 @@ public class Storage {
 			ArrayList<Task> searchedTasks = new ArrayList<Task>();
 		  
 			for (int i = 0; i < allTasks.size() ; i++){
-		  		if(allTasks.get(i).getdescription().contains(keyWord)){
+		  		if(allTasks.get(i).getDescription().contains(keyWord)){
 		   		searchedTasks.add(allTasks.get(i));
 		  	}
 		   }

@@ -22,7 +22,7 @@ public class Controller implements ActionListener {
     		Interpreter cmdInterpreter = new Interpreter();
     		Task taskToAdd = cmdInterpreter.interpretAdd(cmd);
     		storage.addTask(taskToAdd);
-    		userView.ta.setText("TASK ADDED SUCCESSFULLY\n\n" + taskToAdd.getDiscription());	
+    		userView.ta.setText("TASK ADDED SUCCESSFULLY\n\n" + taskToAdd.getDescription());	
     	}
     	userView.jtf.selectAll();
 	}
