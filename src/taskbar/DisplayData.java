@@ -2,11 +2,11 @@ package taskbar;
 
 import java.util.ArrayList;
 
-public class Display {
+public class DisplayData {
 	private String prompt;
 	private ArrayList<Task> listOfTasks;
 	
-	public Display(String prompt, ArrayList<Task> listOfTasks){
+	public DisplayData(String prompt, ArrayList<Task> listOfTasks){
 		this.prompt = prompt;
 		this.listOfTasks = listOfTasks;
 	}
