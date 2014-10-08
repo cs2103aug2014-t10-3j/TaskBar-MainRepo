@@ -7,10 +7,12 @@ import javax.swing.SwingUtilities;
 
 public class Controller implements ActionListener {
 	private UserView userView;
+	private DisplayData displayData;
 	static Storage storage = new Storage();
 	
-	Controller(UserView uv){
+	Controller(UserView uv, DisplayData dd){
 		userView = uv;
+		displayData = dd;
 	}
 
 	@Override

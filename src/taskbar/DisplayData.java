@@ -6,9 +6,16 @@ public class DisplayData {
 	private String prompt;
 	private ArrayList<Task> listOfTasks;
 	
-	public DisplayData(String prompt, ArrayList<Task> listOfTasks){
-		this.prompt = prompt;
-		this.listOfTasks = listOfTasks;
+	public DisplayData(){
+		super();
+	}
+	
+	public boolean promptIsNull(){
+		return prompt == null;
+	}
+	
+	public boolean listOfTasksIsNull(){
+		return listOfTasks == null;
 	}
 
 	public String getPrompt() {
