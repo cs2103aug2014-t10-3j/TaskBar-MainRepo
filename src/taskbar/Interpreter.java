@@ -15,14 +15,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
-public class AddCommandInterpreter {
+public class Interpreter {
 	
 	private String description; //description of task
 	private ArrayList<String> labels; //category of task
 	private int importance; //importance of task, represented by integers
 	
 	//interpret the add command and return a Task or DeadlineTask or Event
-	public AddCommandInterpreter() {
+	public Interpreter() {
 		labels = new ArrayList<String>();
 	}
 	

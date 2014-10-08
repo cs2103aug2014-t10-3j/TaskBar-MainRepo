@@ -32,7 +32,7 @@ public class FileHandler{
 				
 				Task newTask = new Task(description,labels, importance);
 				allTasks.add(newTask);
-				//how to add in deadline and isdone?
+				//TODO: how to add in deadline and isdone?
 			}	
 		
 			br.close();

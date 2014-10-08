@@ -76,7 +76,7 @@ public class GUI implements ActionListener{
     		ta.setText(taskList.displayTask());
     	} else {
     		String cmd =jtf.getText();
-    		AddCommandInterpreter cmdInterpreter = new AddCommandInterpreter();
+    		Interpreter cmdInterpreter = new Interpreter();
     		Task taskToAdd = cmdInterpreter.interpretAdd(cmd);
         	taskList.addTask(taskToAdd);
         	ta.setText("TASK ADDED SUCCESSFULLY\n\n" + taskToAdd.getDiscription());	
