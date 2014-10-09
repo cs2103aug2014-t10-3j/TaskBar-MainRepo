@@ -37,7 +37,7 @@ public class Interpreter {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 			LocalDateTime deadline = LocalDateTime.parse(date, formatter);
 			
-			DeadlineTask deadlineTask = new DeadlineTask(description, labels, importance, deadline);						
+			Task deadlineTask = new Task(description, labels, importance, deadline);						
 			
 			return deadlineTask;
 			
@@ -49,7 +49,7 @@ public class Interpreter {
 			LocalDateTime startTime = LocalDateTime.parse(start, formatter);
 			LocalDateTime endTime = LocalDateTime.parse(end, formatter);
 			
-			Event event = new Event(description, labels, importance, startTime, endTime);
+			Task event = new Task(description, labels, importance, startTime, endTime);
 			
 			return event;			
 		} else return null;		
