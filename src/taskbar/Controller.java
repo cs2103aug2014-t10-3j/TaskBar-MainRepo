@@ -74,7 +74,9 @@ public class Controller implements ActionListener {
 		int index = Integer.parseInt(parameter) - 1;
 		Task taskToBeUpdated = displayData.getListOfTasks().get(index);
 		delete(parameter);
-		
+		displayData.setInputText(Interpreter.convertTaskToAddCommand(taskToBeUpdated));
+		displayData.setPrompt("Please update the task in the input box");
+		userView.update();
 	}
 
 	private void complete(String parameter) {

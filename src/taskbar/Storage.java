@@ -22,14 +22,13 @@ public class Storage {
 		}
 		return 0;
 	}
-
-	public int updateTask(Task taskA, Task taskB) {
+	
+	//No longer useful, since we use delete+add to update.
+	public int updateTask(Task oldTask, Task newTask) {
 		// Overwrite taskA with taskB
-		for (int i = 0; i < allTasks.size(); i++) {
-			if (allTasks.get(i).equals(taskA)) { // check with toString()
-				allTasks.set(i, taskB);
-				return 1;
-			}
+		if(allTasks.contains(oldTask)){
+			allTasks.set(allTasks.indexOf(oldTask), newTask);
+			return 1;
 		}
 		return 0; // no such task found to update
 	}

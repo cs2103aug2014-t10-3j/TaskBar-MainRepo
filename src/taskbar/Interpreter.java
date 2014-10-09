@@ -54,4 +54,18 @@ public class Interpreter {
 			return event;			
 		} else return null;		
 	}
+	
+	public static String convertTaskToAddCommand(Task task){
+		String result = "add\\";
+		result += "\\" + task.getDescription() 
+		+ "\\" + task.getLabels().get(0)
+		+ "\\" + task.getImportance(); 
+		
+		/*TODO to be implemented
+		if(task.isDeadLineTask()){
+			
+		}*/
+		
+		return result;
+	}
 }
