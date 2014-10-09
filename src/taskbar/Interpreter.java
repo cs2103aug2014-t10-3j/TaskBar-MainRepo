@@ -56,7 +56,7 @@ public class Interpreter {
 	}
 	
 	public static String convertTaskToAddCommand(Task task){
-		String result = "add\\";
+		String result = "add";
 		result += "\\" + task.getDescription() 
 		+ "\\" + task.getLabels().get(0)
 		+ "\\" + task.getImportance(); 
