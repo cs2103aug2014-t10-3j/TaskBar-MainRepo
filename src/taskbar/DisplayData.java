@@ -3,20 +3,31 @@ package taskbar;
 import java.util.ArrayList;
 
 public class DisplayData {
+	private String inputText;
 	private String prompt;
 	private ArrayList<Task> listOfTasks;
-	
-	public DisplayData(){
+
+	public DisplayData() {
 		super();
 	}
-	
-	public boolean promptIsNull(){
-		return prompt == null;
+	public boolean inputTextIsEmpty() {
+		return inputText == null || inputText.equals("");
 	}
-	
-	public boolean listOfTasksIsNull(){
-		return listOfTasks == null;
+	public boolean promptIsEmpty() {
+		return prompt == null || prompt.equals("");
 	}
+
+	public boolean listOfTasksIsEmpty() {
+		return listOfTasks == null || listOfTasks.isEmpty();
+	}
+
+	public String getInputText() {
+		return inputText;
+	}
+
+	public void setInputText(String inuptText) {
+		this.inputText = inuptText;
+	};
 
 	public String getPrompt() {
 		return prompt;
@@ -32,5 +43,5 @@ public class DisplayData {
 
 	public void setListOfTasks(ArrayList<Task> listOfTasks) {
 		this.listOfTasks = listOfTasks;
-	};
+	}
 }

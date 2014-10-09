@@ -53,11 +53,11 @@ public class UserView {
 	void update(){
 		String toBeDisplayed = "";
 		
-		if(!displayData.listOfTasksIsNull()){
+		if(!displayData.promptIsEmpty()){
 			toBeDisplayed += displayData.getPrompt() + "\n";
 		}
 		
-		if(!displayData.promptIsNull()){
+		if(!displayData.listOfTasksIsEmpty()){
 			int counter = 1; //TODO refactor the listOfTasks to incoorperate 
 					//serial number, decouple this hidden coupling between 
 					//UserView and Controller command interpretation.
@@ -65,6 +65,10 @@ public class UserView {
 				toBeDisplayed += counter + ". " + t.getDescription() + "\n";
 				counter ++;
 			}
+		}
+		
+		if(!displayData.inputTextIsEmpty()){
+			jtf.setText(displayData.getInputText());
 		}
 		
 		ta.setText(toBeDisplayed);
