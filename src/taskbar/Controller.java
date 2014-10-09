@@ -18,6 +18,10 @@ public class Controller implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String userInput = userView.jtf.getText();
+		
+		//this line is necessary to keep the display up to date
+		//mainly to prevent bug from update() command which modifies the JavaTextField.
+		displayData.setInputText(userInput); 
 
 		String[] splitInputTokens = userInput.split(" ", 2);
 
@@ -33,6 +37,7 @@ public class Controller implements ActionListener {
 			break;
 		case "complete":
 			complete(splitInputTokens[1]);
+			break;
 		default:
 			add(userInput);
 			break;
