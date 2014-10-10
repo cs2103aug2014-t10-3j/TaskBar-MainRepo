@@ -1,10 +1,13 @@
 package parser;
 
-public class CommandTypes {
+public class Command {
+	
+	public static final String ON = "on";
+	public static final String AT = "at";
 
 	public static int SINGLEWORD = -1;
 
-	public String getCommand(String userInput) {
+	public static String getCommand(String userInput) {
 		int indexFirstSpace = userInput.indexOf(' ');
 		if (indexFirstSpace == SINGLEWORD) {
 			return userInput;
@@ -13,4 +16,7 @@ public class CommandTypes {
 		return command;
 	}
 
+	public static String getDescription(String userInput){
+		
+	}
 }
