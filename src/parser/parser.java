@@ -1,3 +1,7 @@
+/**
+ * @author Xiaofan
+ */
+
 package parser;
 import java.util.*;
 
@@ -16,6 +20,9 @@ public class parser {
 		
 		if(commandWord == ADD){
 			String commandDescription = Command.getDescription(userInput);
+			String commandLocation = Command.getLocation(userInput);
+			//add time and date
+			//return a task
 		}
 		
 	}
