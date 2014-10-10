@@ -1,3 +1,6 @@
+#java Copiled file, since need to compile on new com anyway
+*.class
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
