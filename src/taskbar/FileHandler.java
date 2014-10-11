@@ -2,10 +2,10 @@ package taskbar;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ReadWriteFiles{
+public class FileHandler{
 	
 		
-		public ArrayList<Task> readTask(Task deleteTask)throws IOException{
+		public ArrayList<Task> readFromFile(Task deleteTask)throws IOException{
 			FileReader reader = new FileReader("database.txt");
 			BufferedReader br = new BufferedReader(reader);
 			ArrayList<Task> allTasks = new ArrayList<Task>();
@@ -32,7 +32,7 @@ public class ReadWriteFiles{
 				
 				Task newTask = new Task(description,labels, importance);
 				allTasks.add(newTask);
-				//how to add in deadline and isdone?
+				//TODO: how to add in deadline and isdone?
 			}	
 		
 			br.close();
@@ -41,7 +41,7 @@ public class ReadWriteFiles{
 		}
 	
 		
-		public void WriteFile(ArrayList<Task> taskAL) throws IOException{
+		public void writeToFile(ArrayList<Task> taskAL) throws IOException{
 			try {
 
 			    FileWriter outFile = new FileWriter("database.txt");

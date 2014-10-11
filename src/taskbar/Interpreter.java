@@ -15,23 +15,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
-public class AddCommandInterpreter {
+public class Interpreter {
 	
-	private String description; //description of task
-	private ArrayList<String> labels; //category of task
-	private int importance; //importance of task, represented by integers
-	
-	//interpret the add command and return a Task or DeadlineTask or Event
-	public AddCommandInterpreter() {
-		labels = new ArrayList<String>();
-	}
-	
-	public Task interpretAdd(String string) {
+	public static Task interpretAdd(String string) {
 		String unsplitString = string;
 		String[] itemsOfTask = unsplitString.split("\\\\");
-		description = itemsOfTask[1];
+		String description = itemsOfTask[1];
+		ArrayList<String> labels = new ArrayList<String>();
 		labels.add(itemsOfTask[2]);
-		importance = Integer.parseInt(itemsOfTask[3]);
+		int importance = Integer.parseInt(itemsOfTask[3]);
 		
 		if(itemsOfTask.length == 4){
 			
@@ -45,7 +37,7 @@ public class AddCommandInterpreter {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 			LocalDateTime deadline = LocalDateTime.parse(date, formatter);
 			
-			DeadlineTask deadlineTask = new DeadlineTask(description, labels, importance, deadline);						
+			Task deadlineTask = new Task(description, labels, importance, deadline);						
 			
 			return deadlineTask;
 			
@@ -57,9 +49,23 @@ public class AddCommandInterpreter {
 			LocalDateTime startTime = LocalDateTime.parse(start, formatter);
 			LocalDateTime endTime = LocalDateTime.parse(end, formatter);
 			
-			Event event = new Event(description, labels, importance, startTime, endTime);
+			Task event = new Task(description, labels, importance, startTime, endTime);
 			
 			return event;			
 		} else return null;		
+	}
+	
+	public static String convertTaskToAddCommand(Task task){
+		String result = "add";
+		result += "\\" + task.getDescription() 
+		+ "\\" + task.getLabels().get(0)
+		+ "\\" + task.getImportance(); 
+		
+		/*TODO to be implemented
+		if(task.isDeadLineTask()){
+			
+		}*/
+		
+		return result;
 	}
 }
