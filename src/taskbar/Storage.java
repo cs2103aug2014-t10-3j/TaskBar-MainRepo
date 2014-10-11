@@ -15,7 +15,7 @@ public class Storage {
 		}
 		public int deleteTask(Task taskFromLogic){			
 			for(int i = 0 ; i < allTasks.size() ; i++) {
-				if ( allTasks.get(i).equals(taskFromLogic)) {  
+				if ( allTasks.get(i).equals(taskFromLogic)) {  // how to check 2 tasks are equal? should have a toString() in Task to check?
 					allTasks.remove(i);
 					return 1;
 				}
@@ -86,10 +86,6 @@ public class Storage {
 		public void sortByTime() {
 			
 		}
-		
-		public void save(){
-			ReadWriteFiles save = new ReadWriteFiles();
-			save.WriteFile(taskAL);
-		}
+			
 
 }
