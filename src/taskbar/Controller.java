@@ -67,6 +67,7 @@ public class Controller implements ActionListener {
 	// TODO add in all kinds of assertion and exception handling.
 	private void delete(String parameter) {
 		int index = Integer.parseInt(parameter) - 1;
+		assert index >= 0 : "Invalid task index number.";
 		Task taskToBeDeleted = displayData.getListOfTasks().get(index);
 		storage.deleteTask(taskToBeDeleted);
 
@@ -77,6 +78,7 @@ public class Controller implements ActionListener {
 
 	private void update(String parameter) {
 		int index = Integer.parseInt(parameter) - 1;
+		assert index >= 0 : "Invalid task index number.";
 		Task taskToBeUpdated = displayData.getListOfTasks().get(index);
 		delete(parameter);
 		displayData.setInputText(Interpreter.convertTaskToAddCommand(taskToBeUpdated));
@@ -86,6 +88,7 @@ public class Controller implements ActionListener {
 
 	private void complete(String parameter) {
 		int index = Integer.parseInt(parameter) - 1;
+		assert index >= 0 : "Invalid task index number.";
 		Task taskToBeCompleted = displayData.getListOfTasks().get(index);
 		taskToBeCompleted.setDone(true);
 
