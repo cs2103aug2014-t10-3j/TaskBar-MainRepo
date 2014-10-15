@@ -5,7 +5,7 @@
 package parser;
 import java.util.*;
 
-public class parser {
+public class Interpreter {
 	
 	public static final String ADD = "add";
 	public static final String UPDATE = "update";
@@ -20,7 +20,7 @@ public class parser {
 		
 		if(commandWord == ADD){
 			String commandDescription = Command.getDescription(userInput);
-			String commandLocation = Command.getLocation(userInput);
+			int commandImportance = Command.getImportance(userInput);
 			//add time and date
 			//return a task
 		}

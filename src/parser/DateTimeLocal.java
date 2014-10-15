@@ -4,20 +4,39 @@
 
 package parser;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import com.joestelmach.natty.*;
 
 public class DateTimeLocal {
 	
-	public static final String TOMORROW = "tomorrow";
-	public static final String MONDAY = "monday";
-	public static final String TUESDAY = "tuesday";
-	public static final String WEDNESDAY = "wednesday";
-	public static final String THURSDAY = "thursday";
-	public static final String FRIDAY = "friday";
-	public static final String SATURDAY = "saturday";
-	public static final String SUNDAY = "sunday";
+	public static LocalDateTime getStartDateTime(String userInput){
+		//return start time from user input using natty lib
+	}
 	
-	public static LocalDateTime interpretDateTime(String dateTime){
-		
+	public static LocalDateTime getEndDateTime(String userInput){
+		//return end time from user input using natty lib
+	}
+	
+	public static LocalDateTime scheduledDateTime(String userInput){
+		//return scheduled time from user input using natty lib
+	}
+	
+	private static void getDatesFromUserInput(String userInput){
+		Parser parser = new Parser();
+		List<DateGroup> dateGroups = parser.parse(userInput);
+		if(dateGroups > 0){
+			for(DateGroup group:dateGroups) {
+				List<Date> datesFromInput = group.getDates();
+			}
+			Date currentDate = new Date();
+			for(Date dateDate: datesFromInput){
+					//more things to add
+					//natty library
+			}
+		}else{
+			datesFromInput = null;
+		}
 	}
 	
 }
