@@ -14,9 +14,9 @@ public class Logging {
 	
 	public static Logger getInstance(){
 		if (self == null){
-			self = Logger.getLogger("Kairos");
+			self = Logger.getLogger("ET");
 			try {
-				fileTxt = new FileHandler("KairosLog.txt",true);
+				fileTxt = new FileHandler("ETLog.txt",true);
 			} catch (SecurityException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
