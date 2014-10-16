@@ -3,78 +3,89 @@ package taskbar;
 import java.util.ArrayList;
 
 public class Storage {
-
-	private static ArrayList<Task> allTasks = new ArrayList<Task>();
-
-	public Storage() {
-
-	}
-
-	public void addTask(Task taskFromLogic) {
-		allTasks.add(taskFromLogic);
-	}
-
-	// TODO add in exception handling/throwing (Task not found)
-	public int deleteTask(Task taskToBeDeleted) {
-		boolean removed = allTasks.remove(taskToBeDeleted);
-		if(removed){
-			return 1;
-		}
-		return 0;
-	}
 	
-	//No longer useful, since we use delete+add to update.
-	public int updateTask(Task oldTask, Task newTask) {
-		// Overwrite taskA with taskB
-		if(allTasks.contains(oldTask)){
-			allTasks.set(allTasks.indexOf(oldTask), newTask);
-			return 1;
+		private static ArrayList<Task> allTasks = new ArrayList<Task>();
+		 	
+		public Storage() {
+			
 		}
-		return 0; // no such task found to update
-	}
-
-	public ArrayList<Task> searchTask(String keyWord) {
-
-		ArrayList<Task> searchedTasks = new ArrayList<Task>();
-
-		for (int i = 0; i < allTasks.size(); i++) {
-			if (allTasks.get(i).getDescription().contains(keyWord)) {
-				searchedTasks.add(allTasks.get(i));
-			}
+		
+		public void addTask(Task taskFromLogic) {			 
+			allTasks.add(taskFromLogic);							
 		}
-
-		return searchedTasks;
-
-	}
-
-	public ArrayList<Task> getAllTasks() {
-		// need to figure out how to sort them
-		// maybe can have the default display as Sort by Importance display.
-		return allTasks;
-
-	}
-
-	public void sortByImportance() {
-		boolean swapped = true;
-		int j = 0;
-		Task tmp;
-		while (swapped) {
-			swapped = false;
-			j++;
-			for (int i = 0; i < allTasks.size() - j; i++) {
-				if (allTasks.get(i).getImportance() < allTasks.get(i + 1)
-						.getImportance()) {
-					tmp = allTasks.get(i);
-					allTasks.set(i, allTasks.get(i + 1));
-					allTasks.set(i + 1, tmp);
-					swapped = true;
+		public int deleteTask(Task taskFromLogic){			
+			for(int i = 0 ; i < allTasks.size() ; i++) {
+				if ( allTasks.get(i).equals(taskFromLogic)) {  // how to check 2 tasks are equal? should have a toString() in Task to check?
+					allTasks.remove(i);
+					return 1;
 				}
-			}
+			}			  
+			return 0;   //means no such task found
 		}
-	}
-
-	public void sortByTime() {
-
-	}
+		
+		public int updateTask(Task taskA, Task taskB) {
+		//Overwrite taskA with taskB
+			for(int i = 0 ; i < allTasks.size() ; i++){
+				if (allTasks.get(i).equals(taskA)) {		//check with toString()
+					allTasks.set(i,taskB);
+					return 1;
+				}		  	 
+			}
+			return 0 ;	// no such task found to update
+		}
+		
+		public String displayTask() {
+			if (allTasks.size()==0) return "Task list is empty.";
+			else {
+				String text = "";
+				for (int i=0; i<allTasks.size(); i++) {
+					text += allTasks.get(i).getdescription() + "\n";
+				}
+				return text;
+			}			
+		}
+		public ArrayList<Task> searchTask(String keyWord) {
+			
+			ArrayList<Task> searchedTasks = new ArrayList<Task>();
+		  
+			for (int i = 0; i < allTasks.size() ; i++){
+		  		if(allTasks.get(i).getdescription().contains(keyWord)){
+		   		searchedTasks.add(allTasks.get(i));
+		  	}
+		   }
+		   
+		   return searchedTasks;
+		 
+		}
+		
+		public ArrayList<Task> getTasks(){
+			// need to figure out how to sort them
+			// maybe can have the default display as Sort by Importance display.	
+			   	 return allTasks;
+			 
+		}
+		
+		public void sortByImportance(){
+			boolean swapped = true;
+		      int j = 0;
+		      Task tmp;
+		      while (swapped) {
+		            swapped = false;
+		            j++;
+		            for (int i = 0; i < allTasks.size()- j; i++) {                                       
+		                  if (allTasks.get(i).getImportance() < allTasks.get(i + 1).getImportance()) {                          
+		                        tmp = allTasks.get(i);
+		                        allTasks.set(i,allTasks.get(i+1));
+		                        allTasks.set(i+1, tmp);
+		                        swapped = true;
+		                  }
+		            }                
+		      }
+		}
+		
+		public void sortByTime() {
+			
+		}
+			
 
 }
