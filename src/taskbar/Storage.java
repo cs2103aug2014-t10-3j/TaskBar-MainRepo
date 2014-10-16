@@ -1,3 +1,7 @@
+/*
+ * Storage class
+ * Write ZiJie
+ */
 package taskbar;
 
 import java.util.ArrayList;

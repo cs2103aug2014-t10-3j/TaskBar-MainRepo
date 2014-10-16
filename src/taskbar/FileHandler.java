@@ -1,3 +1,7 @@
+/*
+ * File IO
+ * Write: ZiJie
+ */
 package taskbar;
 import java.io.*;
 import java.util.ArrayList;
@@ -41,7 +45,7 @@ public class FileHandler{
 		}
 	
 		
-		public void writeToFile(ArrayList<Task> taskAL) throws IOException{
+		public void writeToFile(ArrayList<Task> taskAL) {
 			try {
 
 			    FileWriter outFile = new FileWriter("database.txt");
@@ -61,7 +65,7 @@ public class FileHandler{
 
 			} catch (IOException e) {
 
-			    e.printStackTrace();
+			    e.printStackTrace(); //handle locally
 
 			}
 		}
