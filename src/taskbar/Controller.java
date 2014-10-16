@@ -2,6 +2,8 @@ package taskbar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
@@ -9,6 +11,8 @@ public class Controller implements ActionListener {
 	private UserView userView;
 	private DisplayData displayData;
 	static Storage storage = new Storage();
+	
+	private Logger logger = Logging.getInstance();
 
 	Controller(UserView uv, DisplayData dd) {
 		userView = uv;
@@ -74,6 +78,10 @@ public class Controller implements ActionListener {
 		displayData.setPrompt("Task deleted successfully\n"
 				+ taskToBeDeleted.getDescription());
 		displayData.setListOfTasks(null);
+		userView.update();
+		
+		logger.log(Level.FINE, "Task deleted successfully\n"
+				+ taskToBeDeleted.getDescription());
 	}
 
 	private void update(String parameter) {
@@ -84,6 +92,8 @@ public class Controller implements ActionListener {
 		displayData.setInputText(Interpreter.convertTaskToAddCommand(taskToBeUpdated));
 		displayData.setPrompt("Please update the task in the input box");
 		userView.update();
+		
+		
 	}
 
 	private void complete(String parameter) {
