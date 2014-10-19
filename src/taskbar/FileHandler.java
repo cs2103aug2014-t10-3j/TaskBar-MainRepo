@@ -1,6 +1,6 @@
 /*
  * File IO
- * Write: ZiJie
+ * Writer: ZiJie
  */
 package taskbar;
 import java.io.*;
@@ -51,10 +51,6 @@ public class FileHandler{
 			    FileWriter outFile = new FileWriter("database.txt");
 
 			    PrintWriter out = new PrintWriter(outFile);
-
-			    // Also could be written as follows on one line
-
-			    // Printwriter out = new PrintWriter(new FileWriter(filename));
 
 			    // Write text to file
 			    for(int i=0; i< taskAL.size(); i++)
