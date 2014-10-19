@@ -1,6 +1,7 @@
 /*
  * Storage class
- * Write ZiJie
+ * Writer: ZiJie
+ *
  */
 package taskbar;
 
@@ -45,7 +46,7 @@ public class Storage {
 	}
 	
 	//TODO Refactor this to sort a given ArrayList
-	public void sortByImportance() {
+	public ArrayList<Task> sortByImportance() {
 		boolean swapped = true;
 		int j = 0;
 		Task tmp;
@@ -60,9 +61,10 @@ public class Storage {
 					allTasks.set(i + 1, tmp);
 					swapped = true;
 				}
-				//return text;
+				
 			}
 		}
+		return allTasks;
 	}
 
 	public ArrayList<Task> searchTask(String keyWord) {
@@ -86,8 +88,27 @@ public class Storage {
 
 	}
 
-	public void sortByTime() {
-
+	public ArrayList<Task> sortByTime() {
+		boolean swapped = true;
+		int j = 0;
+		Task tmp;
+		while (swapped) {
+			swapped = false;
+			j++;
+			for (int i = 0; i < allTasks.size() - j; i++) {
+				if (allTasks.get(i).getDeadline().isBefore(allTasks.get(i + 1).getDeadline()))
+				{
+					tmp = allTasks.get(i);
+					allTasks.set(i, allTasks.get(i + 1));
+					allTasks.set(i + 1, tmp);
+					swapped = true;
+				}
+				
+			}
+		}
+		return allTasks;
+	}
+		
 	}
 
-}
+
