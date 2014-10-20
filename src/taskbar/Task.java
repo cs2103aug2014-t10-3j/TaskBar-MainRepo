@@ -81,24 +81,6 @@ public class Task {
 		this.importance = importance;
 	}
 
-	public String toString()
-	{
-		String thisString = "";
-		thisString += description;
-		thisString += "\n";
-		thisString += Integer.toString(labels.size());
-		thisString += "\n";
-		for(int i=0; i<labels.size(); i++){
-			thisString += labels.get(i);
-			thisString += "\n";
-		}
-		thisString += "\n";
-		thisString += Integer.toString(importance);
-		
-		return thisString;
-	}
-
-	
 	//Specific to DeadlineTask
 	public LocalDateTime getDeadline() {
 		return timeStamp1;
@@ -126,5 +108,22 @@ public class Task {
 	//Specific to Event
 	public void setEndTime(LocalDateTime endTime) {
 		this.timeStamp2 = endTime;
+	}
+
+	public String toString()
+	{
+		String thisString = "";
+		thisString += description;
+		thisString += "\n";
+		thisString += Integer.toString(labels.size());
+		thisString += "\n";
+		for(int i=0; i<labels.size(); i++){
+			thisString += labels.get(i);
+			thisString += "\n";
+		}
+		thisString += "\n";
+		thisString += Integer.toString(importance);
+		
+		return thisString;
 	}
 }

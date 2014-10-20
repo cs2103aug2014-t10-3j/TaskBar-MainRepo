@@ -10,9 +10,28 @@ import java.util.ArrayList;
 public class Storage {
 
 	private static ArrayList<Task> allTasks = new ArrayList<Task>();
+	private static Storage storage;
+	
+	/**
+	 * Constructor for the class. Since Singleton pattern is applied, this 
+	 * constructor is made private access.
+	 */
+	private Storage() {
 
-	public Storage() {
-
+	}
+	
+	/**
+	 * This method reinforce the Singleton pattern for class Storage, which 
+	 * means each time the software is run, there should be only one instance
+	 * of class Storage.
+	 * @return The static storage instance.
+	 */
+	public static Storage getInstance(){
+		if(storage != null){
+			return storage;
+		}
+		storage = new Storage();
+		return storage;
 	}
 
 	public void addTask(Task taskFromLogic) {
