@@ -18,7 +18,6 @@ public class Controller implements ActionListener {
 		userView = uv;
 		displayData = dd;
 		storage = Storage.getInstance();
-		assert(false);
 	}
 
 	@Override

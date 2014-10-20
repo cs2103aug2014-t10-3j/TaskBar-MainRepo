@@ -10,6 +10,7 @@ public class FileHandler{
 	
 		
 		public ArrayList<Task> readFromFile() throws IOException{
+			try{
 			FileReader reader = new FileReader("database.txt");
 			BufferedReader br = new BufferedReader(reader);
 			ArrayList<Task> allTasks = new ArrayList<Task>();
@@ -42,6 +43,9 @@ public class FileHandler{
 			br.close();
 			reader.close();
 			return allTasks;
+			}catch(FileNotFoundException e){
+				return new ArrayList<Task>();
+			}
 		}
 	
 		

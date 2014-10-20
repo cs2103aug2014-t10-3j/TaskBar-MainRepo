@@ -43,6 +43,12 @@ public class Storage {
 		return storage;
 	}
 
+	public ArrayList<Task> getAllTasks() {
+		// need to figure out how to sort them
+		// maybe can have the default display as Sort by Importance display.
+		return allTasks;
+	}
+
 	public void addTask(Task taskFromLogic) {
 		allTasks.add(taskFromLogic);
 		fileHandler.writeToFile(allTasks);
@@ -62,34 +68,6 @@ public class Storage {
 		return 0;
 	}
 
-	public ArrayList<Task> getAllTasks() {
-		// need to figure out how to sort them
-		// maybe can have the default display as Sort by Importance display.
-		return allTasks;
-	}
-	
-	//TODO Refactor this to sort a given ArrayList
-	public ArrayList<Task> sortByImportance() {
-		boolean swapped = true;
-		int j = 0;
-		Task tmp;
-		while (swapped) {
-			swapped = false;
-			j++;
-			for (int i = 0; i < allTasks.size() - j; i++) {
-				if (allTasks.get(i).getImportance() < allTasks.get(i + 1)
-						.getImportance()) {
-					tmp = allTasks.get(i);
-					allTasks.set(i, allTasks.get(i + 1));
-					allTasks.set(i + 1, tmp);
-					swapped = true;
-				}
-				
-			}
-		}
-		return allTasks;
-	}
-
 	public ArrayList<Task> searchTask(String keyWord) {
 
 		ArrayList<Task> searchedTasks = new ArrayList<Task>();
@@ -104,13 +82,8 @@ public class Storage {
 		return searchedTasks;
 
 	}
-
-	public ArrayList<Task> getTasks() {
-		// TODO need to figure out how to sort them
-		// maybe can have the default display as Sort by Importance display.
-		return allTasks;
-
-	}
+	
+	//TODO add in search by time date, getDoneTasks, getNotDoneTasks
 
 	public ArrayList<Task> sortByTime() {
 		boolean swapped = true;
@@ -122,6 +95,28 @@ public class Storage {
 			for (int i = 0; i < allTasks.size() - j; i++) {
 				if (allTasks.get(i).getDeadline().isBefore(allTasks.get(i + 1).getDeadline()))
 				{
+					tmp = allTasks.get(i);
+					allTasks.set(i, allTasks.get(i + 1));
+					allTasks.set(i + 1, tmp);
+					swapped = true;
+				}
+				
+			}
+		}
+		return allTasks;
+	}
+
+	//TODO Refactor this to sort a given ArrayList
+	public ArrayList<Task> sortByImportance() {
+		boolean swapped = true;
+		int j = 0;
+		Task tmp;
+		while (swapped) {
+			swapped = false;
+			j++;
+			for (int i = 0; i < allTasks.size() - j; i++) {
+				if (allTasks.get(i).getImportance() < allTasks.get(i + 1)
+						.getImportance()) {
 					tmp = allTasks.get(i);
 					allTasks.set(i, allTasks.get(i + 1));
 					allTasks.set(i + 1, tmp);
