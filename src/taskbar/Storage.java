@@ -5,19 +5,28 @@
  */
 package taskbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Storage {
 
-	private static ArrayList<Task> allTasks = new ArrayList<Task>();
+	private ArrayList<Task> allTasks;
+	private FileHandler fileHandler;
 	private static Storage storage;
 	
 	/**
 	 * Constructor for the class. Since Singleton pattern is applied, this 
 	 * constructor is made private access.
 	 */
-	private Storage() {
-
+	private Storage(){
+		try{
+			fileHandler = new FileHandler();
+			allTasks = fileHandler.readFromFile();
+		}catch(Exception e){
+			e.printStackTrace();
+			//TODO add in proper handling for IOException
+		}
+		
 	}
 	
 	/**
@@ -36,32 +45,27 @@ public class Storage {
 
 	public void addTask(Task taskFromLogic) {
 		allTasks.add(taskFromLogic);
+		fileHandler.writeToFile(allTasks);
+		//TODO maybe figure out a way to make incremental modificaiton to the recorded file? 
 	}
 
-	// TODO add in exception handling/throwing (Task not found)
+
 	public int deleteTask(Task taskToBeDeleted) {
+		//The specified task should exist if the software is running correctly.
+		assert allTasks.contains(taskToBeDeleted);
+		
 		boolean removed = allTasks.remove(taskToBeDeleted);
+		fileHandler.writeToFile(allTasks);
 		if (removed) {
 			return 1;
 		}
 		return 0;
 	}
 
-	// No longer useful, since we use delete+add to update.
-	public int updateTask(Task oldTask, Task newTask) {
-		// Overwrite taskA with taskB
-		if (allTasks.contains(oldTask)) {
-			allTasks.set(allTasks.indexOf(oldTask), newTask);
-			return 1;
-		}
-		return 0; // no such task found to update
-	}
-
 	public ArrayList<Task> getAllTasks() {
 		// need to figure out how to sort them
 		// maybe can have the default display as Sort by Importance display.
 		return allTasks;
-
 	}
 	
 	//TODO Refactor this to sort a given ArrayList
@@ -91,7 +95,8 @@ public class Storage {
 		ArrayList<Task> searchedTasks = new ArrayList<Task>();
 
 		for (int i = 0; i < allTasks.size(); i++) {
-			if (allTasks.get(i).getDescription().contains(keyWord)) {
+			if (allTasks.get(i).getDescription().toLowerCase().contains(
+					keyWord.toLowerCase())) {
 				searchedTasks.add(allTasks.get(i));
 			}
 		}
@@ -101,7 +106,7 @@ public class Storage {
 	}
 
 	public ArrayList<Task> getTasks() {
-		// need to figure out how to sort them
+		// TODO need to figure out how to sort them
 		// maybe can have the default display as Sort by Importance display.
 		return allTasks;
 

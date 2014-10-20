@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class FileHandler{
 	
 		
-		public ArrayList<Task> readFromFile(Task deleteTask)throws IOException{
+		public ArrayList<Task> readFromFile() throws IOException{
 			FileReader reader = new FileReader("database.txt");
 			BufferedReader br = new BufferedReader(reader);
 			ArrayList<Task> allTasks = new ArrayList<Task>();
