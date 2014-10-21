@@ -11,7 +11,12 @@ public class Task {
 
 	private LocalDateTime timeStamp1;
 	private LocalDateTime timeStamp2;
-
+	
+	
+	public Task()
+	{	
+	}
+	
 	public Task(String description, ArrayList<String> labels, int importance) {
 		super();
 		this.description = description;

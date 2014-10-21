@@ -5,14 +5,17 @@
  */
 package taskbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import org.jdom2.JDOMException;
+import org.jdom2.input.DOMBuilder;
+import org.jdom2.Element;
 
 public class Storage {
 
 	private static ArrayList<Task> allTasks = new ArrayList<Task>();
 
 	public Storage() {
-
 	}
 
 	public void addTask(Task taskFromLogic) {
@@ -109,6 +112,18 @@ public class Storage {
 		return allTasks;
 	}
 		
-	}
+	
 
+
+	public void writeFile() throws IOException{
+		 String fileName = "task.xml";
+		 WriteFileJDOM.writeFileUsingJDOM(allTasks, fileName);
+	}
+	
+	//IN PROGRESSS
+	public void readFile(){
+		
+	}
+	}
+	
 
