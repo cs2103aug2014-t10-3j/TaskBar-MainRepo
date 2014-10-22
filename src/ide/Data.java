@@ -72,10 +72,12 @@ public class Data {
 	
 	private String arrayToString(ArrayList<String> arr) {
 		String str="";
-		for (String s:arr) {
-			str += s + ", ";
+		if (arr.size()!=0) {
+			for (String s:arr) {
+				str += s + ", ";
+			}
+			str.substring(0, str.length()-2);
 		}
-		str.substring(0, str.length()-2);
 		return str;
 	}
 	

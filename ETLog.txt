@@ -1,3 +1,9 @@
 Oct 20, 2014 12:12:49 PM taskbar.Controller delete
 FINE: Task deleted successfully
 I'm the second task
+Oct 22, 2014 10:38:27 PM taskbar.Controller delete
+FINE: Task deleted successfully
+sch
+Oct 22, 2014 10:38:40 PM taskbar.Controller delete
+FINE: Task deleted successfully
+sch

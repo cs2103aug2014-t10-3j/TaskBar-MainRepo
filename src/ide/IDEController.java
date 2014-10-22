@@ -54,13 +54,13 @@ public class IDEController implements Initializable{
 			}			
 		});
 		
-		textbox.textProperty().addListener(new ChangeListener<String>() {
+		/*textbox.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> ov, String oldText, String newText) {
 				data = ctrl.handleKeyTyped(oldText);
 				showToUser(data);
 			}
-		});
+		});*/
 		
 	}
 	
@@ -72,10 +72,13 @@ public class IDEController implements Initializable{
 	
 	private void showToUser(DisplayData data) {
 		if (data.needToUpdate()) {
-			list.removeAll();
-			for (Task t: data.getListOfTasks()) {
-				Data newTask = new Data(t);
-				list.add(newTask);
+			list.clear();
+			
+			if (data.getListOfTasks()!=null) {
+				for (Task t: data.getListOfTasks()) {
+					Data newTask = new Data(t);
+					list.add(newTask);
+				}
 			}
 		}
 		
