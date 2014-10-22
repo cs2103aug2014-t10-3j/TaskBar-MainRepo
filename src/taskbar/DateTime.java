@@ -6,10 +6,15 @@ public class DateTime {
 	
 	public static Boolean is24hTimeFormat(String string){
 		if(string.length() == 4){
-			int stringInt = Integer.parseInt(string);
-			if(isOnlyNumbers(string) && stringInt <= 2359){
-				return true;
+			try{
+				int stringInt = Integer.parseInt(string);
+				if(isOnlyNumbers(string) && stringInt <= 2359){
+					return true;
+				}
+			}catch(NumberFormatException e){
+				return false;
 			}
+			
 		}
 		return false;
 	}
