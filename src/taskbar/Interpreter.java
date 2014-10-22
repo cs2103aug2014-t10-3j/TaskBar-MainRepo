@@ -11,6 +11,7 @@
 package taskbar;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
@@ -44,14 +45,30 @@ public class Interpreter {
 	
 	public static String convertTaskToAddCommand(Task task){
 		String result = "add";
-		result += "\\" + task.getDescription() 
-		+ "\\" + task.getLabels().get(0)
-		+ "\\" + task.getImportance(); 
-		
-		/*TODO to be implemented
+		result = result + " " + task.getDescription();
 		if(task.isDeadLineTask()){
-			
-		}*/
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+			LocalDateTime scheduledDateTime = task.getDeadline();
+			String formattedScheduleTime = scheduledDateTime.format(formatter);
+			result = result + " by " + formattedScheduleTime;
+		}
+		if(task.isEvent()){
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+			LocalDateTime startDateTime = task.getStartTime();
+			String formattedStartTime = startDateTime.format(formatter);
+			LocalDateTime endDateTime = task.getEndTime();
+			String formattedEndTime = endDateTime.format(formatter);
+			result = result + " from " + formattedStartTime + " to " + formattedEndTime;
+		}
+		int numOfLabels = task.getNumLabels();
+		for(int i=0; i<numOfLabels; i++){
+			result = result + " #" + task.getLabels().get(i);
+		}
+		
+		int importance = task.getImportance();
+		for(int i=0; i<importance;i++){
+			result = result + "!";
+		}
 		
 		return result;
 	}
