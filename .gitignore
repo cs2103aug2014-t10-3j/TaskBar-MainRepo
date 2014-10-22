@@ -1,3 +1,5 @@
+.classpath
+
 #java Copiled file, since need to compile on new com anyway
 *.class
 
