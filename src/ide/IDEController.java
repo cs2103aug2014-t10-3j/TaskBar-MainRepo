@@ -93,6 +93,7 @@ public class IDEController implements Initializable{
 		ft.setFromValue(1);
 		ft.setDelay(Duration.seconds(2.0));
 		ft.play();
+		
 	}
 	
 }

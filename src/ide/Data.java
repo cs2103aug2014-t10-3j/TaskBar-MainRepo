@@ -16,7 +16,7 @@ public class Data {
 	private SimpleStringProperty date;
 	private SimpleStringProperty time;
 	
-	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
 	DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public Data(Task task) {
@@ -92,7 +92,7 @@ public class Data {
 				if (t1.toLocalDate().isEqual(t2.toLocalDate())) {
 					str += t1.format(dateFmt);
 				} else {
-					str += t1.format(dateFmt) + "-" + t2.format(dateFmt);
+					str += t1.format(dateFmt) + " - " + t2.format(dateFmt);
 				}
 			}
 			
@@ -111,7 +111,7 @@ public class Data {
 				}				
 			} else {
 				if (t1.toLocalDate().isEqual(t2.toLocalDate())) {
-					str += t1.format(timeFmt) + "-" + t2.format(timeFmt);
+					str += t1.format(timeFmt) + " - " + t2.format(timeFmt);
 				}
 			}
 		}

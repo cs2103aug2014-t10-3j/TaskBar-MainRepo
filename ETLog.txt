@@ -7,3 +7,12 @@ sch
 Oct 22, 2014 10:38:40 PM taskbar.Controller delete
 FINE: Task deleted successfully
 sch
+Oct 23, 2014 12:47:16 AM taskbar.Controller delete
+FINE: Task deleted successfully
+task2 25.10.14 0900
+Oct 23, 2014 12:51:28 AM taskbar.Controller delete
+FINE: Task deleted successfully
+t6
+Oct 23, 2014 12:51:39 AM taskbar.Controller delete
+FINE: Task deleted successfully
+t3
