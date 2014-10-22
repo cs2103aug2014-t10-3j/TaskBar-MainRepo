@@ -5,19 +5,14 @@ package taskbar;
 
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class DateTimeLocal {
 	
 	public static LocalDateTime getStartDateTime(String userInput){
 		//return start time from user input
 		String startDateTime = null;
-		Pattern pattern = Pattern.compile("from(.*?\\s)to\\s");
-		Matcher matcher = pattern.matcher(userInput);
-		while(matcher.find()){
-			startDateTime = matcher.group(1);
-		}
+		startDateTime = userInput.substring(userInput.lastIndexOf(" from ")+6, userInput.lastIndexOf(" to "));
 		LocalDateTime startTime = getDateTime(startDateTime);
 		return startTime;
 	}
@@ -25,11 +20,7 @@ public class DateTimeLocal {
 	public static LocalDateTime getEndDateTime(String userInput){
 		//return end time from user input
 		String endDateTime = null;
-		Pattern pattern = Pattern.compile("to(.*?\\s)");
-		Matcher matcher = pattern.matcher(userInput);
-		while(matcher.find()){
-			endDateTime = matcher.group(1);
-		}
+		endDateTime = userInput.substring(userInput.lastIndexOf(" to ")+4, userInput.length());
 		LocalDateTime endTime = getDateTime(endDateTime);
 		return endTime;
 	}
@@ -37,11 +28,7 @@ public class DateTimeLocal {
 	public static LocalDateTime getScheduledDateTime(String userInput){
 		//return scheduled time from user input
 		String scheduledDateTime = null;
-		Pattern pattern = Pattern.compile("by(.*?\\s)");
-		Matcher matcher = pattern.matcher(userInput);
-		while(matcher.find()){
-			scheduledDateTime = matcher.group(1);
-		}
+		scheduledDateTime = userInput.substring(userInput.lastIndexOf(" by ")+4, userInput.length());
 		LocalDateTime scheduledTime = getDateTime(scheduledDateTime);
 		return scheduledTime;
 	}
@@ -51,18 +38,10 @@ public class DateTimeLocal {
 		String normalDateTime = null;
 		LocalDateTime normalTime = null;
 		if(userInput.contains("on")){
-			Pattern pattern = Pattern.compile("on(.*?\\s)");
-			Matcher matcher = pattern.matcher(userInput);
-			while(matcher.find()){
-				normalDateTime = matcher.group(1);
-			}
+			normalDateTime = userInput.substring(userInput.lastIndexOf(" on ")+4, userInput.length());
 			normalTime = getDateTime(normalDateTime);
 		}else if(userInput.contains("at")){
-			Pattern pattern = Pattern.compile("at(.*?\\s)");
-			Matcher matcher = pattern.matcher(userInput);
-			while(matcher.find()){
-				normalDateTime = matcher.group(1);
-			}
+			normalDateTime = userInput.substring(userInput.lastIndexOf(" at ")+4, userInput.length());
 			normalTime = getDateTime(normalDateTime);
 		}
 		return normalTime;
@@ -126,7 +105,9 @@ public class DateTimeLocal {
 			String timeSub = time.substring(0, time.length()-2);
 			int time12h = Integer.parseInt(timeSub);
 			if(time.contains("pm")){
-				time12h = time12h + 12;
+				if(time12h != 12){
+					time12h = time12h + 12;
+				}
 			}
 			LocalDateTime time1 = LocalDateTime.of(2014, month, day, time12h, 0);
 			return time1;
@@ -137,7 +118,9 @@ public class DateTimeLocal {
 			String timeSub = time.substring(0, time.length()-2);
 			int time12h = Integer.parseInt(timeSub);
 			if(time.contains("pm")){
-				time12h = time12h + 12;
+				if(time12h != 12){
+					time12h = time12h + 12;
+				}
 			}
 			LocalDateTime time2 = LocalDateTime.of(year, month, day, time12h, 0);
 			return time2;
@@ -171,7 +154,9 @@ public class DateTimeLocal {
 		String timeSub = time.substring(0, time.length()-2);
 		int time12h = Integer.parseInt(timeSub);
 		if(time.contains("pm")){
-			time12h = time12h + 12;
+			if(time12h != 12){
+				time12h = time12h + 12;
+			}
 		}
 		if(date.equals("tomorrow") || date.equals("tmr")){
 			LocalDateTime specified = current.plusDays(1L);
@@ -208,7 +193,9 @@ public class DateTimeLocal {
 		String timeSub = time.substring(0, time.length()-2);
 		int time12h = Integer.parseInt(timeSub);
 		if(time.contains("pm")){
-			time12h = time12h + 12;
+			if(time12h != 12){
+				time12h = time12h + 12;
+			}
 		}
 		LocalDateTime specified = LocalDateTime.of(2014, month, day, time12h, 0);
 		return specified;	
@@ -232,7 +219,9 @@ public class DateTimeLocal {
 		String timeSub = time.substring(0, time.length()-2);
 		int time12h = Integer.parseInt(timeSub);
 		if(time.contains("pm")){
-			time12h = time12h + 12;
+			if(time12h != 12){
+				time12h = time12h + 12;
+			}
 		}
 		LocalDateTime specified = LocalDateTime.of(year, month, day, time12h, 0);
 		return specified;
@@ -254,11 +243,12 @@ public class DateTimeLocal {
 		String timeSub = dateTime.substring(0, dateTime.length()-2);
 		int time12h = Integer.parseInt(timeSub);
 		if(dateTime.contains("pm")){
-			time12h = time12h + 12;
+			if(time12h != 12){
+				time12h = time12h + 12;
+			}
 		}
 		LocalDateTime specified = current.withHour(time12h);
-		specified = specified.withMinute(0);
-		return specified;
+		return specified.withMinute(0);
 	}
 	
 	public static LocalDateTime timeFrom24hTime(String dateTime){
@@ -273,14 +263,10 @@ public class DateTimeLocal {
 		LocalDateTime current = LocalDateTime.now();
 		if(dateTime.equals("tomorrow") || dateTime.equals("tmr")){
 			LocalDateTime specified = current.plusDays(1L);
-			specified = specified.withHour(0);
-			specified = specified.withMinute(0);
-			return specified;
+			return specified.withHour(0).withMinute(0);
 		}else{
 			LocalDateTime specified = current.plusDays(differenceInDays(dateTime, current));
-			specified = specified.withHour(0);
-			specified = specified.withMinute(0);
-			return specified;
+			return specified.withHour(0).withMinute(0);
 		}
 	}
 	

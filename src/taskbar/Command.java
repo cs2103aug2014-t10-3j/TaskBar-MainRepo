@@ -45,57 +45,61 @@ public class Command {
 
 	public static String getDescription(String userInput){
 		String description = null;
-		int[] prepArray;
-		prepArray = new int[4];
-		Arrays.fill(prepArray, 1000);
+		if(isPrepPresent(userInput)){
+			int[] prepArray;
+			prepArray = new int[4];
+			Arrays.fill(prepArray, 1000);
 
-		if(userInput.contains(AT)){
-			prepArray[0] = userInput.indexOf(AT);
-		}
-		if(userInput.contains(BY)){
-			prepArray[1] = userInput.indexOf(BY);
-		}
-		if(userInput.contains(FROM)){
-			prepArray[2] = userInput.indexOf(FROM);
-		}
-		if(userInput.contains(ON)){
-			prepArray[3] = userInput.indexOf(ON);
-		}
+			if(userInput.contains(AT)){
+				prepArray[0] = userInput.indexOf(AT);
+			}
+			if(userInput.contains(BY)){
+				prepArray[1] = userInput.indexOf(BY);
+			}
+			if(userInput.contains(FROM)){
+				prepArray[2] = userInput.indexOf(FROM);
+			}
+			if(userInput.contains(ON)){
+				prepArray[3] = userInput.indexOf(ON);
+			}
 
-		int smallestIndex = 0;
+			int smallestIndex = 0;
 
-		for(int i=1; i<4; i++){
-			if(prepArray[i] < prepArray[i-1]){
-				smallestIndex = i; 
+			for(int i=1; i<4; i++){
+				if(prepArray[i] < prepArray[i-1]){
+					smallestIndex = i; 
+				}
 			}
+			
+			if(smallestIndex == 0){
+				Pattern pattern = Pattern.compile("add(.*?\\s)at\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}else if(smallestIndex == 1){
+				Pattern pattern = Pattern.compile("add(.*?\\s)by\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}else if(smallestIndex == 2){
+				Pattern pattern = Pattern.compile("add(.*?\\s)from\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}else if(smallestIndex == 3){
+				Pattern pattern = Pattern.compile("add(.*?\\s)on\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}
+			return description.trim();
+		}else{
+			return userInput.substring(userInput.indexOf("add ")+4, userInput.length());
 		}
-
-		if(smallestIndex == 0){
-			Pattern pattern = Pattern.compile("add(.*?\\s)at\\s");
-			Matcher matcher = pattern.matcher(userInput);
-			while(matcher.find()){
-				description = matcher.group(1);
-			}
-		}else if(smallestIndex == 1){
-			Pattern pattern = Pattern.compile("add(.*?\\s)by\\s");
-			Matcher matcher = pattern.matcher(userInput);
-			while(matcher.find()){
-				description = matcher.group(1);
-			}
-		}else if(smallestIndex == 2){
-			Pattern pattern = Pattern.compile("add(.*?\\s)from\\s");
-			Matcher matcher = pattern.matcher(userInput);
-			while(matcher.find()){
-				description = matcher.group(1);
-			}
-		}else if(smallestIndex == 3){
-			Pattern pattern = Pattern.compile("add(.*?\\s)on\\s");
-			Matcher matcher = pattern.matcher(userInput);
-			while(matcher.find()){
-				description = matcher.group(1);
-			}
-		}
-		return description.trim();
 	}
 
 	public static int getImportance(String userInput){
