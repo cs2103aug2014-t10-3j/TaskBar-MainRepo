@@ -7,6 +7,8 @@ public class DisplayData {
 	private String prompt;
 	private ArrayList<Task> listOfTasks;
 	
+	private boolean needToUpdate;
+
 	private boolean needToUpdateInputBox;
 	private boolean isResultLocked;
 
@@ -14,6 +16,14 @@ public class DisplayData {
 		super();
 	}
 	
+	public boolean needToUpdate() {
+		return needToUpdate;
+	}
+
+	public void setNeedToUpdate(boolean needToUpdate) {
+		this.needToUpdate = needToUpdate;
+	}
+
 	public boolean inputTextIsEmpty() {
 		return inputText == null || inputText.equals("");
 	}
