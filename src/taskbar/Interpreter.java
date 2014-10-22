@@ -67,4 +67,48 @@ public class Interpreter {
 		
 		return result;
 	}
+	
+	public static String getParameter(String userInput){
+		if(hasCommandKeyword(userInput)){
+			String[] splitInputTokens = userInput.split(" ", 2);
+			return splitInputTokens[1];
+		}
+		return userInput;
+		
+	}
+	
+	private static boolean hasCommandKeyword(String userInput){
+		String[] splitInputTokens = userInput.split(" ", 2);
+		String commandKeyword = splitInputTokens[0].toLowerCase();
+		switch(commandKeyword){
+		case"add":
+		case"delete":
+		case"update":
+		case"complete":
+		case"undo":
+		case"show":
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	public static CommandType getCommandType(String userInput){
+		String[] splitInputTokens = userInput.split(" ", 2);
+		String commandKeyword = splitInputTokens[0].toLowerCase();
+		switch(commandKeyword){
+		case"add":
+			return CommandType.ADD;
+		case"delete":
+			return CommandType.DELETE;
+		case"update":
+			return CommandType.UPDATE;
+		case"complete":
+			return CommandType.COMPLETE;
+		case"undo":
+			return CommandType.UNDO;
+		default:
+			return CommandType.SHOW;
+		}
+	}
 }

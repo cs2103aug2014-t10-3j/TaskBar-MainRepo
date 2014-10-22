@@ -33,7 +33,7 @@ public class Controller{
 
 	public DisplayData handleEnter(String userInput) {
 		// TODO to be refactored as processEnterCommandsThatDoNotInvolveSearch
-		CommandType currentCommand = Interpreter.getCommand(userInput);
+		CommandType currentCommand = Interpreter.getCommandType(userInput);
 		if (currentCommand == CommandType.ADD) {
 			storage.addTask(Interpreter.interpretAdd(userInput));
 			setDisplayData("Task successfully added!", null,
@@ -43,7 +43,7 @@ public class Controller{
 		} else if (!isResultLocked) {
 			// TODO to be refactored as processUnlockedEnter
 			// TODO add in handling for arrow-key selection here, delete assert
-			assert Interpreter.getCommand(userInput) == CommandType.SHOW;
+			assert Interpreter.getCommandType(userInput) == CommandType.SHOW;
 			setDisplayData(
 					"<delete/update/complete> + <number> to perform action on a task!",
 					isResultLocked = true);
@@ -92,7 +92,7 @@ public class Controller{
 	}
 
 	private void processUnlockedKeyTyped(String userInput) {
-		CommandType currentCommand = Interpreter.getCommand(userInput);
+		CommandType currentCommand = Interpreter.getCommandType(userInput);
 		switch (currentCommand) {
 		case ADD:
 		case UNDO:
@@ -107,7 +107,7 @@ public class Controller{
 	}
 
 	private void processLockedEnter(String userInput) {
-		CommandType currentCommand = Interpreter.getCommand(userInput);
+		CommandType currentCommand = Interpreter.getCommandType(userInput);
 		assert currentCommand != CommandType.ADD
 				&& currentCommand != CommandType.UNDO : "improperly reached processLockedEnter";
 		switch (currentCommand) {
