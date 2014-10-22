@@ -6,10 +6,14 @@ public class DisplayData {
 	private String inputText;
 	private String prompt;
 	private ArrayList<Task> listOfTasks;
+	
+	private boolean needToUpdateInputBox;
+	private boolean isResultLocked;
 
 	public DisplayData() {
 		super();
 	}
+	
 	public boolean inputTextIsEmpty() {
 		return inputText == null || inputText.equals("");
 	}
@@ -21,6 +25,22 @@ public class DisplayData {
 		return listOfTasks == null || listOfTasks.isEmpty();
 	}
 
+	public boolean needToUpdateInputBox(){
+		return needToUpdateInputBox;
+	}
+	
+	public void setNeedToUpdateInputBox(boolean needToUpdateInputBox) {
+		this.needToUpdateInputBox = needToUpdateInputBox;
+	}
+
+	public void setResultLocked(boolean isResultLocked) {
+		this.isResultLocked = isResultLocked;
+	}
+
+	public boolean isResultLocked(){
+		return isResultLocked;
+	}
+	
 	public String getInputText() {
 		return inputText;
 	}

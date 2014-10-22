@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 
 public class Interpreter {
-	
 	public static Task interpretAdd(String string) {
 		String unsplitString = string;
 		String[] itemsOfTask = unsplitString.split("\\\\");
