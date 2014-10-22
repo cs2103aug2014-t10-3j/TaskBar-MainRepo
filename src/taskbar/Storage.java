@@ -13,61 +13,68 @@ import org.jdom2.Element;
 
 public class Storage {
 
+<<<<<<< HEAD
 	private static ArrayList<Task> allTasks = new ArrayList<Task>();
 
 	public Storage() {
-	}
-
-	public void addTask(Task taskFromLogic) {
-		allTasks.add(taskFromLogic);
-	}
-
-	// TODO add in exception handling/throwing (Task not found)
-	public int deleteTask(Task taskToBeDeleted) {
-		boolean removed = allTasks.remove(taskToBeDeleted);
-		if (removed) {
-			return 1;
+=======
+	private ArrayList<Task> allTasks;
+	private FileHandler fileHandler;
+	private static Storage storage;
+	
+	/**
+	 * Constructor for the class. Since Singleton pattern is applied, this 
+	 * constructor is made private access.
+	 */
+	private Storage(){
+		try{
+			fileHandler = new FileHandler();
+			allTasks = fileHandler.readFromFile();
+		}catch(Exception e){
+			e.printStackTrace();
+			//TODO add in proper handling for IOException
 		}
-		return 0;
+		
 	}
-
-	// No longer useful, since we use delete+add to update.
-	public int updateTask(Task oldTask, Task newTask) {
-		// Overwrite taskA with taskB
-		if (allTasks.contains(oldTask)) {
-			allTasks.set(allTasks.indexOf(oldTask), newTask);
-			return 1;
+	
+	/**
+	 * This method reinforce the Singleton pattern for class Storage, which 
+	 * means each time the software is run, there should be only one instance
+	 * of class Storage.
+	 * @return The static storage instance.
+	 */
+	public static Storage getInstance(){
+		if(storage != null){
+			return storage;
 		}
-		return 0; // no such task found to update
+		storage = new Storage();
+		return storage;
 	}
 
 	public ArrayList<Task> getAllTasks() {
 		// need to figure out how to sort them
 		// maybe can have the default display as Sort by Importance display.
 		return allTasks;
-
+>>>>>>> origin/master
 	}
-	
-	//TODO Refactor this to sort a given ArrayList
-	public ArrayList<Task> sortByImportance() {
-		boolean swapped = true;
-		int j = 0;
-		Task tmp;
-		while (swapped) {
-			swapped = false;
-			j++;
-			for (int i = 0; i < allTasks.size() - j; i++) {
-				if (allTasks.get(i).getImportance() < allTasks.get(i + 1)
-						.getImportance()) {
-					tmp = allTasks.get(i);
-					allTasks.set(i, allTasks.get(i + 1));
-					allTasks.set(i + 1, tmp);
-					swapped = true;
-				}
-				
-			}
+
+	public void addTask(Task taskFromLogic) {
+		allTasks.add(taskFromLogic);
+		fileHandler.writeToFile(allTasks);
+		//TODO maybe figure out a way to make incremental modificaiton to the recorded file? 
+	}
+
+
+	public int deleteTask(Task taskToBeDeleted) {
+		//The specified task should exist if the software is running correctly.
+		assert allTasks.contains(taskToBeDeleted);
+		
+		boolean removed = allTasks.remove(taskToBeDeleted);
+		fileHandler.writeToFile(allTasks);
+		if (removed) {
+			return 1;
 		}
-		return allTasks;
+		return 0;
 	}
 
 	public ArrayList<Task> searchTask(String keyWord) {
@@ -75,7 +82,8 @@ public class Storage {
 		ArrayList<Task> searchedTasks = new ArrayList<Task>();
 
 		for (int i = 0; i < allTasks.size(); i++) {
-			if (allTasks.get(i).getDescription().contains(keyWord)) {
+			if (allTasks.get(i).getDescription().toLowerCase().contains(
+					keyWord.toLowerCase())) {
 				searchedTasks.add(allTasks.get(i));
 			}
 		}
@@ -83,13 +91,8 @@ public class Storage {
 		return searchedTasks;
 
 	}
-
-	public ArrayList<Task> getTasks() {
-		// need to figure out how to sort them
-		// maybe can have the default display as Sort by Importance display.
-		return allTasks;
-
-	}
+	
+	//TODO add in search by time date, getDoneTasks, getNotDoneTasks
 
 	public ArrayList<Task> sortByTime() {
 		boolean swapped = true;
@@ -101,6 +104,28 @@ public class Storage {
 			for (int i = 0; i < allTasks.size() - j; i++) {
 				if (allTasks.get(i).getDeadline().isBefore(allTasks.get(i + 1).getDeadline()))
 				{
+					tmp = allTasks.get(i);
+					allTasks.set(i, allTasks.get(i + 1));
+					allTasks.set(i + 1, tmp);
+					swapped = true;
+				}
+				
+			}
+		}
+		return allTasks;
+	}
+
+	//TODO Refactor this to sort a given ArrayList
+	public ArrayList<Task> sortByImportance() {
+		boolean swapped = true;
+		int j = 0;
+		Task tmp;
+		while (swapped) {
+			swapped = false;
+			j++;
+			for (int i = 0; i < allTasks.size() - j; i++) {
+				if (allTasks.get(i).getImportance() < allTasks.get(i + 1)
+						.getImportance()) {
 					tmp = allTasks.get(i);
 					allTasks.set(i, allTasks.get(i + 1));
 					allTasks.set(i + 1, tmp);
