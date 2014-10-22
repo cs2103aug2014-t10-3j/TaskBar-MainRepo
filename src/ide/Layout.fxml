@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="457.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="table" layoutX="37.0" layoutY="46.0" prefHeight="363.0" prefWidth="427.0" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="16.0">
+        <columns>
+          <TableColumn fx:id="descCol" editable="false" prefWidth="234.0" text="Description" />
+            <TableColumn fx:id="tagCol" editable="false" minWidth="0.0" prefWidth="65.0" text="Tag" />
+          <TableColumn fx:id="dateCol" editable="false" minWidth="0.0" prefWidth="65.0" text="Date" />
+            <TableColumn fx:id="timeCol" editable="false" minWidth="0.0" prefWidth="65.0" text="Time" />
+        </columns>
+      </TableView>
+      <Label fx:id="status" layoutX="53.0" layoutY="420.0" prefHeight="17.0" prefWidth="335.0" text="Label" />
+      <TextField fx:id="textbox" layoutX="55.0" layoutY="15.0" prefHeight="25.0" prefWidth="392.0" promptText="Enter command" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="33.0" />
+   </children>
+</AnchorPane>

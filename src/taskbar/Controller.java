@@ -17,7 +17,7 @@ public class Controller{
 	private Logger logger = Logging.getInstance();
 
 	// TODO modify constructor to suit the new architecture.
-	Controller() {
+	public Controller() {
 		storage = Storage.getInstance();
 		isResultLocked = false;
 	}

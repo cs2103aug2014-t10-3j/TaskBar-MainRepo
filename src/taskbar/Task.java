@@ -30,6 +30,7 @@ public class Task {
 			LocalDateTime time) {
 		this(description, labels, importance);
 		timeStamp1 = time;
+		timeStamp2 = null;
 	}
 
 	public Task(String description, ArrayList<String> labels, int importance,
