@@ -29,6 +29,14 @@ public class DisplayData {
 		return needToUpdateInputBox;
 	}
 	
+	public void setNeedToUpdateInputBox(boolean needToUpdateInputBox) {
+		this.needToUpdateInputBox = needToUpdateInputBox;
+	}
+
+	public void setResultLocked(boolean isResultLocked) {
+		this.isResultLocked = isResultLocked;
+	}
+
 	public boolean isResultLocked(){
 		return isResultLocked;
 	}
