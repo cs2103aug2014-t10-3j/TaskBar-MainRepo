@@ -3,6 +3,7 @@ package taskbar;
  * @author Xiaofan
  */
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
 
@@ -104,12 +105,19 @@ public class DateTimeLocal {
 			int month = Integer.parseInt(splitSlash[1]);
 			String timeSub = time.substring(0, time.length()-2);
 			int time12h = Integer.parseInt(timeSub);
-			if(time.contains("pm")){
-				if(time12h != 12){
-					time12h = time12h + 12;
-				}
+			int hour;
+			int minute;
+			if (time12h<=12) {
+				hour = time12h;
+				minute = 0;							
+			} else {
+				hour = time12h/100;
+				minute = time12h%100;
 			}
-			LocalDateTime time1 = LocalDateTime.of(2014, month, day, time12h, 0);
+			if(time.contains("pm") && hour!=12){					
+				hour = hour + 12;					
+			}
+			LocalDateTime time1 = LocalDateTime.of(2014, month, day, hour, minute);
 			return time1;
 		}else if(splitSlash.length == 3){
 			int day = Integer.parseInt(splitSlash[0]);
@@ -117,12 +125,19 @@ public class DateTimeLocal {
 			int year = Integer.parseInt(splitSlash[2]);
 			String timeSub = time.substring(0, time.length()-2);
 			int time12h = Integer.parseInt(timeSub);
-			if(time.contains("pm")){
-				if(time12h != 12){
-					time12h = time12h + 12;
-				}
+			int hour;
+			int minute;
+			if (time12h<=12) {
+				hour = time12h;
+				minute = 0;							
+			} else {
+				hour = time12h/100;
+				minute = time12h%100;
 			}
-			LocalDateTime time2 = LocalDateTime.of(year, month, day, time12h, 0);
+			if(time.contains("pm") && hour!=12){					
+				hour = hour + 12;					
+			}
+			LocalDateTime time2 = LocalDateTime.of(year, month, day, hour, minute);
 			return time2;
 		}
 		return null;
@@ -153,20 +168,26 @@ public class DateTimeLocal {
 		LocalDateTime current = LocalDateTime.now();
 		String timeSub = time.substring(0, time.length()-2);
 		int time12h = Integer.parseInt(timeSub);
-		if(time.contains("pm")){
-			if(time12h != 12){
-				time12h = time12h + 12;
-			}
+		int hour;
+		int minute;
+		if (time12h<=12) {
+			hour = time12h;
+			minute = 0;							
+		} else {
+			hour = time12h/100;
+			minute = time12h%100;
 		}
+		if(time.contains("pm") && hour!=12){					
+			hour = hour + 12;					
+		}
+		LocalDateTime specified;
 		if(date.equals("tomorrow") || date.equals("tmr")){
-			LocalDateTime specified = current.plusDays(1L);
-			specified = specified.withMinute(0);
-			return specified.withHour(time12h);
+			specified = current.plusDays(1L);
 		}else{
-			LocalDateTime specified = current.plusDays(differenceInDays(date, current));
-			specified = specified.withMinute(0);
-			return specified.withHour(time12h);
+			specified = current.plusDays(differenceInDays(date, current));
 		}
+		specified = specified.withHour(hour).withMinute(minute);
+		return specified;
 	}
 	
 	public static LocalDateTime timeFromDayDateAnd24hTime(String date, String time){
@@ -174,7 +195,7 @@ public class DateTimeLocal {
 		int hour = Integer.parseInt(time.substring(0, time.length()-2));
 		int min = Integer.parseInt(time.substring(2));
 		if(date.equals("tomorrow") || date.equals("tmr")){
-			LocalDateTime specified = current.plusDays(1L);
+			LocalDateTime specified = current.plusDays(1);
 			specified = specified.withHour(hour);
 			specified = specified.withMinute(min);
 			return specified;
@@ -192,12 +213,19 @@ public class DateTimeLocal {
 		int month = getIntFromMonth(splitStrSpace[1]);
 		String timeSub = time.substring(0, time.length()-2);
 		int time12h = Integer.parseInt(timeSub);
-		if(time.contains("pm")){
-			if(time12h != 12){
-				time12h = time12h + 12;
-			}
+		int hour;
+		int minute;
+		if (time12h<=12) {
+			hour = time12h;
+			minute = 0;							
+		} else {
+			hour = time12h/100;
+			minute = time12h%100;
 		}
-		LocalDateTime specified = LocalDateTime.of(2014, month, day, time12h, 0);
+		if(time.contains("pm") && hour!=12){					
+			hour = hour + 12;					
+		}
+		LocalDateTime specified = LocalDateTime.of(2014, month, day, hour, minute);
 		return specified;	
 	}
 	
@@ -218,12 +246,19 @@ public class DateTimeLocal {
 		int year = Integer.parseInt(splitStrSpace[2]);
 		String timeSub = time.substring(0, time.length()-2);
 		int time12h = Integer.parseInt(timeSub);
-		if(time.contains("pm")){
-			if(time12h != 12){
-				time12h = time12h + 12;
-			}
+		int hour;
+		int minute;
+		if (time12h<=12) {
+			hour = time12h;
+			minute = 0;							
+		} else {
+			hour = time12h/100;
+			minute = time12h%100;
 		}
-		LocalDateTime specified = LocalDateTime.of(year, month, day, time12h, 0);
+		if(time.contains("pm") && hour!=12){					
+			hour = hour + 12;					
+		}
+		LocalDateTime specified = LocalDateTime.of(year, month, day, hour, minute);
 		return specified;
 	}
 	
@@ -242,13 +277,20 @@ public class DateTimeLocal {
 		LocalDateTime current = LocalDateTime.now();
 		String timeSub = dateTime.substring(0, dateTime.length()-2);
 		int time12h = Integer.parseInt(timeSub);
-		if(dateTime.contains("pm")){
-			if(time12h != 12){
-				time12h = time12h + 12;
-			}
+		int hour;
+		int minute;
+		if (time12h<=12) {
+			hour = time12h;
+			minute = 0;							
+		} else {
+			hour = time12h/100;
+			minute = time12h%100;
 		}
-		LocalDateTime specified = current.withHour(time12h);
-		return specified.withMinute(0);
+		if(dateTime.contains("pm") && hour!=12){					
+			hour = hour + 12;					
+		}
+		LocalDateTime specified = current.withHour(hour).withMinute(minute);
+		return specified;
 	}
 	
 	public static LocalDateTime timeFrom24hTime(String dateTime){
@@ -274,8 +316,14 @@ public class DateTimeLocal {
 		String splitStrSpace[] = dateTime.split("/");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = Integer.parseInt(splitStrSpace[1]);
-		int year = Integer.parseInt(splitStrSpace[2]);
-		LocalDateTime specified = LocalDateTime.of(year, month, day, 0, 0);
+		LocalDateTime specified;
+		if (splitStrSpace.length==3) {
+			int year = Integer.parseInt(splitStrSpace[2]);
+			specified = LocalDateTime.of(year, month, day, 0, 0);
+		} else {
+			specified = LocalDateTime.of(2014, month, day, 0, 0);
+		}
+		
 		return specified;
 	}
 	
