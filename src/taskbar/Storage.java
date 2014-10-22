@@ -6,18 +6,17 @@
 package taskbar;
 
 import java.io.IOException;
+import java.util.List;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import org.jdom2.JDOMException;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.Element;
 
 public class Storage {
 
-<<<<<<< HEAD
-	private static ArrayList<Task> allTasks = new ArrayList<Task>();
 
-	public Storage() {
-=======
 	private ArrayList<Task> allTasks;
 	private FileHandler fileHandler;
 	private static Storage storage;
@@ -55,7 +54,7 @@ public class Storage {
 		// need to figure out how to sort them
 		// maybe can have the default display as Sort by Importance display.
 		return allTasks;
->>>>>>> origin/master
+
 	}
 
 	public void addTask(Task taskFromLogic) {
@@ -147,7 +146,39 @@ public class Storage {
 	
 	//IN PROGRESSS
 	public void readFile(){
-		
+		 final String fileName = "/Users/ET/tasks.xml";
+	        org.jdom2.Document jdomDoc;
+	        try {
+	            //we can create JDOM Document from DOM, SAX and STAX Parser Builder classes
+	            jdomDoc = ReadFileJDOM.useDOMParser(fileName);
+	            Element root = jdomDoc.getRootElement();
+	            List<Element> taskListElements = root.getChildren("Task");
+	            List<Task> taskList = new ArrayList<>();
+	            for (Element taskElement : taskListElements) {
+	                Task task1 = new Task();
+	                task1.setDescription(taskElement.getChildText("Description"));
+	                
+	                List<Element> list = root.getChildren("Labels");
+	                ArrayList<String> labelsList = new ArrayList<String>();
+	                for(Element label : list)
+	                {
+	                	labelsList.add(label.getChildText("Label"));
+	                }
+	                
+	                task1.setLabels(labelsList);
+	               
+	                task1.setImportance(Integer.parseInt(taskElement.getChildText("Importance")));
+	                task1.setDeadline(LocalDateTime.parse(taskElement.getChildText("TimeStamp1")));
+	                task1.setEndTime(LocalDateTime.parse(taskElement.getChildText("TimeStamp2")));
+	                taskList.add(task1);
+	            }
+	            //lets print Employees list information
+	            for (Task tasks : taskList)
+	                System.out.println(tasks);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	 
 	}
 	}
 	

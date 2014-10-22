@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -27,18 +26,13 @@ public class WriteFileJDOM {
             Element labs = new Element("Labels");
             tasks.addContent(labs);
             for(int i=0; i<task.getNumLabels(); i++){
-            	tasks.addContent(labs.setText(task.getLabels().get(i)));
+            	tasks.addContent(labs.addContent(new Element("Label").setText(task.getLabels().get(i))));
             }
             tasks.addContent(new Element("Importance").setText(""+task.getImportance()));
-            if(task.isDeadLineTask())
-            {
-            	tasks.addContent(new Element("Deadline").setText(""+task.getDeadline()));
-            }
-            if(task.isEvent())
-            {
-            	tasks.addContent(new Element("Event")).setText(""+task.getStartTime() + "" + task.getEndTime());
-            }
-          
+            
+            tasks.addContent(new Element("TimeStamp1").setText(task.getStartTime().toString()));
+            tasks.addContent(new Element("TimeStamp2").setText(task.getEndTime().toString()));
+            
         }
         //JDOM document is ready now, lets write it to file now
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
