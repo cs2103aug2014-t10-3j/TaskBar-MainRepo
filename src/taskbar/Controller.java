@@ -37,7 +37,7 @@ public class Controller{
 		if (currentCommand == CommandType.ADD) {
 			storage.addTask(Interpreter.interpretAdd(userInput));
 			setDisplayData("Task successfully added!", storage.getAllTasks(),
-					isResultLocked = false);
+					isResultLocked = true);
 		} else if (currentCommand == CommandType.UNDO) {
 			// TODO implement UNDO
 		} else if (!isResultLocked) {
@@ -143,7 +143,7 @@ public class Controller{
 			storage.deleteTask(taskToBeDeleted);
 
 			setDisplayData("Task deleted successfully", storage.getAllTasks(),
-					isResultLocked = false);
+					isResultLocked = true);
 
 			logger.log(Level.FINE, "Task deleted successfully\n"
 					+ taskToBeDeleted.getDescription());
