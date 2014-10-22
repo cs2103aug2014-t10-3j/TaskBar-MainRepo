@@ -47,7 +47,11 @@ public class IDEController implements Initializable{
 		textbox.setOnAction((event) -> {
 			data = ctrl.handleEnter(textbox.getText());
 			showToUser(data);
-			
+			if (data.needToUpdateInputBox()) {
+				textbox.setText(data.getInputText());
+			} else {
+				textbox.clear();
+			}			
 		});
 		
 		textbox.textProperty().addListener(new ChangeListener<String>() {
@@ -78,12 +82,6 @@ public class IDEController implements Initializable{
 		status.setText(data.getPrompt());
 		status.setOpacity(1);
 		fadeStatus();
-		
-		if (data.needToUpdateInputBox()) {
-			textbox.setText(data.getInputText());
-		} else {
-			textbox.clear();
-		}
 	}
 	
 	private void fadeStatus() {

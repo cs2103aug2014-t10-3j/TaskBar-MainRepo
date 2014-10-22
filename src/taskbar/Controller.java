@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class Controller{
 
-	private DisplayData displayData;
+	private DisplayData displayData = new DisplayData();
 	private Storage storage;
 	private boolean isResultLocked;
 
