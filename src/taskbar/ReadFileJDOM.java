@@ -20,7 +20,6 @@ import org.jdom2.input.DOMBuilder;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-//UNDER CONSTRUCTION
 public class ReadFileJDOM {
 	
 	//Get JDOM document from DOM Parser
