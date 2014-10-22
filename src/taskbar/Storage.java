@@ -147,31 +147,7 @@ public class Storage {
 	
 	//IN PROGRESSS
 	public void readFile(){
-		 final String fileName = "/Users/ET/tasks.xml";
-	        org.jdom2.Document jdomDoc;
-	        try {
-	            //we can create JDOM Document from DOM, SAX and STAX Parser Builder classes
-	            jdomDoc = ReadFileJDOM.useDOMParser(fileName);
-	            Element root = jdomDoc.getRootElement();
-	            List<Element> taskListElements = root.getChildren("Task");
-	            List<Task> taskList = new ArrayList<>();
-	            for (Element taskElement : taskListElements) {
-	                Task task1 = new Task();
-	                task1.setDescription(taskElement.getChildText("Description"));
-	                
-	                task1.setLabels(Integer.parseInt(taskElement.getChildText("Labels")));
-	                task1.setName(taskElement.getChildText("name"));
-	                task1.setRole(taskElement.getChildText("role"));
-	                task1.setGender(taskElement.getChildText("gender"));
-	                taskList.add(task1);
-	            }
-	            //lets print Employees list information
-	            for (Employee emp : empList)
-	                System.out.println(emp);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	 
+		
 	}
 	}
 	
