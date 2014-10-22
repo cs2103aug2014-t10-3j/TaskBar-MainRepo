@@ -19,7 +19,7 @@ public class Interpreter {
 	public static Task interpretAdd(String command) {
 		String userInput = command.toLowerCase();
 		String userInputOnly = Command.removeImportanceTagString(command);
-		String commandDescription = Command.getDescription(userInput);
+		String commandDescription = Command.getDescription(userInputOnly);
 		int commandImportance = Command.getImportance(userInput);
 		ArrayList<String> commandTag = Command.getTag(userInput);
 		String typeOfTask = Command.getTypeOfTask(userInput);
