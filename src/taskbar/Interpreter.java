@@ -11,47 +11,35 @@
 package taskbar;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
 public class Interpreter {
-	public static Task interpretAdd(String string) {
-		String unsplitString = string;
-		String[] itemsOfTask = unsplitString.split("\\\\");
-		String description = itemsOfTask[1];
-		ArrayList<String> labels = new ArrayList<String>();
-		labels.add(itemsOfTask[2]);
-		int importance = Integer.parseInt(itemsOfTask[3]);
-		
-		if(itemsOfTask.length == 4){
-			
-			Task task = new Task(description, labels, importance);
-		
+	public static Task interpretAdd(String command) {
+		String userInput = command.toLowerCase();
+		String userInputOnly = Command.removeImportanceTagString(command);
+		String commandDescription = Command.getDescription(userInput);
+		int commandImportance = Command.getImportance(userInput);
+		ArrayList<String> commandTag = Command.getTag(userInput);
+		String typeOfTask = Command.getTypeOfTask(userInput);
+		if(typeOfTask == "task"){
+			LocalDateTime normalTime = DateTimeLocal.getNormalDateTime(userInputOnly);
+			Task task = new Task(commandDescription, commandTag, commandImportance, normalTime);
 			return task;
-			
-		} else if (itemsOfTask.length == 5){
-			
-			String date = itemsOfTask[4];
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-			LocalDateTime deadline = LocalDateTime.parse(date, formatter);
-			
-			Task deadlineTask = new Task(description, labels, importance, deadline);						
-			
-			return deadlineTask;
-			
-		} else if (itemsOfTask.length == 6) {
-			
-			String start = itemsOfTask[4];
-			String end = itemsOfTask[5];
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-			LocalDateTime startTime = LocalDateTime.parse(start, formatter);
-			LocalDateTime endTime = LocalDateTime.parse(end, formatter);
-			
-			Task event = new Task(description, labels, importance, startTime, endTime);
-			
-			return event;			
-		} else return null;		
+		}else if(typeOfTask == "scheduled task"){
+			LocalDateTime scheduledTime = DateTimeLocal.getScheduledDateTime(userInputOnly);
+			Task task = new Task(commandDescription, commandTag, commandImportance, scheduledTime);
+			return task;
+		}else if(typeOfTask == "event"){
+			LocalDateTime startTime = DateTimeLocal.getStartDateTime(userInputOnly);
+			LocalDateTime endTime = DateTimeLocal.getEndDateTime(userInputOnly);
+			Task task = new Task(commandDescription, commandTag, commandImportance, startTime, endTime);
+			return task;
+		}else if(typeOfTask == "floating"){
+			Task task = new Task(commandDescription, commandTag, commandImportance);
+			return task;
+		}
+		return null;
 	}
 	
 	public static String convertTaskToAddCommand(Task task){

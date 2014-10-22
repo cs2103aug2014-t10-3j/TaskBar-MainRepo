@@ -1,8 +1,8 @@
+package taskbar;
 /**
  * @author Xiaofan
  */
 
-package parser;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Arrays;
@@ -65,7 +65,7 @@ public class Command {
 		int smallestIndex = 0;
 
 		for(int i=1; i<4; i++){
-			if(prepArray[i] < prepArray[0]){
+			if(prepArray[i] < prepArray[i-1]){
 				smallestIndex = i; 
 			}
 		}
@@ -128,6 +128,8 @@ public class Command {
 			return "event";
 		}else if(userInput.contains(ON) || userInput.contains(AT)){
 			return "task";
+		}else if(userInput.contains(ON) && userInput.contains(TO)){
+			return "event";
 		}else{
 			return "floating";
 		}

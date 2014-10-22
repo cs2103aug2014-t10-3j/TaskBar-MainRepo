@@ -1,5 +1,7 @@
-package parser;
-
+package taskbar;
+/**
+ * @author Xiaofan
+ */
 public class DateTime {
 	
 	public static Boolean is24hTimeFormat(String string){
@@ -13,8 +15,9 @@ public class DateTime {
 	}
 	
 	public static Boolean is12hTimeFormat(String string){
-		String substring = string.substring(string.length()-2, string.length());
-		if(substring.equalsIgnoreCase("am") || substring.equalsIgnoreCase("pm")){
+		int length = string.length();
+		String substring = string.substring(length-2, length);
+		if(substring.equals("am") || substring.equals("pm")){
 			return true;
 		}
 		return false;

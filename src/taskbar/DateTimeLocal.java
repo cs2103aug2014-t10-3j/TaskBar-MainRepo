@@ -1,8 +1,8 @@
+package taskbar;
 /**
  * @author Xiaofan
  */
 
-package parser;
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
 import java.util.regex.Matcher;
@@ -173,11 +173,13 @@ public class DateTimeLocal {
 		if(time.contains("pm")){
 			time12h = time12h + 12;
 		}
-		if(date == "tomorrow" || date == "tmr"){
-			LocalDateTime specified = current.plusDays(1);
+		if(date.equals("tomorrow") || date.equals("tmr")){
+			LocalDateTime specified = current.plusDays(1L);
+			specified = specified.withMinute(0);
 			return specified.withHour(time12h);
 		}else{
 			LocalDateTime specified = current.plusDays(differenceInDays(date, current));
+			specified = specified.withMinute(0);
 			return specified.withHour(time12h);
 		}
 	}
@@ -186,15 +188,15 @@ public class DateTimeLocal {
 		LocalDateTime current = LocalDateTime.now();
 		int hour = Integer.parseInt(time.substring(0, time.length()-2));
 		int min = Integer.parseInt(time.substring(2));
-		if(date == "tomorrow" || date == "tmr"){
-			LocalDateTime specified = current.plusDays(1);
-			specified.withHour(hour);
-			specified.withMinute(min);
+		if(date.equals("tomorrow") || date.equals("tmr")){
+			LocalDateTime specified = current.plusDays(1L);
+			specified = specified.withHour(hour);
+			specified = specified.withMinute(min);
 			return specified;
 		}else{
 			LocalDateTime specified = current.plusDays(differenceInDays(date, current));
-			specified.withHour(hour);
-			specified.withMinute(min);
+			specified = specified.withHour(hour);
+			specified = specified.withMinute(min);
 			return specified;
 		}
 	}
@@ -255,6 +257,7 @@ public class DateTimeLocal {
 			time12h = time12h + 12;
 		}
 		LocalDateTime specified = current.withHour(time12h);
+		specified = specified.withMinute(0);
 		return specified;
 	}
 	
@@ -268,17 +271,21 @@ public class DateTimeLocal {
 	
 	public static LocalDateTime timeFromDayDate(String dateTime){
 		LocalDateTime current = LocalDateTime.now();
-		if(dateTime == "tomorrow" || dateTime == "tmr"){
-			LocalDateTime specified = current.plusDays(1);
+		if(dateTime.equals("tomorrow") || dateTime.equals("tmr")){
+			LocalDateTime specified = current.plusDays(1L);
+			specified = specified.withHour(0);
+			specified = specified.withMinute(0);
 			return specified;
 		}else{
 			LocalDateTime specified = current.plusDays(differenceInDays(dateTime, current));
+			specified = specified.withHour(0);
+			specified = specified.withMinute(0);
 			return specified;
 		}
 	}
 	
 	public static LocalDateTime timeFromNumDate(String dateTime){
-		String splitStrSpace[] = dateTime.split("\\s");
+		String splitStrSpace[] = dateTime.split("/");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = Integer.parseInt(splitStrSpace[1]);
 		int year = Integer.parseInt(splitStrSpace[2]);
@@ -288,74 +295,75 @@ public class DateTimeLocal {
 	
 	public static long differenceInDays(String day, LocalDateTime current){
 		DayOfWeek currentDay = current.getDayOfWeek();
-		long currentDayInt = currentDay.getValue();
-		long difference = 0;
-		if(day == "monday" || day == "mon"){
+		int currentDayInt = currentDay.getValue();
+		int difference = 0;
+		if(day.equals("monday") || day.equals("mon")){
 			difference = 1 + 7 - currentDayInt;
-		}else if(day == "tuesday" || day == "tue"){
+		}else if(day.equals("tuesday") || day.equals("tue")){
 			if(2 > currentDayInt){
 				difference = 2 - currentDayInt;
 			}else{
 				difference = 2 + 7 - currentDayInt;
 			}
-		}else if(day == "wednesday" || day == "wed"){
+		}else if(day.equals("wednesday") || day.equals("wed")){
 			if(3 > currentDayInt){
 				difference = 3 - currentDayInt;
 			}else{
 				difference = 3 + 7 - currentDayInt;
 			}
-		}else if(day == "thursday" || day == "thu"){
+		}else if(day.equals("thursday") || day.equals("thu")){
 			if(4 > currentDayInt){
 				difference = 4 - currentDayInt;
 			}else{
 				difference = 4 + 7 - currentDayInt;
 			}
-		}else if(day == "friday" || day == "fri"){
+		}else if(day.equals("friday") || day.equals("fri")){
 			if(5 > currentDayInt){
 				difference = 5 - currentDayInt;
 			}else{
 				difference = 5 + 7 - currentDayInt;
 			}
-		}else if(day == "saturday" || day == "sat"){
+		}else if(day.equals("saturday") || day.equals("sat")){
 			if(6 > currentDayInt){
 				difference = 6 - currentDayInt;
 			}else{
 				difference = 6 + 7 - currentDayInt;
 			}
-		}else if(day == "sunday" || day == "sun"){
+		}else if(day.equals("sunday") || day.equals("sun")){
 			if(7 > currentDayInt){
 				difference = 7 - currentDayInt;
 			}else{
 				difference = 7 + 7 - currentDayInt;
 			}
 		}
-		return difference;
+		long temp = Long.valueOf(String.valueOf(difference));
+		return temp;
 	}
 	
 	public static int getIntFromMonth(String string){
-		if(string == "january" || string == "jan"){
+		if(string.equals("january") || string.equals("jan")){
 			return 1;
-		}else if(string == "february" || string == "feb"){
+		}else if(string.equals("february") || string.equals("feb")){
 			return 2;
-		}else if(string == "march" || string == "mar"){
+		}else if(string.equals("march") || string.equals("mar")){
 			return 3;
-		}else if(string == "april" || string == "apr"){
+		}else if(string.equals("april") || string.equals("apr")){
 			return 4;
-		}else if(string == "may"){
+		}else if(string.equals("may")){
 			return 5;
-		}else if(string == "june" || string == "jun"){
+		}else if(string.equals("june") || string.equals("jun")){
 			return 6;
-		}else if(string == "july" || string == "jul"){
+		}else if(string.equals("july") || string.equals("jul")){
 			return 7;
-		}else if(string == "august" || string == "aug"){
+		}else if(string.equals("august") || string.equals("aug")){
 			return 8;
-		}else if(string == "september" || string == "sep"){
+		}else if(string.equals("september") || string.equals("sep")){
 			return 9;
-		}else if(string == "october" || string == "oct"){
+		}else if(string.equals("october") || string.equals("oct")){
 			return 10;
-		}else if(string == "november" || string == "nov"){
+		}else if(string.equals("november") || string.equals("nov")){
 			return 11;
-		}else if(string == "december" || string == "dec"){
+		}else if(string.equals("december") || string.equals("dec")){
 			return 12;
 		}
 		return 0;
