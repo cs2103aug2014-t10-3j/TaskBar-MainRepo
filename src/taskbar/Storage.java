@@ -5,6 +5,7 @@
  */
 package taskbar;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -17,8 +18,6 @@ import org.jdom2.Element;
 public class Storage {
 
 	private ArrayList<Task> allTasks;
-	private ReadFileJDOM readFile;
-	private WriteFileJDOM writeFile;
 	private static Storage storage;
 
 	/**
@@ -60,10 +59,10 @@ public class Storage {
 	}
 
 	public void addTask(Task taskFromLogic) {
-		try{
-		allTasks.add(taskFromLogic);
-		//writeFile();
-		}catch(Exception e){
+		try {
+			allTasks.add(taskFromLogic);
+			// writeFile();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		// TODO maybe figure out a way to make incremental modificaiton to the
@@ -180,12 +179,15 @@ public class Storage {
 						.getChildText("TimeStamp1")));
 				task1.setEndTime(LocalDateTime.parse(taskElement
 						.getChildText("TimeStamp2")));
+
 				allTasks.add(task1);
 
 			}
 			// lets print Employees list information
 			for (Task tasks : allTasks)
 				System.out.println(tasks);
+		} catch (FileNotFoundException e) {
+			allTasks = new ArrayList<Task>();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
