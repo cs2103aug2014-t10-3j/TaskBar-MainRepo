@@ -46,18 +46,16 @@ public class Interpreter {
 	public static String convertTaskToAddCommand(Task task){
 		String result = "add";
 		result = result + " " + task.getDescription();
-		if(task.isDeadLineTask()){
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+		if(task.isDeadLineTask()){			
 			LocalDateTime scheduledDateTime = task.getDeadline();
-			String formattedScheduleTime = scheduledDateTime.format(formatter);
+			String formattedScheduleTime = getTimeExpression(scheduledDateTime);								
 			result = result + " by " + formattedScheduleTime;
 		}
-		if(task.isEvent()){
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
-			LocalDateTime startDateTime = task.getStartTime();
-			String formattedStartTime = startDateTime.format(formatter);
+		if(task.isEvent()){		
+			LocalDateTime startDateTime = task.getStartTime();			
 			LocalDateTime endDateTime = task.getEndTime();
-			String formattedEndTime = endDateTime.format(formatter);
+			String formattedStartTime = getTimeExpression(startDateTime); 
+			String formattedEndTime = getTimeExpression(endDateTime);			
 			result = result + " from " + formattedStartTime + " to " + formattedEndTime;
 		}
 		int numOfLabels = task.getNumLabels();
@@ -71,6 +69,18 @@ public class Interpreter {
 		}
 		
 		return result;
+	}
+	
+	public static String getTimeExpression(LocalDateTime time) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm");
+		DateTimeFormatter formatterWithoutTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		String expr;
+		if (time.getHour()==0 && time.getMinute()==0) {
+			expr = time.format(formatterWithoutTime);
+		} else {
+			expr = time.format(formatter);
+		}
+		return expr;
 	}
 	
 	public static String getParameter(String userInput){

@@ -17,9 +17,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 public class IDEController implements Initializable{
+	@FXML private AnchorPane pane;
+	
 	@FXML private TextField textbox;
 	@FXML private TableView<Data> table;
 	@FXML private TableColumn<Data, String> descCol;
@@ -28,6 +32,9 @@ public class IDEController implements Initializable{
 	@FXML private TableColumn<Data, String> timeCol;
 	@FXML private Label status;
 	
+	@FXML private ImageView icon;
+	@FXML private ImageView slogan;
+	
 	private DisplayData data = new DisplayData();
 	private Controller ctrl = new Controller();
 	
@@ -35,6 +42,16 @@ public class IDEController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		pane.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> ov, Number oldVal, Number newVal) {
+				icon.setLayoutX((Double)newVal/2 - icon.getFitWidth()/2);
+				slogan.setLayoutX((Double)newVal/2 - slogan.getFitWidth()/2);
+			}
+		});
+		
+		
 		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
 		tagCol.setCellValueFactory(new PropertyValueFactory<Data, String>("tag"));
 		dateCol.setCellValueFactory(new PropertyValueFactory<Data, String>("date"));
