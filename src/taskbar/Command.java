@@ -132,7 +132,7 @@ public class Command {
 			return "event";
 		}else if(userInput.contains(ON) || userInput.contains(AT)){
 			return "task";
-		}else if(userInput.contains(ON) && userInput.contains(TO)){
+		}else if(userInput.contains(FROM) && userInput.contains(TO)){
 			return "event";
 		}else{
 			return "floating";
