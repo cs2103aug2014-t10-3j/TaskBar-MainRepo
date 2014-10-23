@@ -147,13 +147,13 @@ public class Storage {
 	}
 
 	public void writeFile() throws IOException {
-		String fileName = "task.xml";
+		String fileName = "/Users/tasks.xml";
 		WriteFileJDOM.writeFileUsingJDOM(allTasks, fileName);
 	}
 
 	// IN PROGRESSS
 	public void readFile() {
-		final String fileName = "/Users/ET/tasks.xml";
+		final String fileName = "/Users/tasks.xml";
 		org.jdom2.Document jdomDoc;
 		try {
 			// we can create JDOM Document from DOM, SAX and STAX Parser Builder
