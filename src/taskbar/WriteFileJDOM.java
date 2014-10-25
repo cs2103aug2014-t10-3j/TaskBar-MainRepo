@@ -9,6 +9,7 @@ package taskbar;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.jdom2.Document;
@@ -20,30 +21,41 @@ public class WriteFileJDOM {
 
 	protected static void writeFileUsingJDOM(ArrayList<Task> taskList,
 			String fileName) throws IOException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		Document doc = new Document();
+		doc.setRootElement(new Element("tasks"));
 		for (Task task : taskList) {
 			Element tasks = new Element("Task");
 			tasks.addContent(new Element("Description").setText(task
 					.getDescription()));
-			Element labs = new Element("Labels");
+			ArrayList<String> labels = task.getLabels();
+			for(int i=0 ; i < task.getNumLabels(); i++){
+			Element labs = new Element("Label" + i);
 			tasks.addContent(labs);
+			labs.setText(labels.get(i));
+			}
+			
+		
+			
+			
 			if (task.getImportance() != 0)
 				tasks.addContent(new Element("Importance").setText(""
 						+ task.getImportance()));
 
 			if (task.getDeadline()!=null) {
 				tasks.addContent(new Element("TimeStamp1").setText(task
-						.getStartTime().toString()));
+						.getStartTime().format(formatter)));
 			} else {
-				tasks.addContent(new Element("TimeStamp1").setText(null));
+				tasks.addContent(new Element("TimeStamp1").setText(""));
 			}
 
 			if (task.getEndTime()!=null) {
 				tasks.addContent(new Element("TimeStamp2").setText(task
-						.getEndTime().toString()));
+						.getEndTime().format(formatter)));
 			} else {
-				tasks.addContent(new Element("TimeStamp2").setText(null));
+				tasks.addContent(new Element("TimeStamp2").setText(""));
 			}
+			doc.getRootElement().addContent(tasks);
 
 		}
 		// JDOM document is ready now, lets write it to file now

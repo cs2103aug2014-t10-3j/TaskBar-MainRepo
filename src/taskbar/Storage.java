@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.jdom2.JDOMException;
@@ -146,13 +147,13 @@ public class Storage {
 	}
 
 	public void writeFile() throws IOException {
-		String fileName = "/Users/tasks.xml";
+		String fileName = "task.xml";
 		WriteFileJDOM.writeFileUsingJDOM(allTasks, fileName);
 	}
 
 	// IN PROGRESSS
 	public void readFile() {
-		final String fileName = "/Users/tasks.xml";
+		final String fileName = "task.xml";
 		org.jdom2.Document jdomDoc;
 		try {
 			// we can create JDOM Document from DOM, SAX and STAX Parser Builder
@@ -160,32 +161,41 @@ public class Storage {
 			jdomDoc = ReadFileJDOM.useDOMParser(fileName);
 			Element root = jdomDoc.getRootElement();
 			List<Element> taskListElements = root.getChildren("Task");
+			DateTimeFormatter formatter = DateTimeFormatter
+					.ofPattern("yyyy-MM-dd HH:mm");
 
 			for (Element taskElement : taskListElements) {
 				Task task1 = new Task();
 				task1.setDescription(taskElement.getChildText("Description"));
 
-				List<Element> list = root.getChildren("Labels");
-				ArrayList<String> labelsList = new ArrayList<String>();
-				for (Element label : list) {
-					labelsList.add(label.getChildText("Label"));
+				int i = 0;
+				ArrayList<String> labels = new ArrayList<String>();
+				while ((taskElement.getChildText("labels"+i))!= null)
+				{
+					labels.add(taskElement.getChildText("labels"+i));
+					i++;
 				}
-
-				task1.setLabels(labelsList);
-
+				task1.setLabels(labels);
+				
 				task1.setImportance(Integer.parseInt(taskElement
 						.getChildText("Importance")));
-				task1.setDeadline(LocalDateTime.parse(taskElement
-						.getChildText("TimeStamp1")));
-				task1.setEndTime(LocalDateTime.parse(taskElement
-						.getChildText("TimeStamp2")));
+				if (taskElement.getChildText("TimeStamp1") != "") {
+					task1.setDeadline(LocalDateTime.parse(
+							taskElement.getChildText("TimeStamp1"), formatter));
+				} else {
+					task1.setDeadline(null);
+				}
+
+				if (taskElement.getChildText("TimeStamp2") != "") {
+					task1.setEndTime(LocalDateTime.parse(
+							taskElement.getChildText("TimeStamp2"), formatter));
+				} else {
+					task1.setEndTime(null);
+				}
 
 				allTasks.add(task1);
 
 			}
-			// lets print Employees list information
-			for (Task tasks : allTasks)
-				System.out.println(tasks);
 		} catch (FileNotFoundException e) {
 			allTasks = new ArrayList<Task>();
 		} catch (Exception e) {

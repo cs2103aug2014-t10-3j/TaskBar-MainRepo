@@ -1,6 +1,7 @@
 package taskbar;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Task {
@@ -11,12 +12,11 @@ public class Task {
 
 	private LocalDateTime timeStamp1;
 	private LocalDateTime timeStamp2;
-	
-	
-	public Task()
-	{	
+
+	public Task() {
+		labels = new ArrayList<String>();
 	}
-	
+
 	public Task(String description, ArrayList<String> labels, int importance) {
 		super();
 		this.description = description;
@@ -76,9 +76,10 @@ public class Task {
 		this.labels = labels;
 	}
 
-	public int getNumLabels(){
+	public int getNumLabels() {
 		return labels.size();
 	}
+
 	public int getImportance() {
 		return importance;
 	}
@@ -87,49 +88,59 @@ public class Task {
 		this.importance = importance;
 	}
 
-	//Specific to DeadlineTask
+	// Specific to DeadlineTask
 	public LocalDateTime getDeadline() {
 		return timeStamp1;
 	}
-	//Specific to DeadlineTask
+
+	// Specific to DeadlineTask
 	public void setDeadline(LocalDateTime deadline) {
 		this.timeStamp1 = deadline;
 	}
-	
-	//Specific to Event
+
+	// Specific to Event
 	public LocalDateTime getStartTime() {
 		return timeStamp1;
 	}
-	
-	//Specific to Event
+
+	// Specific to Event
 	public void setStartTime(LocalDateTime startTime) {
 		this.timeStamp1 = startTime;
 	}
 
-	//Specific to Event
+	// Specific to Event
 	public LocalDateTime getEndTime() {
 		return timeStamp2;
 	}
 
-	//Specific to Event
+	// Specific to Event
 	public void setEndTime(LocalDateTime endTime) {
 		this.timeStamp2 = endTime;
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		String thisString = "";
 		thisString += description;
 		thisString += "\n";
-		thisString += Integer.toString(labels.size());
+		thisString += ("" + labels.size());
 		thisString += "\n";
-		for(int i=0; i<labels.size(); i++){
+		for (int i = 0; i < labels.size(); i++) {
 			thisString += labels.get(i);
 			thisString += "\n";
 		}
-		thisString += "\n";
 		thisString += Integer.toString(importance);
-		
+		thisString += "\n";
+		DateTimeFormatter formatter = DateTimeFormatter
+				.ofPattern("yyyy-MM-dd HH:mm");
+		if (timeStamp1 != null && timeStamp2 != null) {
+			thisString += timeStamp1.format(formatter);
+			thisString += "\n";
+			thisString += timeStamp2.format(formatter);
+		}
+		else if (timeStamp1 != null)
+		{
+			thisString += timeStamp1.format(formatter);
+		}
 		return thisString;
 	}
 }
