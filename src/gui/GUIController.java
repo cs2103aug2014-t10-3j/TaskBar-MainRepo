@@ -3,6 +3,9 @@ package gui;
 import taskbar.*;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import javafx.animation.FadeTransition;
@@ -89,9 +92,41 @@ public class GUIController implements Initializable{
 	
 	private void configureTable() {
 		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
+		
 		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
+		descCol.setComparator(new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				return o1.compareToIgnoreCase(o2);
+			}
+		});
+		
 		tagCol.setCellValueFactory(new PropertyValueFactory<Data, String>("tag"));
+		
 		dateCol.setCellValueFactory(new PropertyValueFactory<Data, String>("date"));
+		dateCol.setComparator(new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				if (o1=="") {
+					if (o2=="") {
+						return 0;
+					} else {
+						return -1;
+					}						
+				} else {
+					if (o2=="") {
+						return 1;
+					} else {
+						DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
+						LocalDate d1 = LocalDate.parse(o1.substring(0, 8), dateFmt);
+						LocalDate d2 = LocalDate.parse(o2.substring(0, 8), dateFmt);
+						return d1.compareTo(d2);
+					}
+				}
+				
+			}
+		});
+		
 		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
 		
 		table.setPlaceholder(new Label("There is nothing to show"));

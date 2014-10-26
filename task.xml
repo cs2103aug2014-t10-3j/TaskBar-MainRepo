@@ -19,15 +19,21 @@
     <TimeStamp2>2014-11-30 00:00</TimeStamp2>
   </Task>
   <Task>
-    <Description>EE2021 homework</Description>
+    <Description>ET V0.3</Description>
+    <Importance>0</Importance>
+    <TimeStamp1>2014-10-30 00:00</TimeStamp1>
+    <TimeStamp2 />
+  </Task>
+  <Task>
+    <Description>ee2021 homework</Description>
     <Importance>0</Importance>
     <TimeStamp1>2014-10-29 00:00</TimeStamp1>
     <TimeStamp2 />
   </Task>
   <Task>
-    <Description>ET V0.3</Description>
+    <Description>mom's birthday</Description>
     <Importance>0</Importance>
-    <TimeStamp1>2014-10-30 00:00</TimeStamp1>
+    <TimeStamp1>2014-11-01 00:00</TimeStamp1>
     <TimeStamp2 />
   </Task>
 </tasks>
