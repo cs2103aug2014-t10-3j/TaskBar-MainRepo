@@ -62,7 +62,7 @@ public class Storage {
 	public void addTask(Task taskFromLogic) {
 		try {
 			allTasks.add(taskFromLogic);
-			// writeFile();
+			writeFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

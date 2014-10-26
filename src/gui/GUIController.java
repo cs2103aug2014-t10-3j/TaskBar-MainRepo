@@ -1,4 +1,4 @@
-package ide;
+package gui;
 
 import taskbar.*;
 
@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,11 +22,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
-public class IDEController implements Initializable{
+public class GUIController implements Initializable{
 	@FXML private AnchorPane pane;
 	
 	@FXML private TextField textbox;
 	@FXML private TableView<Data> table;
+	@FXML private TableColumn<Data, String> noCol;
 	@FXML private TableColumn<Data, String> descCol;
 	@FXML private TableColumn<Data, String> tagCol;
 	@FXML private TableColumn<Data, String> dateCol;
@@ -51,16 +53,11 @@ public class IDEController implements Initializable{
 			}
 		});
 		
-		
-		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
-		tagCol.setCellValueFactory(new PropertyValueFactory<Data, String>("tag"));
-		dateCol.setCellValueFactory(new PropertyValueFactory<Data, String>("date"));
-		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
-		
 		configureTable();
 		
 		status.setOpacity(0);
 		
+		setTextboxOnFocus();
 		textbox.setOnAction((event) -> {
 			data = ctrl.handleEnter(textbox.getText());
 			showToUser(data);
@@ -81,10 +78,26 @@ public class IDEController implements Initializable{
 		
 	}
 	
+	private void setTextboxOnFocus() {
+		Platform.runLater(new Runnable() {			
+			@Override
+			public void run() {
+				textbox.requestFocus();
+			}
+		});
+	}
+	
 	private void configureTable() {
+		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
+		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
+		tagCol.setCellValueFactory(new PropertyValueFactory<Data, String>("tag"));
+		dateCol.setCellValueFactory(new PropertyValueFactory<Data, String>("date"));
+		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
+		
 		table.setPlaceholder(new Label("There is nothing to show"));
 		table.setItems(list);
 		
+		showToUser(ctrl.loadAllTasks());
 	}
 	
 	private void showToUser(DisplayData data) {
@@ -93,7 +106,7 @@ public class IDEController implements Initializable{
 			
 			if (data.getListOfTasks()!=null) {
 				for (Task t: data.getListOfTasks()) {
-					Data newTask = new Data(t);
+					Data newTask = new Data(t,list.size()+1);
 					list.add(newTask);
 				}
 			}
@@ -110,7 +123,5 @@ public class IDEController implements Initializable{
 		ft.setFromValue(1);
 		ft.setDelay(Duration.seconds(2.0));
 		ft.play();
-		
 	}
-	
 }

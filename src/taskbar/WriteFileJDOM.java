@@ -30,17 +30,13 @@ public class WriteFileJDOM {
 					.getDescription()));
 			ArrayList<String> labels = task.getLabels();
 			for(int i=0 ; i < task.getNumLabels(); i++){
-			Element labs = new Element("Label" + i);
-			tasks.addContent(labs);
-			labs.setText(labels.get(i));
+				Element labs = new Element("Label" + i);
+				tasks.addContent(labs);
+				labs.setText(labels.get(i));
 			}
 			
-		
-			
-			
-			if (task.getImportance() != 0)
-				tasks.addContent(new Element("Importance").setText(""
-						+ task.getImportance()));
+			tasks.addContent(new Element("Importance").setText(""
+					+ task.getImportance()));
 
 			if (task.getDeadline()!=null) {
 				tasks.addContent(new Element("TimeStamp1").setText(task

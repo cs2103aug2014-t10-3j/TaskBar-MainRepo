@@ -22,6 +22,11 @@ public class Controller{
 		isResultLocked = false;
 	}
 
+	public DisplayData loadAllTasks() {
+		setDisplayData("", storage.getAllTasks(), isResultLocked = true);
+		return displayData;
+	}
+	
 	public DisplayData handleKeyTyped(String userInput) {
 		if (isResultLocked) {
 			displayData.setNeedToUpdate(false);

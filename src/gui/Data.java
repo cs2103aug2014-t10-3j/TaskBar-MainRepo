@@ -1,4 +1,4 @@
-package ide;
+package gui;
 
 import taskbar.*;
 
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Data {
+	private SimpleStringProperty order;
 	private SimpleStringProperty desc;
 	private SimpleStringProperty tag;
 	private SimpleStringProperty date;
@@ -19,12 +20,13 @@ public class Data {
 	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
 	DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 	
-	public Data(Task task) {
+	public Data(Task task, int ord) {
 		String newDesc = task.getDescription();
 		ArrayList<String> newTag = task.getLabels();
 		LocalDateTime time1 = task.getStartTime();
 		LocalDateTime time2 = task.getEndTime();
 		
+		order = new SimpleStringProperty(Integer.toString(ord));
 		desc = new SimpleStringProperty(newDesc);
 		tag = new SimpleStringProperty(arrayToString(newTag));
 		date = new SimpleStringProperty(processDate(time1, time2));
@@ -36,6 +38,10 @@ public class Data {
 		tag = new SimpleStringProperty(arrayToString(newTag));
 		date = new SimpleStringProperty(processDate(time1, time2));
 		time = new SimpleStringProperty(processTime(time1, time2));
+	}
+	
+	public String getOrder() {
+		return order.get();
 	}
 	
 	public String getDesc() {
@@ -52,6 +58,10 @@ public class Data {
 	
 	public String getTime() {
 		return time.get();
+	}
+	
+	public void setOrder(int ord) {
+		order.set(Integer.toString(ord));
 	}
 	
 	public void setDesc(String newDesc) {
@@ -76,7 +86,7 @@ public class Data {
 			for (String s:arr) {
 				str += s + ", ";
 			}
-			str.substring(0, str.length()-2);
+			str = str.substring(0, str.length()-2);
 		}
 		return str;
 	}
