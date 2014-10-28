@@ -41,5 +41,15 @@
             <Font name="Segoe UI Semilight" size="26.0" />
          </font>
       </Label>
+      <Label fx:id="clock" contentDisplay="CENTER" layoutX="241.0" layoutY="7.0" prefHeight="38.0" prefWidth="123.0" text="23:59:00" textAlignment="CENTER">
+         <font>
+            <Font name="Segoe UI Semilight" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="day" contentDisplay="CENTER" layoutX="21.0" layoutY="7.0" prefHeight="38.0" prefWidth="208.0" text="Wed, 08 May 14 " textAlignment="CENTER">
+         <font>
+            <Font name="Segoe UI Semilight" size="26.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

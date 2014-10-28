@@ -68,7 +68,7 @@
 	-fx-table-cell-border-color: transparent;
 }
 
-#closeBtn {
+#closeBtn, #clock, #day {
 	-fx-background-color: #c32c2c;
 	-fx-text-fill: white;
 }

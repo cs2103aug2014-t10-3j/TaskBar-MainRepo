@@ -4,16 +4,22 @@ import taskbar.*;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -31,15 +37,19 @@ public class GUIController implements Initializable{
 	@FXML private AnchorPane outerPane;
 	@FXML private AnchorPane pane;
 	
+	@FXML private Label day;
+	@FXML private Label clock;
 	@FXML private Label closeBtn;
 	
 	@FXML private TextField textbox;
+	
 	@FXML private TableView<Data> table;
 	@FXML private TableColumn<Data, String> noCol;
 	@FXML private TableColumn<Data, String> descCol;
 	@FXML private TableColumn<Data, String> tagCol;
 	@FXML private TableColumn<Data, String> dateCol;
 	@FXML private TableColumn<Data, String> timeCol;
+	
 	@FXML private Label status;
 	
 	private DisplayData data = new DisplayData();
@@ -54,6 +64,7 @@ public class GUIController implements Initializable{
 		addDragListener();
 		
 		setCloseBtn();
+		setClockAndDate();
 		
 		configureTable();
 		
@@ -97,6 +108,24 @@ public class GUIController implements Initializable{
 			Platform.exit();			
 		});
 	}
+	
+	private void setClockAndDate() {
+		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("  EEE, dd MMM yy");
+		DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("  HH:mm:ss");
+		Timeline tline = new Timeline(new KeyFrame(Duration.seconds(0),
+				new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						LocalDateTime now = LocalDateTime.now();
+						clock.setText(now.format(timeFmt));
+						day.setText(now.format(dateFmt));				
+					}
+				}
+			), new KeyFrame(Duration.seconds(1))
+		);
+		tline.setCycleCount(Animation.INDEFINITE);
+		tline.play();
+	};
 	
 	private void configureTable() {
 		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
