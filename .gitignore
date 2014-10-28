@@ -1,3 +1,6 @@
+#excldue classpath file so that each of us can define our own classpath
+.classpath
+
 #java Copiled file, since need to compile on new com anyway
 *.class
 
