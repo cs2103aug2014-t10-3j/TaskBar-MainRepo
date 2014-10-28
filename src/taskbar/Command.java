@@ -37,7 +37,8 @@ public class Command {
 	}
 
 	public static Boolean isPrepPresent(String userInput){
-		if(userInput.contains(AT) || userInput.contains(BY) || userInput.contains(FROM) || userInput.contains(ON)){
+		if(userInput.contains(" " + AT + " ") || userInput.contains(" " + BY + " ") ||
+				userInput.contains(" " + FROM + " ") || userInput.contains(" " + ON + " ")){
 			return true;
 		}
 		return false;
