@@ -22,11 +22,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 public class GUIController implements Initializable{
+	@FXML private AnchorPane outerPane;
 	@FXML private AnchorPane pane;
+	
+	@FXML private Label closeBtn;
 	
 	@FXML private TextField textbox;
 	@FXML private TableView<Data> table;
@@ -37,24 +42,18 @@ public class GUIController implements Initializable{
 	@FXML private TableColumn<Data, String> timeCol;
 	@FXML private Label status;
 	
-	@FXML private ImageView icon;
-	@FXML private ImageView slogan;
-	
 	private DisplayData data = new DisplayData();
 	private Controller ctrl = new Controller();
 	
 	private ObservableList<Data> list = FXCollections.observableArrayList();
+	double x,y;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		pane.widthProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> ov, Number oldVal, Number newVal) {
-				icon.setLayoutX((Double)newVal/2 - icon.getFitWidth()/2);
-				slogan.setLayoutX((Double)newVal/2 - slogan.getFitWidth()/2);
-			}
-		});
+		addDragListener();
+		
+		setCloseBtn();
 		
 		configureTable();
 		
@@ -81,12 +80,21 @@ public class GUIController implements Initializable{
 		
 	}
 	
-	private void setTextboxOnFocus() {
-		Platform.runLater(new Runnable() {			
-			@Override
-			public void run() {
-				textbox.requestFocus();
-			}
+	private void addDragListener() {		
+	    pane.setOnMousePressed((event) -> {
+	        x = pane.getScene().getWindow().getX() - event.getScreenX();
+	        y = pane.getScene().getWindow().getY() - event.getScreenY();
+	    });
+
+	    pane.setOnMouseDragged((event) -> {
+	        pane.getScene().getWindow().setX(event.getScreenX() + x);
+	        pane.getScene().getWindow().setY(event.getScreenY() + y);
+	    });
+	}
+	
+	private void setCloseBtn() {
+		closeBtn.setOnMouseClicked((event) -> {
+			Platform.exit();			
 		});
 	}
 	
@@ -133,6 +141,15 @@ public class GUIController implements Initializable{
 		table.setItems(list);
 		
 		showToUser(ctrl.loadAllTasks());
+	}
+	
+	private void setTextboxOnFocus() {
+		Platform.runLater(new Runnable() {			
+			@Override
+			public void run() {
+				textbox.requestFocus();
+			}
+		});
 	}
 	
 	private void showToUser(DisplayData data) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -7,34 +8,38 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="pane" prefHeight="535.0" prefWidth="596.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
+<AnchorPane fx:id="outerPane" prefHeight="501.0" prefWidth="710.0" stylesheets="@appearance.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
    <children>
-      <TableView fx:id="table" layoutX="24.0" layoutY="130.0" prefHeight="363.0" prefWidth="502.0" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="130.0">
-         <columns>
-            <TableColumn fx:id="noCol" editable="false" prefWidth="31.0" resizable="false" text="#" />
-            <TableColumn fx:id="descCol" editable="false" prefWidth="210.0" text="Description" />
-            <TableColumn fx:id="tagCol" editable="false" prefWidth="123.0" text="Tags" />
-            <TableColumn fx:id="dateCol" editable="false" prefWidth="108.0" resizable="false" text="Date" />
-            <TableColumn fx:id="timeCol" editable="false" resizable="false" sortable="false" text="Time" />
-         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-      <Label fx:id="status" layoutX="33.0" layoutY="502.0" prefHeight="27.0" prefWidth="491.0" text="Label" AnchorPane.bottomAnchor="6.0">
+      <AnchorPane fx:id="pane" layoutY="19.0" prefHeight="482.0" prefWidth="714.0">
+         <children>
+            <TextField fx:id="textbox" layoutX="22.0" layoutY="42.0" prefHeight="25.0" prefWidth="667.0" promptText="Enter command" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="21.0">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </TextField>
+            <TableView fx:id="table" prefHeight="378.0" prefWidth="671.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="86.0">
+               <columns>
+                  <TableColumn fx:id="noCol" editable="false" prefWidth="31.0" resizable="false" text="#" />
+                  <TableColumn fx:id="descCol" editable="false" prefWidth="212.0" resizable="false" text="Description" />
+                  <TableColumn fx:id="tagCol" editable="false" prefWidth="173.0" resizable="false" text="Tags" />
+                  <TableColumn fx:id="dateCol" prefWidth="131.0" resizable="false" text="Date" />
+                  <TableColumn fx:id="timeCol" prefWidth="123.0" resizable="false" text="Time" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Label fx:id="status" layoutX="24.0" layoutY="452.0" prefHeight="27.0" prefWidth="491.0" text="Label" AnchorPane.bottomAnchor="3.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label fx:id="closeBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="671.0" layoutY="7.0" prefHeight="38.0" prefWidth="35.0" text="X" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="13.0" />
-         </font></Label>
-      <TextField fx:id="textbox" layoutX="43.0" layoutY="99.0" prefHeight="25.0" prefWidth="466.0" promptText="Enter command" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="36.0" />
-      <ImageView fx:id="icon" fitHeight="85.0" fitWidth="77.0" layoutX="259.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../icon.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="slogan" fitHeight="25.0" fitWidth="256.0" layoutX="176.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../slogan.png" />
-         </image>
-      </ImageView>
+            <Font name="Segoe UI Semilight" size="26.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
