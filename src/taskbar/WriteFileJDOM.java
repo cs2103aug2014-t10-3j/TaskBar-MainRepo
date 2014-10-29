@@ -57,7 +57,7 @@ public class WriteFileJDOM {
 		// JDOM document is ready now, lets write it to file now
 		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
 		// output xml to console for debugging
-		xmlOutputter.output(doc, System.out);
+		//xmlOutputter.output(doc, System.out);
 		xmlOutputter.output(doc, new FileOutputStream(fileName));
 	}
 
