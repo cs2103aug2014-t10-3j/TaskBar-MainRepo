@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import taskbar.Storage;
+import taskbar.Task;
+
 public class StorageTest {
 
 	@Test
@@ -40,8 +43,6 @@ public class StorageTest {
 			e.printStackTrace();
 		}
 
-	}
-
 	@Test
 	public void testRead() {
 		Storage storage = Storage.getInstance();
@@ -59,7 +60,5 @@ public class StorageTest {
 			System.out.println(storage.getAllTasks().get(i).toString());
 		}
 	}
-
-
 
 }

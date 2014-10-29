@@ -170,9 +170,9 @@ public class Storage {
 
 				int i = 0;
 				ArrayList<String> labels = new ArrayList<String>();
-				while ((taskElement.getChildText("labels"+i))!= null)
+				while ((taskElement.getChildText("Label"+i))!= null)
 				{
-					labels.add(taskElement.getChildText("labels"+i));
+					labels.add(taskElement.getChildText("Label"+i));
 					i++;
 				}
 				task1.setLabels(labels);
