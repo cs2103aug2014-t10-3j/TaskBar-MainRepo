@@ -1,76 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tasks>
   <Task>
-    <Description>CS2103T tutorial tomorrow</Description>
-    <Label0>homework</Label0>
+    <Description>homework</Description>
     <Importance>0</Importance>
-    <TimeStamp1>2014-10-29 10:00</TimeStamp1>
+    <TimeStamp1 />
     <TimeStamp2 />
   </Task>
   <Task>
-    <Description>Soccer training later</Description>
+    <Description>dhsj</Description>
     <Importance>0</Importance>
-    <TimeStamp1>2014-10-29 19:00</TimeStamp1>
+    <TimeStamp1>2014-10-29 00:00</TimeStamp1>
     <TimeStamp2 />
   </Task>
   <Task>
-    <Description>do lab</Description>
+    <Description>dhsaj</Description>
     <Importance>0</Importance>
     <TimeStamp1>2014-10-31 00:00</TimeStamp1>
     <TimeStamp2 />
   </Task>
   <Task>
-    <Description>VHDL test</Description>
+    <Description>hrej</Description>
     <Importance>0</Importance>
-    <TimeStamp1>2014-11-03 00:00</TimeStamp1>
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>Econs with janni</Description>
-    <Importance>0</Importance>
-    <TimeStamp1>2014-11-02 00:00</TimeStamp1>
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>softball friendly</Description>
-    <Importance>0</Importance>
-    <TimeStamp1 />
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>soccer friendly</Description>
-    <Importance>0</Importance>
-    <TimeStamp1>2014-11-02 00:00</TimeStamp1>
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>OP2 next week</Description>
-    <Importance>0</Importance>
-    <TimeStamp1 />
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>CS1020E Lab</Description>
-    <Importance>0</Importance>
-    <TimeStamp1 />
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>CS1020E tutorial</Description>
-    <Importance>0</Importance>
-    <TimeStamp1>2014-10-31 23:59</TimeStamp1>
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>Softball Training tomorrow</Description>
-    <Importance>0</Importance>
-    <TimeStamp1 />
-    <TimeStamp2 />
-  </Task>
-  <Task>
-    <Description>make janni :) asap</Description>
-    <Importance>0</Importance>
-    <TimeStamp1 />
+    <TimeStamp1>2014-11-01 00:00</TimeStamp1>
     <TimeStamp2 />
   </Task>
 </tasks>
