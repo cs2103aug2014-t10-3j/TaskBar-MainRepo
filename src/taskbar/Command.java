@@ -79,7 +79,7 @@ public class Command {
 					description = matcher.group(1);
 				}
 			}else if(smallestIndex == 1){
-				Pattern pattern = Pattern.compile("add(.*?\\s)\\sby\\s");
+				Pattern pattern = Pattern.compile("add(.*?\\s)by\\s");
 				Matcher matcher = pattern.matcher(userInput);
 				while(matcher.find()){
 					description = matcher.group(1);
