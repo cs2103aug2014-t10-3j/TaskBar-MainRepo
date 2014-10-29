@@ -24,6 +24,9 @@ public class DateTimeLocal {
 		String endDateTime = null;
 		endDateTime = userInput.substring(userInput.lastIndexOf(" to ")+4, userInput.length());
 		LocalDateTime endTime = getDateTime(endDateTime);
+		if(endTime.isBefore(getStartDateTime(userInput))){
+			return endTime.withDayOfMonth(getStartDateTime(userInput).getDayOfMonth());
+		}
 		return endTime;
 	}
 
