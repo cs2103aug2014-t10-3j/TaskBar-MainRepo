@@ -8,6 +8,7 @@ package taskbar;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,7 +35,6 @@ public class Storage {
 			e.printStackTrace();
 			// TODO add in proper handling for IOException
 		}
-
 	}
 
 	/**
@@ -45,28 +45,16 @@ public class Storage {
 	 * @return The static storage instance.
 	 */
 	public static Storage getInstance() {
-		if (storage != null) {
-			return storage;
+		if (storage == null) {
+			storage = new Storage();
 		}
-		storage = new Storage();
 		return storage;
 	}
 
 	public ArrayList<Task> getAllNotDoneTasks() {
 		ArrayList<Task> result = new ArrayList<Task>();
-		for(Task t : allTasks){
-			if(!t.isDone()){
-				result.add(t);
-			}
-		}
-		sortByTime(result);
-		return result;
-	}
-	
-	public ArrayList<Task> getAllDoneTasks() {
-		ArrayList<Task> result = new ArrayList<Task>();
-		for(Task t : allTasks){
-			if(t.isDone()){
+		for (Task t : allTasks) {
+			if (!t.isDone()) {
 				result.add(t);
 			}
 		}
@@ -74,21 +62,88 @@ public class Storage {
 		return result;
 	}
 
-	public ArrayList<Task> searchTask(String keyWord) {
-	
+	public ArrayList<Task> getAllDoneTasks() {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for (Task t : allTasks) {
+			if (t.isDone()) {
+				result.add(t);
+			}
+		}
+		sortByTime(result);
+		return result;
+	}
+
+	public ArrayList<Task> getTaskByKeyword(String keyWord) {
+
 		ArrayList<Task> searchedTasks = new ArrayList<Task>();
-	
-		for (Task t:allTasks) {
-			if (!t.isDone() && t.getDescription().toLowerCase()
-					.contains(keyWord.toLowerCase())) {
+
+		for (Task t : allTasks) {
+			if (!t.isDone()
+					&& t.getDescription().toLowerCase()
+							.contains(keyWord.toLowerCase())) {
 				searchedTasks.add(t);
+			}
+			if (!t.isDone()
+					&& !t.getLabels().isEmpty()) {
+				ArrayList<String> labels = t.getLabels();
+				for (String l : labels) {
+					if (l.contains(keyWord.toLowerCase())) {
+						searchedTasks.add(t);
+					}
+				}
 			}
 		}
 		return searchedTasks;
 	}
 
+	public ArrayList<Task> getTaskByLabel(String parameter) {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for (Task t : allTasks) {
+			if (!t.isDone()
+					&& !t.getLabels().isEmpty()) {
+				ArrayList<String> labels = t.getLabels();
+				for (String l : labels) {
+					if (l.contains(parameter.toLowerCase())) {
+						result.add(t);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public ArrayList<Task> getTodayTasks() {
+		return getTasksOnADate(LocalDate.now());
+	}
+
+	public ArrayList<Task> getTomorrowTasks() {
+		return getTasksOnADate(LocalDate.now().plusDays(1));
+	}
+
+	public ArrayList<Task> getTasksOnADate(LocalDate referenceDate) {
+		ArrayList<Task> result = new ArrayList<Task>();
+	
+		for (Task t : allTasks) {
+			if (!t.isDone() && !t.isFloatingTask()) {
+				if (t.isDeadLineTask()) {
+					if (t.getDeadline().toLocalDate().equals(referenceDate)) {
+						result.add(t);
+					}
+				} else if (t.isEvent()) {
+					if (t.getStartTime().toLocalDate().compareTo(referenceDate) <= 0
+							&& t.getEndTime().toLocalDate()
+									.compareTo(referenceDate) >= 0) {
+						result.add(t);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	public void addTask(Task taskFromLogic) {
 		try {
+			assert !allTasks.contains(taskFromLogic);
 			allTasks.add(taskFromLogic);
 			writeFile();
 		} catch (Exception e) {
@@ -98,21 +153,35 @@ public class Storage {
 		// recorded file?
 	}
 
-	public void deleteTask(Task taskToBeDeleted) {
+	public void deleteTask(Task task) {
 		try {
-			assert allTasks.contains(taskToBeDeleted);
-			allTasks.remove(taskToBeDeleted);
+			assert allTasks.contains(task);
+			allTasks.remove(task);
 			writeFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void completeTask(Task task){
-		
+
+	public void completeTask(Task task) {
+		try {
+			assert allTasks.contains(task);
+			task.setDone(true);
+			writeFile();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	
+	public void uncompleteTask(Task task) {
+		try {
+			assert allTasks.contains(task);
+			task.setDone(false);
+			writeFile();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	// TODO add in search by time date, getDoneTasks, getNotDoneTasks
 
@@ -185,13 +254,13 @@ public class Storage {
 			for (Element taskElement : taskListElements) {
 				Task task1 = new Task();
 				task1.setDescription(taskElement.getChildText("Description"));
-				
-				if(taskElement.getChildText("IsDone").equals("true")){
+
+				if (taskElement.getChildText("IsDone").equals("true")) {
 					task1.setDone(true);
-				}else if(taskElement.getChildText("IsDone").equals("false")){
+				} else if (taskElement.getChildText("IsDone").equals("false")) {
 					task1.setDone(false);
 				}
-				
+
 				int i = 0;
 				ArrayList<String> labels = new ArrayList<String>();
 				while ((taskElement.getChildText("Label" + i)) != null) {
@@ -202,7 +271,7 @@ public class Storage {
 
 				task1.setImportance(Integer.parseInt(taskElement
 						.getChildText("Importance")));
-				
+
 				if (taskElement.getChildText("TimeStamp1") != "") {
 					task1.setDeadline(LocalDateTime.parse(
 							taskElement.getChildText("TimeStamp1"), formatter));

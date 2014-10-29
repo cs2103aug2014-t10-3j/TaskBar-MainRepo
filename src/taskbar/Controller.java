@@ -9,6 +9,7 @@ public class Controller {
 
 	private DisplayData displayData;
 	private Storage storage;
+	private History history;
 	//private String input;
 
 	private Logger logger = Logging.getInstance();
@@ -17,6 +18,7 @@ public class Controller {
 	public Controller() {
 		storage = Storage.getInstance();
 		displayData = new DisplayData();
+		history = History.getInstance();
 	}
 
 	public DisplayData loadAllTasks() {
@@ -25,32 +27,13 @@ public class Controller {
 	}
 
 	public DisplayData handleEnter(String userInput) {
-		// TODO to be refactored as processEnterCommandsThatDoNotInvolveSearch
-		//input = userInput;
-		CommandType currentCommand = Interpreter.getCommandType(userInput);
-
-		switch (currentCommand) {
-		case ADD:
-			add(userInput);
-			break;
-		case UNDO:
-			// TODO implement UNDO
-		case SHOW:
-			show(userInput);
-			break;
-		case DELETE:
-			delete(userInput);
-			break;
-		case UPDATE:
-			update(userInput);
-			break;
-		case COMPLETE:
-			complete(userInput);
-			break;
-		default:
-			break;
+		Command command = Interpreter.getCommand(userInput, displayData, storage, history);
+		if(command instanceof UndoableCommand){
+			if(command.execute());
+			history.addExecutedCommand((UndoableCommand) command);
+		}else{
+			command.execute();
 		}
-
 		return displayData;
 	}
 
@@ -100,7 +83,7 @@ public class Controller {
 	private void show(String userInput) {
 		setDisplayData(
 				"<delete/update/complete> + <number> to perform action on a task!",
-				storage.searchTask(Interpreter.getParameter(userInput)));
+				storage.getTaskByKeyword(Interpreter.getParameter(userInput)));
 	}
 
 	private void delete(String userInput) {
