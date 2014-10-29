@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
+import com.sun.javafx.scene.control.skin.TableViewSkin;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -23,12 +26,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
@@ -58,6 +64,7 @@ public class GUIController implements Initializable{
 	
 	private ObservableList<Data> list = FXCollections.observableArrayList();
 	private SequentialTransition seqTrans;
+	private VirtualFlow flow;
 	double windowX,windowY;
 	
 	@Override
@@ -78,6 +85,7 @@ public class GUIController implements Initializable{
 			data = ctrl.handleEnter(textbox.getText());
 			showToUser(data);		
 		});
+		
 		
 	}
 	
@@ -192,8 +200,27 @@ public class GUIController implements Initializable{
 		});
 
 		table.setItems(list);
+		data = ctrl.loadAllTasks();
+		showToUser(data);
 		
-		showToUser(ctrl.loadAllTasks());
+		textbox.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				ObservableList<Node> nodes = ((TableViewSkin)table.getSkin()).getChildren();
+				if (data.listOfTasksIsEmpty()) {
+					return;
+				}
+				flow = (VirtualFlow) nodes.get(1); 
+				int firstVisible = flow.getFirstVisibleCell().getIndex();
+				if (event.getCode()==KeyCode.UP) {
+					table.scrollTo(firstVisible-1);
+				} else if (event.getCode()==KeyCode.DOWN) {
+					table.scrollTo(firstVisible+1);
+				}
+			}
+		});
+		
+		
 	}
 	
 	private void setTextboxOnFocus() {

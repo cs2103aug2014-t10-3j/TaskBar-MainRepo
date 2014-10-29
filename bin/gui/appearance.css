@@ -24,6 +24,7 @@
 	-fx-background-color: -fx-base;
 	-fx-background-insets: 0;
 	-fx-control-inner-background: -fx-base;
+	-fx-text-inner-color: white;
 	-fx-table-cell-border-color: transparent;
 	-fx-table-header-border-color: transparent;
 }
@@ -62,8 +63,7 @@
 }
 
 .pastDeadline {
-	-fx-control-inner-background: #E25041 !important;
-	-fx-text-fill: yellow !important;
+	-fx-control-inner-background: #E25041 !important;	
 }
 
 .nearDeadline {
