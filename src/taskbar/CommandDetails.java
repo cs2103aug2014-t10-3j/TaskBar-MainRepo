@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class Command {
+public class CommandDetails {
 
 	public static final String ON = " on ";
 	public static final String AT = " at ";

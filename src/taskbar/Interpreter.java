@@ -19,11 +19,11 @@ import java.util.ArrayList;
 public class Interpreter {
 	public static Task interpretAdd(String command) throws DateTimeException {
 		String userInput = command.toLowerCase();
-		String userInputOnly = Command.removeImportanceTagString(command);
-		String commandDescription = Command.getDescription(userInputOnly);
-		int commandImportance = Command.getImportance(userInput);
-		ArrayList<String> commandTag = Command.getTag(userInput);
-		String typeOfTask = Command.getTypeOfTask(userInput);
+		String userInputOnly = CommandDetails.removeImportanceTagString(command);
+		String commandDescription = CommandDetails.getDescription(userInputOnly);
+		int commandImportance = CommandDetails.getImportance(userInput);
+		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
+		String typeOfTask = CommandDetails.getTypeOfTask(userInput);
 		if(typeOfTask == "task"){
 			LocalDateTime normalTime = DateTimeLocal.getNormalDateTime(userInputOnly);
 			Task task = new Task(commandDescription, commandTag, commandImportance, normalTime);
@@ -70,6 +70,26 @@ public class Interpreter {
 		}
 		
 		return result;
+	}
+	
+	public static Show.ShowCommandType interpretShow(String userInput){
+		String showCommandParameter = getParameter(userInput).toLowerCase();
+		switch(showCommandParameter){
+		case "all":
+			return Show.ShowCommandType.ALL;
+		case "today":
+			return Show.ShowCommandType.TODAY;
+		case "tomorrow":
+			return Show.ShowCommandType.TOMORROW;
+		case "done":
+			return Show.ShowCommandType.DONE;
+		default:
+			if(showCommandParameter.charAt(0) == '#'){
+				return Show.ShowCommandType.LABEL;
+			}else{
+				return Show.ShowCommandType.KEYWORD;
+			}
+		}
 	}
 	
 	public static String getTimeExpression(LocalDateTime time) {
@@ -125,6 +145,28 @@ public class Interpreter {
 			return CommandType.UNDO;
 		default:
 			return CommandType.SHOW;
+		}
+	}
+
+	public static Command getCommand(String userInput, DisplayData displayData,
+			Storage storage, History history) {
+		String[] splitInputTokens = userInput.split(" ", 2);
+		String commandKeyword = splitInputTokens[0].toLowerCase();
+		switch(commandKeyword){
+		case"add":
+			return new Add(displayData, storage, userInput);
+		case"delete":
+			return new Delete(displayData, storage, userInput);
+		case"update":
+			return new Update(displayData, storage, userInput);
+		case"complete":
+			return new Complete(displayData, storage, userInput);
+		case"undo":
+			return new Undo(displayData, storage, history);
+		case"redo":
+			return new Redo(displayData, storage, history);
+		default:
+			return new Show(displayData, storage, userInput);
 		}
 	}
 }
