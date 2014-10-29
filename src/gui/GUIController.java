@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -56,7 +57,8 @@ public class GUIController implements Initializable{
 	private Controller ctrl = new Controller();
 	
 	private ObservableList<Data> list = FXCollections.observableArrayList();
-	double x,y;
+	private SequentialTransition seqTrans;
+	double windowX,windowY;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -93,13 +95,13 @@ public class GUIController implements Initializable{
 	
 	private void addDragListener() {		
 	    pane.setOnMousePressed((event) -> {
-	        x = pane.getScene().getWindow().getX() - event.getScreenX();
-	        y = pane.getScene().getWindow().getY() - event.getScreenY();
+	        windowX = pane.getScene().getWindow().getX() - event.getScreenX();
+	        windowY = pane.getScene().getWindow().getY() - event.getScreenY();
 	    });
 
 	    pane.setOnMouseDragged((event) -> {
-	        pane.getScene().getWindow().setX(event.getScreenX() + x);
-	        pane.getScene().getWindow().setY(event.getScreenY() + y);
+	        pane.getScene().getWindow().setX(event.getScreenX() + windowX);
+	        pane.getScene().getWindow().setY(event.getScreenY() + windowY);
 	    });
 	}
 	
@@ -231,10 +233,18 @@ public class GUIController implements Initializable{
 	}
 	
 	private void fadeStatus() {
-		FadeTransition ft = new FadeTransition(Duration.seconds(1.0),status);
-		ft.setToValue(0);
-		ft.setFromValue(1);
-		ft.setDelay(Duration.seconds(2.0));
-		ft.play();
+		defineTransition();
+		seqTrans.stop();
+		seqTrans.play();
+	}
+	
+	private void defineTransition() {
+		FadeTransition ft1 = new FadeTransition(Duration.seconds(4.0), status);
+		ft1.setToValue(1);
+		ft1.setFromValue(1);
+		FadeTransition ft2 = new FadeTransition(Duration.seconds(1.0),status);
+		ft2.setToValue(0);
+		ft2.setFromValue(1);
+		seqTrans = new SequentialTransition(ft1, ft2);
 	}
 }
