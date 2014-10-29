@@ -32,8 +32,7 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must end with two \r
-Icon
-
+Icon
 # Thumbnails
 ._*
 
@@ -51,5 +50,4 @@ Temporary Items
 bin/taskbar/Storage.class
 *.class
 .classpath
-
 task.xml

@@ -204,7 +204,6 @@ public class GUIController implements Initializable{
 		showToUser(ctrl.loadAllTasks());
 	}
 	
-	
 	private void setTextboxOnFocus() {
 		Platform.runLater(new Runnable() {			
 			@Override
