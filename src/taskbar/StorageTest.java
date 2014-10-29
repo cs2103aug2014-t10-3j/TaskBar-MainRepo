@@ -45,18 +45,18 @@ public class StorageTest {
 	@Test
 	public void testRead() {
 		Storage storage = Storage.getInstance();
-		for (int i = 0; i < storage.getAllTasks().size(); i++) {
-			System.out.println(storage.getAllTasks().get(i).toString());
+		for (int i = 0; i < storage.getAllNotDoneTasks().size(); i++) {
+			System.out.println(storage.getAllNotDoneTasks().get(i).toString());
 		}
 	}
 
 	@Test
 	public void deleteTask() {
 		Storage storage = Storage.getInstance();
-		Task deleteTask = storage.getAllTasks().get(0);
+		Task deleteTask = storage.getAllNotDoneTasks().get(0);
 		storage.deleteTask(deleteTask);
-		for (int i = 0; i < storage.getAllTasks().size(); i++) {
-			System.out.println(storage.getAllTasks().get(i).toString());
+		for (int i = 0; i < storage.getAllNotDoneTasks().size(); i++) {
+			System.out.println(storage.getAllNotDoneTasks().get(i).toString());
 		}
 	}
 

@@ -52,11 +52,39 @@ public class Storage {
 		return storage;
 	}
 
-	public ArrayList<Task> getAllTasks() {
-		// need to figure out how to sort them
-		// maybe can have the default display as Sort by Importance display.
-		return allTasks;
+	public ArrayList<Task> getAllNotDoneTasks() {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for(Task t : allTasks){
+			if(!t.isDone()){
+				result.add(t);
+			}
+		}
+		sortByTime(result);
+		return result;
+	}
+	
+	public ArrayList<Task> getAllDoneTasks() {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for(Task t : allTasks){
+			if(t.isDone()){
+				result.add(t);
+			}
+		}
+		sortByTime(result);
+		return result;
+	}
 
+	public ArrayList<Task> searchTask(String keyWord) {
+	
+		ArrayList<Task> searchedTasks = new ArrayList<Task>();
+	
+		for (Task t:allTasks) {
+			if (!t.isDone() && t.getDescription().toLowerCase()
+					.contains(keyWord.toLowerCase())) {
+				searchedTasks.add(t);
+			}
+		}
+		return searchedTasks;
 	}
 
 	public void addTask(Task taskFromLogic) {
@@ -70,58 +98,48 @@ public class Storage {
 		// recorded file?
 	}
 
-	public int deleteTask(Task taskToBeDeleted) {
-		try {// The specified task should exist if the software is running
-				// correctly.
+	public void deleteTask(Task taskToBeDeleted) {
+		try {
 			assert allTasks.contains(taskToBeDeleted);
-
-			boolean removed = allTasks.remove(taskToBeDeleted);
+			allTasks.remove(taskToBeDeleted);
 			writeFile();
-			if (removed) {
-				return 1;
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return 0;
+	}
+	
+	public void completeTask(Task task){
+		
 	}
 
-	public ArrayList<Task> searchTask(String keyWord) {
-
-		ArrayList<Task> searchedTasks = new ArrayList<Task>();
-
-		for (int i = 0; i < allTasks.size(); i++) {
-			if (allTasks.get(i).getDescription().toLowerCase()
-					.contains(keyWord.toLowerCase())) {
-				searchedTasks.add(allTasks.get(i));
-			}
-		}
-
-		return searchedTasks;
-
-	}
+	
 
 	// TODO add in search by time date, getDoneTasks, getNotDoneTasks
 
-	public ArrayList<Task> sortByTime() {
+	public void sortByTime(ArrayList<Task> list) {
 		boolean swapped = true;
 		int j = 0;
 		Task tmp;
 		while (swapped) {
 			swapped = false;
 			j++;
-			for (int i = 0; i < allTasks.size() - j; i++) {
-				if (allTasks.get(i).getDeadline()
-						.isBefore(allTasks.get(i + 1).getDeadline())) {
-					tmp = allTasks.get(i);
-					allTasks.set(i, allTasks.get(i + 1));
-					allTasks.set(i + 1, tmp);
+			for (int i = 0; i < list.size() - j; i++) {
+				try {
+					if (list.get(i).getDeadline()
+							.isBefore(list.get(i + 1).getDeadline())) {
+						tmp = list.get(i);
+						list.set(i, list.get(i + 1));
+						list.set(i + 1, tmp);
+						swapped = true;
+					}
+				} catch (NullPointerException e) {
+					tmp = list.get(i);
+					list.set(i, list.get(i + 1));
+					list.set(i + 1, tmp);
 					swapped = true;
 				}
-
 			}
 		}
-		return allTasks;
 	}
 
 	// TODO Refactor this to sort a given ArrayList
@@ -167,18 +185,24 @@ public class Storage {
 			for (Element taskElement : taskListElements) {
 				Task task1 = new Task();
 				task1.setDescription(taskElement.getChildText("Description"));
-
+				
+				if(taskElement.getChildText("IsDone").equals("true")){
+					task1.setDone(true);
+				}else if(taskElement.getChildText("IsDone").equals("false")){
+					task1.setDone(false);
+				}
+				
 				int i = 0;
 				ArrayList<String> labels = new ArrayList<String>();
-				while ((taskElement.getChildText("Label"+i))!= null)
-				{
-					labels.add(taskElement.getChildText("Label"+i));
+				while ((taskElement.getChildText("Label" + i)) != null) {
+					labels.add(taskElement.getChildText("Label" + i));
 					i++;
 				}
 				task1.setLabels(labels);
-				
+
 				task1.setImportance(Integer.parseInt(taskElement
 						.getChildText("Importance")));
+				
 				if (taskElement.getChildText("TimeStamp1") != "") {
 					task1.setDeadline(LocalDateTime.parse(
 							taskElement.getChildText("TimeStamp1"), formatter));

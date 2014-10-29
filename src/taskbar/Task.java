@@ -15,6 +15,7 @@ public class Task {
 
 	public Task() {
 		labels = new ArrayList<String>();
+		this.isDone = false;
 	}
 
 	public Task(String description, ArrayList<String> labels, int importance) {

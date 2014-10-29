@@ -10,7 +10,6 @@ public class DisplayData {
 	private boolean needToUpdate;
 
 	private boolean needToUpdateInputBox;
-	private boolean isResultLocked;
 
 	public DisplayData() {
 		super();
@@ -43,14 +42,6 @@ public class DisplayData {
 		this.needToUpdateInputBox = needToUpdateInputBox;
 	}
 
-	public void setResultLocked(boolean isResultLocked) {
-		this.isResultLocked = isResultLocked;
-	}
-
-	public boolean isResultLocked(){
-		return isResultLocked;
-	}
-	
 	public String getInputText() {
 		return inputText;
 	}

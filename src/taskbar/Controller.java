@@ -1,121 +1,38 @@
 package taskbar;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Controller{
+public class Controller {
 
-	private DisplayData displayData = new DisplayData();
+	private DisplayData displayData;
 	private Storage storage;
-	private boolean isResultLocked;
 
 	private Logger logger = Logging.getInstance();
 
 	// TODO modify constructor to suit the new architecture.
 	public Controller() {
 		storage = Storage.getInstance();
-		isResultLocked = false;
+		displayData = new DisplayData();
 	}
 
 	public DisplayData loadAllTasks() {
-		setDisplayData("", storage.getAllTasks(), isResultLocked = true);
-		return displayData;
-	}
-	
-	public DisplayData handleKeyTyped(String userInput) {
-		if (isResultLocked) {
-			displayData.setNeedToUpdate(false);
-		} else {
-			processUnlockedKeyTyped(userInput);
-		}
+		setDisplayData("", storage.getAllNotDoneTasks());
 		return displayData;
 	}
 
 	public DisplayData handleEnter(String userInput) {
 		// TODO to be refactored as processEnterCommandsThatDoNotInvolveSearch
 		CommandType currentCommand = Interpreter.getCommandType(userInput);
-		if (currentCommand == CommandType.ADD) {
-			storage.addTask(Interpreter.interpretAdd(userInput));
-			setDisplayData("Task successfully added!", storage.getAllTasks(),
-					isResultLocked = true);
-		} else if (currentCommand == CommandType.UNDO) {
-			// TODO implement UNDO
-		} else if (!isResultLocked) {
-			// TODO to be refactored as processUnlockedEnter
-			// TODO add in handling for arrow-key selection here, delete assert
-			assert Interpreter.getCommandType(userInput) == CommandType.SHOW;
-			setDisplayData(
-					"<delete/update/complete> + <number> to perform action on a task!",
-					isResultLocked = true);
-		} else {
-			// when the command is not ADD or UNDO, and result is locked:
-			processLockedEnter(userInput);
-		}
 
-		return displayData;
-	}
-
-	/*
-	 * setDisplayData method for setting WITH the need to update input box.
-	 */
-	private void setDisplayData(String inputText, String prompt,
-			ArrayList<Task> listOfTasks, boolean isResultLocked) {
-		displayData.setNeedToUpdate(true);
-		displayData.setNeedToUpdateInputBox(true);
-		displayData.setResultLocked(isResultLocked);
-		displayData.setInputText(inputText);
-		displayData.setPrompt(prompt);
-		displayData.setListOfTasks(listOfTasks);
-	}
-
-	/*
-	 * setDisplayData method for setting withOUT the need to update input box.
-	 */
-	private void setDisplayData(String prompt, ArrayList<Task> listOfTasks,
-			boolean isResultLocked) {
-		displayData.setNeedToUpdate(true);
-		displayData.setNeedToUpdateInputBox(false);
-		displayData.setResultLocked(isResultLocked);
-		displayData.setPrompt(prompt);
-		displayData.setListOfTasks(listOfTasks);
-	}
-
-	/*
-	 * setDisplayData method for setting without the need to update input box,
-	 * and maintaining the list of task as the previous task.
-	 */
-	private void setDisplayData(String prompt, boolean isResultLocked) {
-		displayData.setNeedToUpdate(true);
-		displayData.setNeedToUpdateInputBox(false);
-		displayData.setResultLocked(isResultLocked);
-		displayData.setPrompt(prompt);
-	}
-
-	private void processUnlockedKeyTyped(String userInput) {
-		CommandType currentCommand = Interpreter.getCommandType(userInput);
 		switch (currentCommand) {
 		case ADD:
+			add(userInput);
+			break;
 		case UNDO:
-			break;
-		default: // NONE, SHOW, DELETE, UPDATE, COMPLETE
-			displayData.setListOfTasks( // TODO rethink how to update DD
-										// properly, to avoid the proprobme of
-										// previously set boolean.
-					storage.searchTask(Interpreter.getParameter(userInput)));
-			break;
-		}
-	}
-
-	private void processLockedEnter(String userInput) {
-		CommandType currentCommand = Interpreter.getCommandType(userInput);
-		assert currentCommand != CommandType.ADD
-				&& currentCommand != CommandType.UNDO : "improperly reached processLockedEnter";
-		switch (currentCommand) {
+			// TODO implement UNDO
 		case SHOW:
 			show(userInput);
 			break;
@@ -131,13 +48,57 @@ public class Controller{
 		default:
 			break;
 		}
+
+		return displayData;
+	}
+
+	/*
+	 * setDisplayData method for setting WITH the need to setting input box to something.
+	 */
+	private void setDisplayData(String inputText, String prompt,
+			ArrayList<Task> listOfTasks) {
+		displayData.setNeedToUpdate(true);
+		displayData.setNeedToUpdateInputBox(true);
+		displayData.setInputText(inputText);
+		displayData.setPrompt(prompt);
+		displayData.setListOfTasks(listOfTasks);
+	}
+
+	/*
+	 * setDisplayData method for setting CLEARING the input box.
+	 */
+	private void setDisplayData(String prompt, ArrayList<Task> listOfTasks) {
+		displayData.setNeedToUpdate(true);
+		displayData.setNeedToUpdateInputBox(true);
+		displayData.setInputText("");
+		displayData.setPrompt(prompt);
+		displayData.setListOfTasks(listOfTasks);
+	}
+
+	/*
+	 * setDisplayData method for setting RETAINING the input box text, and
+	 * without the need to update the list of tasks
+	 */
+	private void setDisplayData(String prompt) {
+		displayData.setNeedToUpdate(false);
+		displayData.setNeedToUpdateInputBox(true);
+		displayData.setPrompt(prompt);
+	}
+
+	private void add(String userInput) {
+		try {
+			storage.addTask(Interpreter.interpretAdd(userInput));
+			setDisplayData("Task successfully added!",
+					storage.getAllNotDoneTasks());
+		} catch (DateTimeException e) {
+			setDisplayData("Invalid date & time input. Please refer to the User Guide if in doubt.");
+		}
 	}
 
 	private void show(String userInput) {
 		setDisplayData(
 				"<delete/update/complete> + <number> to perform action on a task!",
-				storage.searchTask(Interpreter.getParameter(userInput)),
-				isResultLocked = true);
+				storage.searchTask(Interpreter.getParameter(userInput)));
 	}
 
 	private void delete(String userInput) {
@@ -147,14 +108,13 @@ public class Controller{
 			Task taskToBeDeleted = displayData.getListOfTasks().get(index);
 			storage.deleteTask(taskToBeDeleted);
 
-			setDisplayData("Task deleted successfully", storage.getAllTasks(),
-					isResultLocked = true);
+			setDisplayData("Task deleted successfully",
+					storage.getAllNotDoneTasks());
 
 			logger.log(Level.FINE, "Task deleted successfully\n"
 					+ taskToBeDeleted.getDescription());
 		} catch (Exception e) {
-			setDisplayData("Invalid delete command. format: <delete> <number>",
-					isResultLocked = true);
+			setDisplayData("Invalid delete command. format: <delete> <number>");
 		}
 
 	}
@@ -170,11 +130,9 @@ public class Controller{
 
 			setDisplayData(
 					Interpreter.convertTaskToAddCommand(taskToBeUpdated),
-					"Please update the task in the input box", null,
-					isResultLocked = false);
+					"Please update the task in the input box", null);
 		} catch (Exception e) {
-			setDisplayData("Invalid update command. format: <delete> <number>",
-					isResultLocked = true);
+			setDisplayData("Invalid update command. format: <update> <number>");
 		}
 	}
 
@@ -184,12 +142,10 @@ public class Controller{
 			assert index >= 0 : "Invalid task index number.";
 			Task taskToBeCompleted = displayData.getListOfTasks().get(index);
 			taskToBeCompleted.setDone(true);
-			
-			setDisplayData("Task successfully marked as completed!", null, 
-					isResultLocked = false);
+
+			setDisplayData("Task successfully marked as completed!", storage.getAllNotDoneTasks());
 		} catch (Exception e) {
-			setDisplayData("Invalid complete command. format: <delete> <number>",
-					isResultLocked = true);
+			setDisplayData("Invalid complete command. format: <complete> <number>");
 		}
 	}
 

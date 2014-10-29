@@ -28,6 +28,14 @@ public class WriteFileJDOM {
 			Element tasks = new Element("Task");
 			tasks.addContent(new Element("Description").setText(task
 					.getDescription()));
+			
+			
+			if(task.isDone()){
+				tasks.addContent(new Element("IsDone").setText("true"));
+			}else{
+				tasks.addContent(new Element("IsDone").setText("false"));
+			}
+			
 			ArrayList<String> labels = task.getLabels();
 			for(int i=0 ; i < task.getNumLabels(); i++){
 				Element labs = new Element("Label" + i);
