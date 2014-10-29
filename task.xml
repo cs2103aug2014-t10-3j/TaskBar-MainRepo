@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tasks>
   <Task>
-    <Description>CS2103T tutorial</Description>
-    <Importance>0</Importance>
-    <TimeStamp1>2014-10-30 10:00</TimeStamp1>
-    <TimeStamp2 />
-  </Task>
-  <Task>
     <Description>revise for final</Description>
     <Importance>0</Importance>
     <TimeStamp1>2014-10-27 00:00</TimeStamp1>
@@ -26,6 +20,19 @@
   </Task>
   <Task>
     <Description>this is a task</Description>
+    <Importance>0</Importance>
+    <TimeStamp1 />
+    <TimeStamp2 />
+  </Task>
+  <Task>
+    <Description>CS2103T tutorial</Description>
+    <Importance>0</Importance>
+    <TimeStamp1 />
+    <TimeStamp2 />
+  </Task>
+  <Task>
+    <Description>run for life</Description>
+    <Label0>mustdo</Label0>
     <Importance>0</Importance>
     <TimeStamp1 />
     <TimeStamp2 />
