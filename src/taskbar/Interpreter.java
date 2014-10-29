@@ -11,12 +11,13 @@
 package taskbar;
 
 import java.time.LocalDateTime;
+import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
 public class Interpreter {
-	public static Task interpretAdd(String command) {
+	public static Task interpretAdd(String command) throws DateTimeException {
 		String userInput = command.toLowerCase();
 		String userInputOnly = Command.removeImportanceTagString(command);
 		String commandDescription = Command.getDescription(userInputOnly);
