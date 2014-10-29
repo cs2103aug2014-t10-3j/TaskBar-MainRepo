@@ -126,7 +126,7 @@ public class Storage {
 			for (int i = 0; i < list.size() - j; i++) {
 				try {
 					if (list.get(i).getDeadline()
-							.isBefore(list.get(i + 1).getDeadline())) {
+							.isAfter(list.get(i + 1).getDeadline())) {
 						tmp = list.get(i);
 						list.set(i, list.get(i + 1));
 						list.set(i + 1, tmp);

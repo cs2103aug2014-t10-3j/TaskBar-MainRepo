@@ -68,28 +68,16 @@ public class GUIController implements Initializable{
 		setCloseBtn();
 		setClockAndDate();
 		
-		configureTable();
-		
 		status.setOpacity(0);
+		defineTransition();
+		
+		configureTable();
 		
 		setTextboxOnFocus();
 		textbox.setOnAction((event) -> {
 			data = ctrl.handleEnter(textbox.getText());
-			showToUser(data);
-			if (data.needToUpdateInputBox()) {
-				textbox.setText(data.getInputText());
-			} else {
-				textbox.clear();
-			}			
+			showToUser(data);		
 		});
-		
-		/*textbox.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> ov, String oldText, String newText) {
-				data = ctrl.handleKeyTyped(oldText);
-				showToUser(data);
-			}
-		});*/
 		
 	}
 	
@@ -157,11 +145,11 @@ public class GUIController implements Initializable{
 					if (o2=="") {
 						return 0;
 					} else {
-						return -1;
+						return 1;
 					}						
 				} else {
 					if (o2=="") {
-						return 1;
+						return -1;
 					} else {
 						DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
 						LocalDate d1 = LocalDate.parse(o1.substring(0, 8), dateFmt);
@@ -172,6 +160,8 @@ public class GUIController implements Initializable{
 				
 			}
 		});
+		
+		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
 		
 		table.setPlaceholder(new Label("There is nothing to show"));
 		table.setRowFactory(new Callback<TableView<Data>, TableRow<Data>>() {
@@ -200,7 +190,7 @@ public class GUIController implements Initializable{
 				return row;
 			}
 		});
-		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
+
 		table.setItems(list);
 		
 		showToUser(ctrl.loadAllTasks());
@@ -226,14 +216,15 @@ public class GUIController implements Initializable{
 				}
 			}
 		}
-		
+		if (data.needToUpdateInputBox()) {
+			textbox.setText(data.getInputText());
+		}
 		status.setText(data.getPrompt());
 		status.setOpacity(1);
 		fadeStatus();
 	}
 	
-	private void fadeStatus() {
-		defineTransition();
+	private void fadeStatus() {		
 		seqTrans.stop();
 		seqTrans.play();
 	}

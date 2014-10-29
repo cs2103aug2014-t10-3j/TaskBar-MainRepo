@@ -51,21 +51,6 @@
 	-fx-alignment: TOP_LEFT;
 }
 
-
-
-
-#table .table-row-cell:filled:selected {
-	-fx-background-color: -fx-focus-color;
-	-fx-text-fill: white;
-	-fx-table-cell-border-color: transparent;
-}
-
-#table:focused .table-row-cell:filled:focused:selected {
-	-fx-background-color: -fx-focus-color;
-	-fx-text-fill: white;
-	-fx-table-cell-border-color: transparent;
-}
-
 #closeBtn, #clock, #day {
 	-fx-background-color: #c32c2c;
 	-fx-text-fill: white;
@@ -78,10 +63,9 @@
 
 .pastDeadline {
 	-fx-control-inner-background: #E25041 !important;
-	-fx-text-fill: white;
+	-fx-text-fill: yellow !important;
 }
 
 .nearDeadline {
 	-fx-control-inner-background: #F7DA64 !important;
-	-fx-text-fill: white;
 }

@@ -9,6 +9,7 @@ public class Controller {
 
 	private DisplayData displayData;
 	private Storage storage;
+	//private String input;
 
 	private Logger logger = Logging.getInstance();
 
@@ -25,6 +26,7 @@ public class Controller {
 
 	public DisplayData handleEnter(String userInput) {
 		// TODO to be refactored as processEnterCommandsThatDoNotInvolveSearch
+		//input = userInput;
 		CommandType currentCommand = Interpreter.getCommandType(userInput);
 
 		switch (currentCommand) {
@@ -81,7 +83,7 @@ public class Controller {
 	 */
 	private void setDisplayData(String prompt) {
 		displayData.setNeedToUpdate(false);
-		displayData.setNeedToUpdateInputBox(true);
+		displayData.setNeedToUpdateInputBox(false);
 		displayData.setPrompt(prompt);
 	}
 
@@ -113,6 +115,15 @@ public class Controller {
 
 			logger.log(Level.FINE, "Task deleted successfully\n"
 					+ taskToBeDeleted.getDescription());
+		} catch (IndexOutOfBoundsException e) {
+			int listSize = displayData.getListOfTasks().size();
+			if (listSize==0) {
+				setDisplayData("There is no task in the list");
+			} else if (listSize==1) {
+				setDisplayData("There is only 1 task in the list");
+			} else {
+				setDisplayData("There are only " + listSize + " tasks in the list");
+			}
 		} catch (Exception e) {
 			setDisplayData("Invalid delete command. format: <delete> <number>");
 		}
@@ -131,6 +142,15 @@ public class Controller {
 			setDisplayData(
 					Interpreter.convertTaskToAddCommand(taskToBeUpdated),
 					"Please update the task in the input box", null);
+		} catch (IndexOutOfBoundsException e) {
+			int listSize = displayData.getListOfTasks().size();
+			if (listSize==0) {
+				setDisplayData("There is no task in the list");
+			} else if (listSize==1) {
+				setDisplayData("There is only 1 task in the list");
+			} else {
+				setDisplayData("There are only " + listSize + " tasks in the list");
+			}
 		} catch (Exception e) {
 			setDisplayData("Invalid update command. format: <update> <number>");
 		}
@@ -144,6 +164,15 @@ public class Controller {
 			taskToBeCompleted.setDone(true);
 
 			setDisplayData("Task successfully marked as completed!", storage.getAllNotDoneTasks());
+		} catch (IndexOutOfBoundsException e) {
+			int listSize = displayData.getListOfTasks().size();
+			if (listSize==0) {
+				setDisplayData("There is no task in the list");
+			} else if (listSize==1) {
+				setDisplayData("There is only 1 task in the list");
+			} else {
+				setDisplayData("There are only " + listSize + " tasks in the list");
+			}
 		} catch (Exception e) {
 			setDisplayData("Invalid complete command. format: <complete> <number>");
 		}
