@@ -3,13 +3,14 @@ package taskbar;
  * @author Xiaofan
  */
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
 
 
 public class DateTimeLocal {
-	
+
 	public static LocalDateTime getStartDateTime(String userInput){
 		//return start time from user input
 		String startDateTime = null;
@@ -17,7 +18,7 @@ public class DateTimeLocal {
 		LocalDateTime startTime = getDateTime(startDateTime);
 		return startTime;
 	}
-	
+
 	public static LocalDateTime getEndDateTime(String userInput){
 		//return end time from user input
 		String endDateTime = null;
@@ -25,7 +26,7 @@ public class DateTimeLocal {
 		LocalDateTime endTime = getDateTime(endDateTime);
 		return endTime;
 	}
-	
+
 	public static LocalDateTime getScheduledDateTime(String userInput){
 		//return scheduled time from user input
 		String scheduledDateTime = null;
@@ -33,7 +34,7 @@ public class DateTimeLocal {
 		LocalDateTime scheduledTime = getDateTime(scheduledDateTime);
 		return scheduledTime;
 	}
-	
+
 	public static LocalDateTime getNormalDateTime(String userInput){
 		//return normal time from user input
 		String normalDateTime = null;
@@ -47,22 +48,30 @@ public class DateTimeLocal {
 		}
 		return normalTime;
 	}
-	
+
 	public static LocalDateTime getDateTime(String string){
 		String dateTime = string.trim();
 		if(dateTime.contains(" ")){
 			String splitStrSpace[] = dateTime.split("\\s");
 			if(splitStrSpace.length == 2){
-				String date = splitStrSpace[0];
-				String time = splitStrSpace[1];
-				if(DateTime.isNumberDateFormat(date) && DateTime.is12hTimeFormat(time)){
-					return timeFromNumDateAnd12hTime(date, time);
-				}else if(DateTime.isNumberDateFormat(date) && DateTime.is24hTimeFormat(time)){
-					return timeFromNumDateAnd24hTime(date, time);
-				}else if(DateTime.isDayDateFormat(date) && DateTime.is12hTimeFormat(time)){
-					return timeFromDayDateAnd12hTime(date, time);
-				}else if(DateTime.isDayDateFormat(date) && DateTime.is24hTimeFormat(time)){
-					return timeFromDayDateAnd24hTime(date, time);
+				if(DateTime.isWordMonth(splitStrSpace[1])){
+					String date = splitStrSpace[0];
+					String month = splitStrSpace[1];
+					if(DateTime.isIntDate(date)){
+						return timeFromIntDateAndWordMonth(date, month);
+					}
+				}else{
+					String date = splitStrSpace[0];
+					String time = splitStrSpace[1];
+					if(DateTime.isNumberDateFormat(date) && DateTime.is12hTimeFormat(time)){
+						return timeFromNumDateAnd12hTime(date, time);
+					}else if(DateTime.isNumberDateFormat(date) && DateTime.is24hTimeFormat(time)){
+						return timeFromNumDateAnd24hTime(date, time);
+					}else if(DateTime.isDayDateFormat(date) && DateTime.is12hTimeFormat(time)){
+						return timeFromDayDateAnd12hTime(date, time);
+					}else if(DateTime.isDayDateFormat(date) && DateTime.is24hTimeFormat(time)){
+						return timeFromDayDateAnd24hTime(date, time);
+					}
 				}
 			}
 			if(splitStrSpace.length == 3){
@@ -97,7 +106,14 @@ public class DateTimeLocal {
 		}
 		return null;
 	}
-	
+
+	public static LocalDateTime timeFromIntDateAndWordMonth(String date, String month){
+		int day = Integer.parseInt(date);
+		int intMonth = getIntFromMonth(month);
+		LocalDateTime specified = LocalDateTime.of(2014, intMonth, day, 0, 0, 0, 0);
+		return specified;
+	}
+
 	public static LocalDateTime timeFromNumDateAnd12hTime(String date, String time){
 		String splitSlash[] = date.split("\\/");
 		if(splitSlash.length == 2){
@@ -142,7 +158,7 @@ public class DateTimeLocal {
 		}
 		return null;
 	}
-	
+
 	public static LocalDateTime timeFromNumDateAnd24hTime(String date, String time){
 		String splitSlash[] = date.split("\\/");
 		if(splitSlash.length == 2){
@@ -163,7 +179,7 @@ public class DateTimeLocal {
 		}
 		return null;
 	}
-	
+
 	public static LocalDateTime timeFromDayDateAnd12hTime(String date, String time){
 		LocalDateTime current = LocalDateTime.now();
 		String timeSub = time.substring(0, time.length()-2);
@@ -189,7 +205,7 @@ public class DateTimeLocal {
 		specified = specified.withHour(hour).withMinute(minute);
 		return specified;
 	}
-	
+
 	public static LocalDateTime timeFromDayDateAnd24hTime(String date, String time){
 		LocalDateTime current = LocalDateTime.now();
 		int hour = Integer.parseInt(time.substring(0, time.length()-2));
@@ -206,7 +222,7 @@ public class DateTimeLocal {
 			return specified;
 		}
 	}
-	
+
 	public static LocalDateTime timeFromWordNoYrAnd12hTime(String date, String time){
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
@@ -228,7 +244,7 @@ public class DateTimeLocal {
 		LocalDateTime specified = LocalDateTime.of(2014, month, day, hour, minute);
 		return specified;	
 	}
-	
+
 	public static LocalDateTime timeFromWordNoYrAnd24hTime(String date, String time){
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
@@ -238,7 +254,7 @@ public class DateTimeLocal {
 		LocalDateTime specified = LocalDateTime.of(2014, month, day, hour, min);
 		return specified;
 	}
-	
+
 	public static LocalDateTime timeFromWordAnd12hTime(String date, String time){
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
@@ -261,7 +277,7 @@ public class DateTimeLocal {
 		LocalDateTime specified = LocalDateTime.of(year, month, day, hour, minute);
 		return specified;
 	}
-	
+
 	public static LocalDateTime timeFromWordAnd24hTime(String date, String time){
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
@@ -272,7 +288,7 @@ public class DateTimeLocal {
 		LocalDateTime specified = LocalDateTime.of(year, month, day, hour, min);
 		return specified;
 	}
-	
+
 	public static LocalDateTime timeFrom12hTime(String dateTime){
 		LocalDateTime current = LocalDateTime.now();
 		String timeSub = dateTime.substring(0, dateTime.length()-2);
@@ -292,7 +308,7 @@ public class DateTimeLocal {
 		LocalDateTime specified = current.withHour(hour).withMinute(minute);
 		return specified;
 	}
-	
+
 	public static LocalDateTime timeFrom24hTime(String dateTime){
 		LocalDateTime current = LocalDateTime.now();
 		int hour = Integer.parseInt(dateTime.substring(0, dateTime.length()-2));
@@ -300,7 +316,7 @@ public class DateTimeLocal {
 		LocalDateTime specified = current.withHour(hour);
 		return specified.withMinute(min);
 	}
-	
+
 	public static LocalDateTime timeFromDayDate(String dateTime){
 		LocalDateTime current = LocalDateTime.now();
 		if(dateTime.equals("tomorrow") || dateTime.equals("tmr")){
@@ -311,7 +327,7 @@ public class DateTimeLocal {
 			return specified.withHour(0).withMinute(0);
 		}
 	}
-	
+
 	public static LocalDateTime timeFromNumDate(String dateTime){
 		String splitStrSpace[] = dateTime.split("/");
 		int day = Integer.parseInt(splitStrSpace[0]);
@@ -323,10 +339,10 @@ public class DateTimeLocal {
 		} else {
 			specified = LocalDateTime.of(2014, month, day, 0, 0);
 		}
-		
+
 		return specified;
 	}
-	
+
 	public static long differenceInDays(String day, LocalDateTime current){
 		DayOfWeek currentDay = current.getDayOfWeek();
 		int currentDayInt = currentDay.getValue();
@@ -373,7 +389,7 @@ public class DateTimeLocal {
 		long temp = Long.valueOf(String.valueOf(difference));
 		return temp;
 	}
-	
+
 	public static int getIntFromMonth(String string){
 		if(string.equals("january") || string.equals("jan")){
 			return 1;
