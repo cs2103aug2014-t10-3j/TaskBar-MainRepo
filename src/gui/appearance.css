@@ -4,8 +4,7 @@
 }
 
 #pane {
-	-fx-base: #3d3e43;
-	
+	-fx-base: #3d3e43;	
 	-fx-background-color: -fx-base;
 }
 
@@ -52,9 +51,8 @@
 	-fx-alignment: TOP_LEFT;
 }
 
-#table .table-row-cell:odd {
-	-fx-background-color: derive(-fx-base, -5%);
-}
+
+
 
 #table .table-row-cell:filled:selected {
 	-fx-background-color: -fx-focus-color;
@@ -76,4 +74,14 @@
 #closeBtn:hover {
 	-fx-background-color: -fx-focus-color !important;
 	-fx-text-fill: #ff5c5c;
+}
+
+.pastDeadline {
+	-fx-control-inner-background: #E25041 !important;
+	-fx-text-fill: white;
+}
+
+.nearDeadline {
+	-fx-control-inner-background: #F7DA64 !important;
+	-fx-text-fill: white;
 }

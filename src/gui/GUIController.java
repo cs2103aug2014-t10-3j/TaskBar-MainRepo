@@ -24,10 +24,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 public class GUIController implements Initializable{
@@ -125,6 +128,13 @@ public class GUIController implements Initializable{
 	};
 	
 	private void configureTable() {
+		table.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent ev) {
+				ev.consume();
+			}
+		});
+		
 		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
 		
 		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
@@ -161,9 +171,34 @@ public class GUIController implements Initializable{
 			}
 		});
 		
-		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
-		
 		table.setPlaceholder(new Label("There is nothing to show"));
+		table.setRowFactory(new Callback<TableView<Data>, TableRow<Data>>() {
+			@Override
+			public TableRow<Data> call(TableView<Data> tv) {
+				TableRow<Data> row = new TableRow<Data>() {
+					@Override
+					protected void updateItem(Data task, boolean empty) {
+						super.updateItem(task, empty);
+						getStyleClass().remove("pastDeadline");
+						getStyleClass().remove("nearDeadline");
+						Data currentTask = empty ? null : (Data) getItem();
+						if (currentTask!=null) {
+							Task taskData = task.getTask();
+							LocalDate today = LocalDateTime.now().toLocalDate();
+							if (taskData.isDeadLineTask()) {
+								if (!taskData.getDeadline().toLocalDate().isAfter(today)) {
+									getStyleClass().add("pastDeadline");
+								} else if (!taskData.getDeadline().toLocalDate().isAfter(today.plusDays(2))) {
+									getStyleClass().add("nearDeadline");
+								}
+							}
+						}
+					}
+				};
+				return row;
+			}
+		});
+		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
 		table.setItems(list);
 		
 		showToUser(ctrl.loadAllTasks());

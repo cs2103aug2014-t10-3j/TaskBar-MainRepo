@@ -17,7 +17,7 @@
                   <Font name="Segoe UI Light" size="12.0" />
                </font>
             </TextField>
-            <TableView fx:id="table" prefHeight="378.0" prefWidth="671.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="86.0">
+            <TableView fx:id="table" focusTraversable="false" prefHeight="378.0" prefWidth="671.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="86.0">
                <columns>
                   <TableColumn fx:id="noCol" editable="false" prefWidth="31.0" resizable="false" text="#" />
                   <TableColumn fx:id="descCol" editable="false" prefWidth="212.0" resizable="false" text="Description" />

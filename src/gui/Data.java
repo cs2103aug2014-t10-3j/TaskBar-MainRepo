@@ -16,6 +16,7 @@ public class Data {
 	private SimpleStringProperty tag;
 	private SimpleStringProperty date;
 	private SimpleStringProperty time;
+	private Task task;
 	
 	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
 	DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
@@ -30,14 +31,8 @@ public class Data {
 		desc = new SimpleStringProperty(newDesc);
 		tag = new SimpleStringProperty(arrayToString(newTag));
 		date = new SimpleStringProperty(processDate(time1, time2));
-		time = new SimpleStringProperty(processTime(time1, time2));		
-	}
-	
-	public Data (String newDesc, ArrayList<String> newTag, LocalDateTime time1, LocalDateTime time2) {
-		desc = new SimpleStringProperty(newDesc);
-		tag = new SimpleStringProperty(arrayToString(newTag));
-		date = new SimpleStringProperty(processDate(time1, time2));
 		time = new SimpleStringProperty(processTime(time1, time2));
+		this.task = task; 
 	}
 	
 	public String getOrder() {
@@ -58,6 +53,10 @@ public class Data {
 	
 	public String getTime() {
 		return time.get();
+	}
+	
+	public Task getTask() {
+		return task;
 	}
 	
 	public void setOrder(int ord) {
