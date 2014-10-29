@@ -10,11 +10,11 @@ import java.util.ArrayList;
 
 public class Command {
 
-	public static final String ON = "on";
-	public static final String AT = "at";
-	public static final String FROM = "from";
-	public static final String BY = "by";
-	public static final String TO = "to";
+	public static final String ON = " on ";
+	public static final String AT = " at ";
+	public static final String FROM = " from ";
+	public static final String BY = " by ";
+	public static final String TO = " to ";
 
 	public static int SINGLEWORD = -1;
 	
@@ -37,8 +37,8 @@ public class Command {
 	}
 
 	public static Boolean isPrepPresent(String userInput){
-		if(userInput.contains(" " + AT + " ") || userInput.contains(" " + BY + " ") ||
-				userInput.contains(" " + FROM + " ") || userInput.contains(" " + ON + " ")){
+		if(userInput.contains(AT) || userInput.contains(BY) ||
+				userInput.contains(FROM) || userInput.contains(ON)){
 			return true;
 		}
 		return false;
@@ -79,7 +79,7 @@ public class Command {
 					description = matcher.group(1);
 				}
 			}else if(smallestIndex == 1){
-				Pattern pattern = Pattern.compile("add(.*?\\s)by\\s");
+				Pattern pattern = Pattern.compile("add(.*?\\s)\\sby\\s");
 				Matcher matcher = pattern.matcher(userInput);
 				while(matcher.find()){
 					description = matcher.group(1);

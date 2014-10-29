@@ -2,10 +2,15 @@ package taskbar;
 /**
  * @author Xiaofan
  */
-import java.time.DateTimeException;
 
 public class DateTime {
 	
+	public static Boolean hasEventDate(String string){
+		if(string.contains(" on ") && string.contains(" from ") && string.contains(" to ")){
+			return true;
+		}
+		return false;
+	}
 	public static Boolean is24hTimeFormat(String string){
 		if(string.length() == 4){
 			try{

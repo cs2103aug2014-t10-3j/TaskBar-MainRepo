@@ -7,6 +7,8 @@ package taskbar;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class DateTimeLocal {
@@ -16,6 +18,11 @@ public class DateTimeLocal {
 		String startDateTime = null;
 		startDateTime = userInput.substring(userInput.lastIndexOf(" from ")+6, userInput.lastIndexOf(" to "));
 		LocalDateTime startTime = getDateTime(startDateTime);
+		if(DateTime.hasEventDate(userInput)){
+			LocalDateTime eventDate = getEventDate(userInput);
+			LocalDateTime timeStart = LocalDateTime.of(eventDate.getYear(), eventDate.getMonthValue(), eventDate.getDayOfMonth(), startTime.getHour(), startTime.getMinute());
+			return timeStart;
+		}
 		return startTime;
 	}
 
@@ -24,10 +31,26 @@ public class DateTimeLocal {
 		String endDateTime = null;
 		endDateTime = userInput.substring(userInput.lastIndexOf(" to ")+4, userInput.length());
 		LocalDateTime endTime = getDateTime(endDateTime);
+		if(DateTime.hasEventDate(userInput)){
+			LocalDateTime eventDate = getEventDate(userInput);
+			LocalDateTime timeEnd = LocalDateTime.of(eventDate.getYear(), eventDate.getMonthValue(), eventDate.getDayOfMonth(), endTime.getHour(), endTime.getMinute());
+			return timeEnd;
+		}
 		if(endTime.isBefore(getStartDateTime(userInput))){
 			return endTime.withDayOfMonth(getStartDateTime(userInput).getDayOfMonth());
 		}
 		return endTime;
+	}
+	
+	public static LocalDateTime getEventDate(String userInput) throws DateTimeException{
+		String date = null;
+		Pattern pattern = Pattern.compile("on(.*?\\s)from\\s");
+		Matcher matcher = pattern.matcher(userInput);
+		while(matcher.find()){
+			date = matcher.group(1);
+		}
+		LocalDateTime eventDate = getDateTime(date);
+		return eventDate;
 	}
 
 	public static LocalDateTime getScheduledDateTime(String userInput) throws DateTimeException{
@@ -158,6 +181,10 @@ public class DateTimeLocal {
 			if(time.contains("pm") && hour!=12){					
 				hour = hour + 12;					
 			}
+			if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+				throw new DateTimeException("invalid year");
+			}
+			year = (year>999) ? year : 2000+year;
 			LocalDateTime time2 = LocalDateTime.of(year, month, day, hour, minute);
 			return time2;
 		}
@@ -180,6 +207,10 @@ public class DateTimeLocal {
 			int year = Integer.parseInt(splitSlash[2]);
 			int hour = Integer.parseInt(time.substring(0, time.length()-2));
 			int min = Integer.parseInt(time.substring(2));
+			if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+				throw new DateTimeException("invalid year");
+			}
+			year = (year>999) ? year : 2000+year;
 			LocalDateTime time2 = LocalDateTime.of(year, month, day, hour, min);
 			return time2;
 		}
@@ -282,6 +313,10 @@ public class DateTimeLocal {
 		if(time.contains("pm") && hour!=12){					
 			hour = hour + 12;					
 		}
+		if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+			throw new DateTimeException("invalid year");
+		}
+		year = (year>999) ? year : 2000+year;
 		LocalDateTime specified = LocalDateTime.of(year, month, day, hour, minute);
 		return specified;
 	}
@@ -293,6 +328,10 @@ public class DateTimeLocal {
 		int year = Integer.parseInt(splitStrSpace[2]);
 		int hour = Integer.parseInt(time.substring(0, time.length()-2));
 		int min = Integer.parseInt(time.substring(2));
+		if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+			throw new DateTimeException("invalid year");
+		}
+		year = (year>999) ? year : 2000+year;
 		LocalDateTime specified = LocalDateTime.of(year, month, day, hour, min);
 		return specified;
 	}
@@ -353,6 +392,10 @@ public class DateTimeLocal {
 		LocalDateTime specified;
 		if (splitStrSpace.length==3) {
 			int year = Integer.parseInt(splitStrSpace[2]);
+			if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+				throw new DateTimeException("invalid year");
+			}
+			year = (year>999) ? year : 2000+year;
 			specified = LocalDateTime.of(year, month, day, 0, 0);
 		} else {
 			specified = LocalDateTime.of(current.getYear(), month, day, 0, 0);
