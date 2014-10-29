@@ -44,7 +44,7 @@ public class DateTimeLocal {
 	
 	public static LocalDateTime getEventDate(String userInput) throws DateTimeException{
 		String date = null;
-		Pattern pattern = Pattern.compile("on(.*?\\s)from\\s");
+		Pattern pattern = Pattern.compile("on(\\s.*?\\s)from\\s");
 		Matcher matcher = pattern.matcher(userInput);
 		while(matcher.find()){
 			date = matcher.group(1);
