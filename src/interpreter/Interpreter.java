@@ -26,7 +26,6 @@ import commands.Undo;
 import commands.Update;
 import commands.Show.ShowCommandType;
 import storage.Storage;
-import util.CommandType;
 import util.DisplayData;
 import util.Task;
 
@@ -87,22 +86,22 @@ public class Interpreter {
 		return result;
 	}
 	
-	public static Show.ShowCommandType interpretShow(String userInput){
+	public static ShowCommandType interpretShow(String userInput){
 		String showCommandParameter = getParameter(userInput).toLowerCase();
 		switch(showCommandParameter){
 		case "all":
-			return Show.ShowCommandType.ALL;
+			return ShowCommandType.ALL;
 		case "today":
-			return Show.ShowCommandType.TODAY;
+			return ShowCommandType.TODAY;
 		case "tomorrow":
-			return Show.ShowCommandType.TOMORROW;
+			return ShowCommandType.TOMORROW;
 		case "done":
-			return Show.ShowCommandType.DONE;
+			return ShowCommandType.DONE;
 		default:
 			if(!showCommandParameter.isEmpty() && showCommandParameter.charAt(0) == '#'){
-				return Show.ShowCommandType.LABEL;
+				return ShowCommandType.LABEL;
 			}else{
-				return Show.ShowCommandType.KEYWORD;
+				return ShowCommandType.KEYWORD;
 			}
 		}
 	}
@@ -141,25 +140,6 @@ public class Interpreter {
 			return true;
 		default:
 			return false;
-		}
-	}
-	
-	public static CommandType getCommandType(String userInput){
-		String[] splitInputTokens = userInput.split(" ", 2);
-		String commandKeyword = splitInputTokens[0].toLowerCase();
-		switch(commandKeyword){
-		case"add":
-			return CommandType.ADD;
-		case"delete":
-			return CommandType.DELETE;
-		case"update":
-			return CommandType.UPDATE;
-		case"complete":
-			return CommandType.COMPLETE;
-		case"undo":
-			return CommandType.UNDO;
-		default:
-			return CommandType.SHOW;
 		}
 	}
 
