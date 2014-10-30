@@ -12,8 +12,8 @@ public class Delete extends UndoableCommand {
 		try {
 			int index = Integer.parseInt(Interpreter.getParameter(userInput)) - 1;
 			assert index >= 0 : "Invalid task index number.";
-			Task taskToBeDeleted = displayData.getListOfTasks().get(index);
-			storage.deleteTask(taskToBeDeleted);
+			task = displayData.getListOfTasks().get(index);
+			storage.deleteTask(task);
 
 			setDisplayData("Task deleted successfully",
 					storage.getAllNotDoneTasks());

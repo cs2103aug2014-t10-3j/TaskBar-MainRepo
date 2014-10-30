@@ -407,39 +407,39 @@ public class DateTimeLocal {
 		DayOfWeek currentDay = current.getDayOfWeek();
 		int currentDayInt = currentDay.getValue();
 		int difference = 0;
-		if(day.equals("monday") || day.equals("mon")){
+		if(day.toLowerCase().equals("monday") || day.toLowerCase().equals("mon")){
 			difference = 1 + 7 - currentDayInt;
-		}else if(day.equals("tuesday") || day.equals("tue")){
+		}else if(day.toLowerCase().equals("tuesday") || day.toLowerCase().equals("tue")){
 			if(2 > currentDayInt){
 				difference = 2 - currentDayInt;
 			}else{
 				difference = 2 + 7 - currentDayInt;
 			}
-		}else if(day.equals("wednesday") || day.equals("wed")){
+		}else if(day.toLowerCase().equals("wednesday") || day.toLowerCase().equals("wed")){
 			if(3 > currentDayInt){
 				difference = 3 - currentDayInt;
 			}else{
 				difference = 3 + 7 - currentDayInt;
 			}
-		}else if(day.equals("thursday") || day.equals("thu")){
+		}else if(day.toLowerCase().equals("thursday") || day.toLowerCase().equals("thu")){
 			if(4 > currentDayInt){
 				difference = 4 - currentDayInt;
 			}else{
 				difference = 4 + 7 - currentDayInt;
 			}
-		}else if(day.equals("friday") || day.equals("fri")){
+		}else if(day.toLowerCase().equals("friday") || day.toLowerCase().equals("fri")){
 			if(5 > currentDayInt){
 				difference = 5 - currentDayInt;
 			}else{
 				difference = 5 + 7 - currentDayInt;
 			}
-		}else if(day.equals("saturday") || day.equals("sat")){
+		}else if(day.toLowerCase().equals("saturday") || day.toLowerCase().equals("sat")){
 			if(6 > currentDayInt){
 				difference = 6 - currentDayInt;
 			}else{
 				difference = 6 + 7 - currentDayInt;
 			}
-		}else if(day.equals("sunday") || day.equals("sun")){
+		}else if(day.toLowerCase().equals("sunday") || day.toLowerCase().equals("sun")){
 			if(7 > currentDayInt){
 				difference = 7 - currentDayInt;
 			}else{
@@ -451,29 +451,29 @@ public class DateTimeLocal {
 	}
 
 	public static int getIntFromMonth(String string){
-		if(string.equals("january") || string.equals("jan")){
+		if(string.toLowerCase().equals("january") || string.toLowerCase().equals("jan")){
 			return 1;
-		}else if(string.equals("february") || string.equals("feb")){
+		}else if(string.toLowerCase().equals("february") || string.toLowerCase().equals("feb")){
 			return 2;
-		}else if(string.equals("march") || string.equals("mar")){
+		}else if(string.toLowerCase().equals("march") || string.toLowerCase().equals("mar")){
 			return 3;
-		}else if(string.equals("april") || string.equals("apr")){
+		}else if(string.toLowerCase().equals("april") || string.toLowerCase().equals("apr")){
 			return 4;
-		}else if(string.equals("may")){
+		}else if(string.toLowerCase().equals("may")){
 			return 5;
-		}else if(string.equals("june") || string.equals("jun")){
+		}else if(string.toLowerCase().equals("june") || string.toLowerCase().equals("jun")){
 			return 6;
-		}else if(string.equals("july") || string.equals("jul")){
+		}else if(string.toLowerCase().equals("july") || string.toLowerCase().equals("jul")){
 			return 7;
-		}else if(string.equals("august") || string.equals("aug")){
+		}else if(string.toLowerCase().equals("august") || string.toLowerCase().equals("aug")){
 			return 8;
-		}else if(string.equals("september") || string.equals("sep")){
+		}else if(string.toLowerCase().equals("september") || string.toLowerCase().equals("sep")){
 			return 9;
-		}else if(string.equals("october") || string.equals("oct")){
+		}else if(string.toLowerCase().equals("october") || string.toLowerCase().equals("oct")){
 			return 10;
-		}else if(string.equals("november") || string.equals("nov")){
+		}else if(string.toLowerCase().equals("november") || string.toLowerCase().equals("nov")){
 			return 11;
-		}else if(string.equals("december") || string.equals("dec")){
+		}else if(string.toLowerCase().equals("december") || string.toLowerCase().equals("dec")){
 			return 12;
 		}
 		return 0;
