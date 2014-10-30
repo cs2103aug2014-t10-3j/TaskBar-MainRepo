@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
@@ -204,6 +205,7 @@ public class GUIController implements Initializable{
 		data = ctrl.loadAllTasks();
 		showToUser(data);
 		
+		AtomicInteger checkFirstVisible = new AtomicInteger(-1);
 		textbox.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -216,7 +218,11 @@ public class GUIController implements Initializable{
 				if (event.getCode()==KeyCode.UP) {
 					table.scrollTo(firstVisible-1);
 				} else if (event.getCode()==KeyCode.DOWN) {
-					table.scrollTo(firstVisible+1);
+					if (firstVisible!=checkFirstVisible.intValue())
+						table.scrollTo(firstVisible+1);
+					else
+						table.scrollTo(firstVisible+2);
+					checkFirstVisible.set(firstVisible);
 				}
 			}
 		});
