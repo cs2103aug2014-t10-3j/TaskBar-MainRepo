@@ -83,8 +83,7 @@ public class Storage {
 							.contains(keyWord.toLowerCase())) {
 				searchedTasks.add(t);
 			}
-			if (!t.isDone()
-					&& !t.getLabels().isEmpty()) {
+			if (!t.isDone() && !t.getLabels().isEmpty()) {
 				ArrayList<String> labels = t.getLabels();
 				for (String l : labels) {
 					if (l.contains(keyWord.toLowerCase())) {
@@ -99,8 +98,7 @@ public class Storage {
 	public ArrayList<Task> getTaskByLabel(String parameter) {
 		ArrayList<Task> result = new ArrayList<Task>();
 		for (Task t : allTasks) {
-			if (!t.isDone()
-					&& !t.getLabels().isEmpty()) {
+			if (!t.isDone() && !t.getLabels().isEmpty()) {
 				ArrayList<String> labels = t.getLabels();
 				for (String l : labels) {
 					if (l.contains(parameter.toLowerCase())) {
@@ -122,7 +120,7 @@ public class Storage {
 
 	public ArrayList<Task> getTasksOnADate(LocalDate referenceDate) {
 		ArrayList<Task> result = new ArrayList<Task>();
-	
+
 		for (Task t : allTasks) {
 			if (!t.isDone() && !t.isFloatingTask()) {
 				if (t.isDeadLineTask()) {
@@ -202,10 +200,12 @@ public class Storage {
 						swapped = true;
 					}
 				} catch (NullPointerException e) {
-					tmp = list.get(i);
-					list.set(i, list.get(i + 1));
-					list.set(i + 1, tmp);
-					swapped = true;
+					if (list.get(i).isFloatingTask() && !list.get(i + 1).isFloatingTask()) {
+						tmp = list.get(i);
+						list.set(i, list.get(i + 1));
+						list.set(i + 1, tmp);
+						swapped = true;
+					}
 				}
 			}
 		}
