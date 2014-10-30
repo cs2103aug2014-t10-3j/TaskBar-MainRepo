@@ -8,11 +8,11 @@ import commands.Update;
 
 public class History {
 	private static History history;
-	private Stack<UndoableCommand> canBeUndoneCommands, undoneCommands;
+	private Stack<UndoableCommand> canBeUndoneCommands, canBeRedoneCommands;
 
 	private History() {
 		canBeUndoneCommands = new Stack<UndoableCommand>();
-		undoneCommands = new Stack<UndoableCommand>();
+		canBeRedoneCommands = new Stack<UndoableCommand>();
 	}
 
 	public static History getInstance() {
@@ -24,7 +24,7 @@ public class History {
 
 	public void addExecutedCommand(UndoableCommand command) {
 		canBeUndoneCommands.push(command);
-		undoneCommands.clear();
+		canBeRedoneCommands.clear();
 	}
 
 	/**
@@ -37,9 +37,9 @@ public class History {
 		}
 		UndoableCommand command = canBeUndoneCommands.pop();
 		command.undo();
-		undoneCommands.push(command);
+		canBeRedoneCommands.push(command);
 		
-		if ((command instanceof Update) && ((Add) command).isDuringUpdate()) {
+		if ((command instanceof Add) && ((Add) command).isDuringUpdate()) {
 			undoOneStep();
 		}
 		return true;
@@ -50,10 +50,10 @@ public class History {
 	 * @return true when the command is successfully undone; false when there is no more commands to undo.
 	 */
 	public boolean redoOneStep(){
-		if(undoneCommands.empty()){
+		if(canBeRedoneCommands.empty()){
 			return false;
 		}
-		UndoableCommand command = undoneCommands.pop();
+		UndoableCommand command = canBeRedoneCommands.pop();
 		
 		command.redo();
 		canBeUndoneCommands.push(command);
