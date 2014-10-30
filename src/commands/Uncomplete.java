@@ -51,7 +51,14 @@ public class Uncomplete extends UndoableCommand {
 	@Override
 	public void undo() {
 		storage.completeTask(task);
-		setDisplayData("Undone \"uncomplete task "+ task.getDescription() + "\"",
+		setDisplayData("Undo: Uncomplete task \"" + task.getDescription() + "\"",
+				storage.getAllNotDoneTasks());
+	}
+
+	@Override
+	public void redo() {
+		storage.uncompleteTask(task);
+		setDisplayData("Redo: Uncomplete task \"" + task.getDescription() + "\"",
 				storage.getAllNotDoneTasks());
 	}
 }

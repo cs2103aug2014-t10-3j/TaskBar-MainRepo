@@ -20,7 +20,7 @@ public class Delete extends UndoableCommand {
 			task = displayData.getListOfTasks().get(index);
 			storage.deleteTask(task);
 
-			setDisplayData("Task deleted successfully",
+			setDisplayData("Task \" " + task.getDescription() + "\" deleted successfully",
 					storage.getAllNotDoneTasks());
 		} catch (IndexOutOfBoundsException e) {
 			int listSize = displayData.getListOfTasks().size();
@@ -42,7 +42,14 @@ public class Delete extends UndoableCommand {
 	@Override
 	public void undo() {
 		storage.addTask(task);
-		setDisplayData("Undone \"delete task "+ task.getDescription() + "\"",
+		setDisplayData("Undo: Delete task \""+ task.getDescription() + "\"",
+				storage.getAllNotDoneTasks());
+	}
+
+	@Override
+	public void redo() {
+		storage.deleteTask(task);
+		setDisplayData("Redo: Delete task \"" + task.getDescription() + "\"",
 				storage.getAllNotDoneTasks());
 	}
 }

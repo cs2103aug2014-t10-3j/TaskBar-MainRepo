@@ -46,7 +46,14 @@ public class Update extends UndoableCommand {
 	@Override
 	public void undo() {
 		storage.addTask(task);
-		setDisplayData("Undone deleting task in update to \""+ task.getDescription() + "\"",
+		setDisplayData("Undo: Update task \""+ task.getDescription() + "\"",
+				storage.getAllNotDoneTasks());
+	}
+
+	@Override
+	public void redo() {
+		storage.deleteTask(task);
+		setDisplayData("Redo: Update task \"" + task.getDescription() + "\"",
 				storage.getAllNotDoneTasks());
 	}
 }

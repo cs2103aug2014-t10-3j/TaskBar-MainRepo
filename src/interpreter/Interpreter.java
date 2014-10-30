@@ -144,12 +144,12 @@ public class Interpreter {
 	}
 
 	public static Command getCommand(String userInput, DisplayData displayData,
-			Storage storage, History history) {
+			Storage storage, History history, boolean duringUpdate) {
 		String[] splitInputTokens = userInput.split(" ", 2);
 		String commandKeyword = splitInputTokens[0].toLowerCase();
 		switch(commandKeyword){
 		case"add":
-			return new Add(displayData, storage, userInput);
+			return new Add(displayData, storage, userInput, duringUpdate);
 		case"delete":
 			return new Delete(displayData, storage, userInput);
 		case"update":

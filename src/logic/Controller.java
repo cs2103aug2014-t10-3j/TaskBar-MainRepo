@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import commands.Command;
 import commands.UndoableCommand;
+import commands.Update;
 import storage.Storage;
 import util.DisplayData;
 
@@ -17,6 +18,7 @@ public class Controller {
 	private DisplayData displayData;
 	private Storage storage;
 	private History history;
+	private boolean duringUpdate = false;
 	//private String input;
 
 	// TODO modify constructor to suit the new architecture.
@@ -27,23 +29,30 @@ public class Controller {
 	}
 
 	/*
-	 * For GUI's initialisation, creates a "all yet-to-be-done task search" through 
-	 * an empty input command ("show [empty string]").
+	 * For GUI's initialisation, creates a "all yet-to-be-done task" search 
 	 */
 	public DisplayData loadAllTasks() {
-		Command command = Interpreter.getCommand("", displayData, storage, history);
+		Command command = Interpreter.getCommand("all", displayData, storage, history, duringUpdate);
 		command.execute();
 		return displayData;
 	}
 
 	public DisplayData handleEnter(String userInput) {
-		Command command = Interpreter.getCommand(userInput, displayData, storage, history);
+		Command command = Interpreter.getCommand(userInput, displayData, storage, history, duringUpdate);
 		if(command instanceof UndoableCommand){
-			if(command.execute());
-			history.addExecutedCommand((UndoableCommand) command);
+			if(command.execute()) {
+				history.addExecutedCommand((UndoableCommand) command);
+			}
 		}else{
 			command.execute();
 		}
+		
+		if (command instanceof Update) {
+			duringUpdate = true;
+		} else {
+			duringUpdate = false;
+		}
+		
 		return displayData;
 	}
 

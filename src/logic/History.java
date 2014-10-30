@@ -2,7 +2,9 @@ package logic;
 
 import java.util.Stack;
 
+import commands.Add;
 import commands.UndoableCommand;
+import commands.Update;
 
 public class History {
 	private static History history;
@@ -36,6 +38,10 @@ public class History {
 		UndoableCommand command = canBeUndoneCommands.pop();
 		command.undo();
 		undoneCommands.push(command);
+		
+		if ((command instanceof Update) && ((Add) command).isDuringUpdate()) {
+			undoOneStep();
+		}
 		return true;
 	}
 	
@@ -48,8 +54,13 @@ public class History {
 			return false;
 		}
 		UndoableCommand command = undoneCommands.pop();
-		command.execute();
+		
+		command.redo();
 		canBeUndoneCommands.push(command);
+		if (command instanceof Update) {
+			redoOneStep();
+		}
+		
 		return true;
 	}
 }

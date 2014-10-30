@@ -54,7 +54,14 @@ public class Complete extends UndoableCommand {
 	@Override
 	public void undo() {
 		storage.uncompleteTask(task);
-		setDisplayData("Undone \"complete task "+ task.getDescription() + "\"",
+		setDisplayData("Undo: Complete task \""+ task.getDescription() + "\"",
+				storage.getAllNotDoneTasks());
+	}
+
+	@Override
+	public void redo() {
+		storage.completeTask(task);
+		setDisplayData("Redo: Complete task \"" + task.getDescription() + "\"",
 				storage.getAllNotDoneTasks());
 	}
 }

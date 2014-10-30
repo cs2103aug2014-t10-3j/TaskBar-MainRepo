@@ -94,6 +94,7 @@ public class Storage {
 				}
 			}
 		}
+		sortByTime(searchedTasks);
 		return searchedTasks;
 	}
 
@@ -109,6 +110,7 @@ public class Storage {
 				}
 			}
 		}
+		sortByTime(result);
 		return result;
 	}
 
