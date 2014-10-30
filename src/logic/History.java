@@ -1,6 +1,8 @@
-package taskbar;
+package logic;
 
 import java.util.Stack;
+
+import commands.UndoableCommand;
 
 public class History {
 	private static History history;

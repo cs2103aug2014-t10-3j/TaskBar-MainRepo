@@ -1,6 +1,6 @@
 package gui;
 
-import taskbar.*;
+import util.*;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -39,6 +39,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import logic.Controller;
 
 public class GUIController implements Initializable{
 	@FXML private AnchorPane outerPane;

@@ -3,7 +3,7 @@
  * Writer: ZiJie
  *
  */
-package taskbar;
+package storage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import org.jdom2.JDOMException;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.Element;
+
+import util.Task;
 
 public class Storage {
 

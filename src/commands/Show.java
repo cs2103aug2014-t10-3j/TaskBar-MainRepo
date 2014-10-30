@@ -1,4 +1,8 @@
-package taskbar;
+package commands;
+
+import interpreter.Interpreter;
+import storage.Storage;
+import util.DisplayData;
 
 public class Show extends Command {
 

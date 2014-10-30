@@ -1,6 +1,12 @@
-package taskbar;
+package commands;
+
+import interpreter.Interpreter;
 
 import java.lang.UnsupportedOperationException;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
 
 public class Complete extends UndoableCommand {
 	private Task task;

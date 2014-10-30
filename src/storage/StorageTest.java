@@ -1,4 +1,4 @@
-package taskbar;
+package storage;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.junit.Test;
+
+import util.Task;
 
 public class StorageTest {
 

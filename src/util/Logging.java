@@ -1,4 +1,4 @@
-package taskbar;
+package util;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;

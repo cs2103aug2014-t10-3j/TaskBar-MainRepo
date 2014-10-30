@@ -1,4 +1,9 @@
-package taskbar;
+package commands;
+
+import interpreter.Interpreter;
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
 
 public class Uncomplete extends UndoableCommand {
 	private Task task;

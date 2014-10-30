@@ -1,6 +1,10 @@
-package taskbar;
+package commands;
 
 import java.util.ArrayList;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
 
 public abstract class Command {
 	public DisplayData displayData;

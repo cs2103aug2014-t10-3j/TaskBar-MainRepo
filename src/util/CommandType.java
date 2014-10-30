@@ -1,4 +1,4 @@
-package taskbar;
+package util;
 
 public enum CommandType {
 	NONE,
