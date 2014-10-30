@@ -84,7 +84,7 @@ public class Interpreter {
 		case "done":
 			return Show.ShowCommandType.DONE;
 		default:
-			if(showCommandParameter.charAt(0) == '#'){
+			if(!showCommandParameter.isEmpty() && showCommandParameter.charAt(0) == '#'){
 				return Show.ShowCommandType.LABEL;
 			}else{
 				return Show.ShowCommandType.KEYWORD;
