@@ -8,16 +8,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="outerPane" prefHeight="501.0" prefWidth="710.0" stylesheets="@appearance.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
+<AnchorPane fx:id="outerPane" prefHeight="694.0" prefWidth="714.0" stylesheets="@appearance.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
    <children>
-      <AnchorPane fx:id="pane" layoutY="19.0" prefHeight="492.0" prefWidth="714.0">
+      <AnchorPane fx:id="pane" layoutY="19.0" prefHeight="501.0" prefWidth="714.0">
          <children>
             <TextField fx:id="textbox" layoutX="22.0" layoutY="42.0" prefHeight="25.0" prefWidth="667.0" promptText="Enter command" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="21.0">
                <font>
                   <Font name="Segoe UI Light" size="12.0" />
                </font>
             </TextField>
-            <TableView fx:id="table" focusTraversable="false" prefHeight="357.0" prefWidth="671.0" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="86.0">
+            <TableView fx:id="table" focusTraversable="false" prefHeight="371.0" prefWidth="671.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="86.0">
                <columns>
                   <TableColumn fx:id="noCol" editable="false" prefWidth="31.0" resizable="false" text="#" />
                   <TableColumn fx:id="descCol" editable="false" prefWidth="212.0" resizable="false" text="Description" />
@@ -29,7 +29,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Label fx:id="status" layoutX="24.0" layoutY="452.0" prefHeight="27.0" prefWidth="491.0" text="Label" AnchorPane.bottomAnchor="3.0">
+            <Label fx:id="status" layoutX="24.0" layoutY="459.0" prefHeight="27.0" prefWidth="491.0" text="Label">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -57,6 +57,92 @@
          <font>
             <Font name="Segoe UI Semilight" size="26.0" />
          </font>
+      </Label>
+      <TextFlow fx:id="helpText" layoutY="520.0" prefHeight="175.0" prefWidth="714.0" style="-fx-padding: 20 10 0 10; -fx-background-color: #d3d7e8;">
+         <children>
+            <Text fill="#c32c2c" strokeType="OUTSIDE" strokeWidth="0.0" text="Add a new task :">
+               <font>
+                  <Font name="Segoe UI Semibold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" add &lt;description&gt; &lt;time&gt;&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;add do tutorial by tmr 830pm&quot; or &quot;add CCA meeting on 5/11 from 2pm to 4pm&quot;&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="#c32c2c" layoutX="20.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete, update, mark a task as complete or incomplete :">
+               <font>
+                  <Font name="Segoe UI Semibold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;command&gt; &lt;number&gt;&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;complete 2&quot;,  &quot;delete 1&quot;, &quot;update 15&quot; or &quot;uncomplete 5&quot;&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="#c32c2c" layoutX="20.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search for task :">
+               <font>
+                  <Font name="Segoe UI Semibold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;keyword&gt;&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;today&quot; or &quot;all&quot; or &quot;CS2101&quot;&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="#c32c2c" layoutX="20.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Undo :">
+               <font>
+                  <Font name="Segoe UI Semibold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" undo, or press Ctrl-Z&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="#c32c2c" layoutX="20.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Redo :">
+               <font>
+                  <Font name="Segoe UI Semibold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="65.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" redo, or press Ctrl-Y&#10;">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="20.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please check the user guide for more complete and detailed instructions">
+               <font>
+                  <Font name="Segoe UI Light" size="12.0" />
+               </font>
+            </Text>
+         </children>
+      </TextFlow>
+      <Label fx:id="helpBtn" alignment="CENTER" contentDisplay="CENTER" layoutY="508.0" prefHeight="27.0" prefWidth="110.0" text="Show help" textAlignment="CENTER">
+         <font>
+            <Font name="Segoe UI Semilight" size="18.0" />
+         </font>
+         <tooltip>
+            <Tooltip text="Command format">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Tooltip>
+         </tooltip>
       </Label>
    </children>
 </AnchorPane>

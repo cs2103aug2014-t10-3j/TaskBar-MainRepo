@@ -24,6 +24,7 @@ import commands.Complete;
 import commands.Delete;
 import commands.Redo;
 import commands.Show;
+import commands.Uncomplete;
 import commands.Undo;
 import commands.Update;
 import commands.Show.ShowCommandType;
@@ -158,6 +159,8 @@ public class Interpreter {
 			return new Update(displayData, storage, userInput);
 		case"complete":
 			return new Complete(displayData, storage, userInput);
+		case"uncomplete":
+			return new Uncomplete(displayData, storage, userInput);
 		case"undo":
 			return new Undo(displayData, storage, history);
 		case"redo":

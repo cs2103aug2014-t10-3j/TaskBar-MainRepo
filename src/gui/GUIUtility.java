@@ -71,6 +71,12 @@ public class GUIUtility {
 		tline.play();
 	}
 	
+	public static void setHelpBtn(Label button, Node target) {
+		button.setOnMouseClicked((event) -> {
+			toggleVisibility(button, target);
+		});
+	}
+	
 	public static void setFocus(Node node) {
 		Platform.runLater(new Runnable() {			
 			@Override
@@ -124,5 +130,15 @@ public class GUIUtility {
 		ft2.setToValue(0);
 		ft2.setFromValue(1);
 		seqTrans = new SequentialTransition(ft1, ft2);
+	}
+	
+	public static void toggleVisibility(Label button, Node target) {
+		if (!target.visibleProperty().get()) {
+			target.setVisible(true);
+			button.setText("Hide help");
+		} else {
+			target.setVisible(false);
+			button.setText("Show help");
+		}
 	}
 }

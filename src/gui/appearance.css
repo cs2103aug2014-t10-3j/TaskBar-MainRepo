@@ -52,12 +52,12 @@
 	-fx-alignment: TOP_LEFT;
 }
 
-#closeBtn, #clock, #day {
+#closeBtn, #clock, #day, #helpBtn {
 	-fx-background-color: #c32c2c;
 	-fx-text-fill: white;
 }
 
-#closeBtn:hover {
+#closeBtn:hover, #helpBtn:hover {
 	-fx-background-color: -fx-focus-color !important;
 	-fx-text-fill: #ff5c5c;
 }

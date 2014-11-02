@@ -16,7 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -26,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.TextFlow;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import logic.Controller;
@@ -49,6 +49,9 @@ public class GUIController implements Initializable{
 	
 	@FXML private Label status;
 	
+	@FXML private Label helpBtn;
+	@FXML private TextFlow helpText;
+	
 	private DisplayData data = new DisplayData();
 	private Controller ctrl = new Controller();
 	
@@ -62,33 +65,34 @@ public class GUIController implements Initializable{
 		
 		GUIUtility.setCloseBtn(closeBtn);
 		GUIUtility.setClockAndDate(clock, day);
+		GUIUtility.setHelpBtn(helpBtn, helpText);
 		
 		status.setOpacity(0);
 		defineTransition();
 		
 		configureTable();
 		
+		helpText.setVisible(false);
+		
 		GUIUtility.setFocus(textbox);
 		textbox.setOnAction((event) -> {
 			data = ctrl.handleEnter(textbox.getText());
 			showToUser(data);		
 		});
+		
 		textbox.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.isControlDown()) {
 					if (event.getCode()==KeyCode.H) {
-						
+						GUIUtility.toggleVisibility(helpBtn, helpText);
 					}
 					if (event.getCode()==KeyCode.Z || event.getCode()==KeyCode.Y) {
 						data = ctrl.handleHotkey(event);
 						showToUser(data);
 					}
 				}
-				
 			}
-			
 		});
 	}
 	
