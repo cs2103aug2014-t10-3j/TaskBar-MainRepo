@@ -15,6 +15,8 @@ import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 import logic.History;
 import commands.Add;
 import commands.Command;
@@ -163,5 +165,16 @@ public class Interpreter {
 		default:
 			return new Show(displayData, storage, userInput);
 		}
+	}
+	
+	public static Command getCommand(KeyEvent event, DisplayData displayData,
+			Storage storage, History history) {
+		if (event.isControlDown() && event.getCode()==KeyCode.Z) {
+			return new Undo(displayData, storage, history);
+		} else if (event.isControlDown() && event.getCode()==KeyCode.Y){
+			return new Redo(displayData, storage, history);
+		}
+		return null;
+		
 	}
 }

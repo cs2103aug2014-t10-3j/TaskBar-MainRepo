@@ -8,22 +8,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import com.sun.javafx.scene.control.skin.TableViewSkin;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
-
-import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
 import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,7 +25,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -65,78 +53,49 @@ public class GUIController implements Initializable{
 	private Controller ctrl = new Controller();
 	
 	private ObservableList<Data> list = FXCollections.observableArrayList();
-	private SequentialTransition seqTrans;
-	private VirtualFlow flow;
-	double windowX,windowY;
+	private SequentialTransition seqTrans ;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		addDragListener();
+		GUIUtility.setDraggable(pane, true);
 		
-		setCloseBtn();
-		setClockAndDate();
+		GUIUtility.setCloseBtn(closeBtn);
+		GUIUtility.setClockAndDate(clock, day);
 		
 		status.setOpacity(0);
 		defineTransition();
 		
 		configureTable();
 		
-		setTextboxOnFocus();
+		GUIUtility.setFocus(textbox);
 		textbox.setOnAction((event) -> {
 			data = ctrl.handleEnter(textbox.getText());
 			showToUser(data);		
 		});
-		
-		
-	}
-	
-	private void addDragListener() {		
-	    pane.setOnMousePressed((event) -> {
-	        windowX = pane.getScene().getWindow().getX() - event.getScreenX();
-	        windowY = pane.getScene().getWindow().getY() - event.getScreenY();
-	    });
+		textbox.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 
-	    pane.setOnMouseDragged((event) -> {
-	        pane.getScene().getWindow().setX(event.getScreenX() + windowX);
-	        pane.getScene().getWindow().setY(event.getScreenY() + windowY);
-	    });
-	}
-	
-	private void setCloseBtn() {
-		closeBtn.setOnMouseClicked((event) -> {
-			Platform.exit();			
-		});
-	}
-	
-	private void setClockAndDate() {
-		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("  EEE, dd MMM yy");
-		DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("  HH:mm:ss");
-		Timeline tline = new Timeline(new KeyFrame(Duration.seconds(0),
-				new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						LocalDateTime now = LocalDateTime.now();
-						clock.setText(now.format(timeFmt));
-						day.setText(now.format(dateFmt));				
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.isControlDown()) {
+					if (event.getCode()==KeyCode.H) {
+						
+					}
+					if (event.getCode()==KeyCode.Z || event.getCode()==KeyCode.Y) {
+						data = ctrl.handleHotkey(event);
+						showToUser(data);
 					}
 				}
-			), new KeyFrame(Duration.seconds(1))
-		);
-		tline.setCycleCount(Animation.INDEFINITE);
-		tline.play();
-	};
+				
+			}
+			
+		});
+	}
 	
 	private void configureTable() {
-		table.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent ev) {
-				ev.consume();
-			}
-		});
+		GUIUtility.setClickable(table, false);
 		
 		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
-		
 		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
 		descCol.setComparator(new Comparator<String>() {
 			@Override
@@ -144,9 +103,7 @@ public class GUIController implements Initializable{
 				return o1.compareToIgnoreCase(o2);
 			}
 		});
-		
 		tagCol.setCellValueFactory(new PropertyValueFactory<Data, String>("tag"));
-		
 		dateCol.setCellValueFactory(new PropertyValueFactory<Data, String>("date"));
 		dateCol.setComparator(new Comparator<String>() {
 			@Override
@@ -170,9 +127,7 @@ public class GUIController implements Initializable{
 				
 			}
 		});
-		
 		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
-		
 		table.setPlaceholder(new Label("There is nothing to show"));
 		table.setRowFactory(new Callback<TableView<Data>, TableRow<Data>>() {
 			@Override
@@ -190,7 +145,7 @@ public class GUIController implements Initializable{
 							if (taskData.isDeadLineTask()) {
 								if (!taskData.getDeadline().toLocalDate().isAfter(today)) {
 									getStyleClass().add("pastDeadline");
-								} else if (!taskData.getDeadline().toLocalDate().isAfter(today.plusDays(2))) {
+								} else if (!taskData.getDeadline().toLocalDate().isAfter(today.plusDays(3))) {
 									getStyleClass().add("nearDeadline");
 								}
 							}
@@ -205,39 +160,10 @@ public class GUIController implements Initializable{
 		data = ctrl.loadAllTasks();
 		showToUser(data);
 		
-		AtomicInteger checkFirstVisible = new AtomicInteger(-1);
-		textbox.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				ObservableList<Node> nodes = ((TableViewSkin)table.getSkin()).getChildren();
-				if (data.listOfTasksIsEmpty()) {
-					return;
-				}
-				flow = (VirtualFlow) nodes.get(1); 
-				int firstVisible = flow.getFirstVisibleCell().getIndex();
-				if (event.getCode()==KeyCode.UP) {
-					table.scrollTo(firstVisible-1);
-				} else if (event.getCode()==KeyCode.DOWN) {
-					if (firstVisible!=checkFirstVisible.intValue())
-						table.scrollTo(firstVisible+1);
-					else
-						table.scrollTo(firstVisible+2);
-					checkFirstVisible.set(firstVisible);
-				}
-			}
-		});
-		
-		
+		GUIUtility.setKeyboardScrolling(table, textbox, data);
 	}
 	
-	private void setTextboxOnFocus() {
-		Platform.runLater(new Runnable() {			
-			@Override
-			public void run() {
-				textbox.requestFocus();
-			}
-		});
-	}
+	
 	
 	private void showToUser(DisplayData data) {
 		if (data.needToUpdate()) {
@@ -272,4 +198,5 @@ public class GUIController implements Initializable{
 		ft2.setFromValue(1);
 		seqTrans = new SequentialTransition(ft1, ft2);
 	}
+	
 }

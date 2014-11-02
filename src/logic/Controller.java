@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.scene.input.KeyEvent;
 import commands.Command;
 import commands.UndoableCommand;
 import commands.Update;
@@ -53,6 +54,14 @@ public class Controller {
 			duringUpdate = false;
 		}
 		
+		return displayData;
+	}
+	
+	public DisplayData handleHotkey(KeyEvent event) {
+		Command command = Interpreter.getCommand(event, displayData, storage, history);
+		if (command!=null) {
+			command.execute();
+		}
 		return displayData;
 	}
 
