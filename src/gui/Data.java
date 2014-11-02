@@ -2,9 +2,11 @@ package gui;
 
 import util.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
 
 
 
@@ -19,7 +21,7 @@ public class Data {
 	private SimpleStringProperty time;
 	private Task task;
 	
-	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
+	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("EEE dd.MM.yy");
 	DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public Data(Task task, int ord) {
@@ -97,16 +99,29 @@ public class Data {
 		
 		if (t1!=null) {
 			if (t2==null) {
-				str += t1.format(dateFmt);
+				str += toCustomString(t1);
 			} else {
 				if (t1.toLocalDate().isEqual(t2.toLocalDate())) {
-					str += t1.format(dateFmt);
+					str += toCustomString(t1);
 				} else {
-					str += t1.format(dateFmt) + " - " + t2.format(dateFmt);
+					str += toCustomString(t1) + " - " + toCustomString(t2);
 				}
 			}
 			
 		} 		
+		return str;
+	}
+	
+	private String toCustomString(LocalDateTime t) {
+		String str = "";
+		LocalDate today = LocalDateTime.now().toLocalDate();
+		if (t.toLocalDate().isEqual(today)) {
+			str = "Today";			
+		} else if (t.toLocalDate().isEqual(today.plusDays(1))) {
+			str = "Tomorrow";
+		} else {
+			str = t.format(dateFmt);
+		}
 		return str;
 	}
 	

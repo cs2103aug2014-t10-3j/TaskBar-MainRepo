@@ -44,7 +44,6 @@ public class GUIUtility {
 		        node.getScene().getWindow().setY(event.getScreenY() + y.get());
 		    });
 		}
-		
 	}
 	
 	public static void setCloseBtn(Label closeBtn) {
