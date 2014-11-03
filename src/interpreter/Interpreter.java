@@ -94,13 +94,17 @@ public class Interpreter {
 		switch(showCommandParameter){
 		case "all":
 			return ShowCommandType.ALL;
-		case "today":
-			return ShowCommandType.TODAY;
-		case "tomorrow":
-			return ShowCommandType.TOMORROW;
 		case "done":
 			return ShowCommandType.DONE;
+		case "floating":
+			return ShowCommandType.FLOATING;
 		default:
+			if (DateTime.isDayDateFormat(showCommandParameter) ||
+					DateTime.isWordDateFormat(showCommandParameter) ||
+						DateTime.isNumberDateFormat(showCommandParameter)) {
+				return ShowCommandType.DATE;
+			}
+			
 			if(!showCommandParameter.isEmpty() && showCommandParameter.charAt(0) == '#'){
 				return ShowCommandType.LABEL;
 			}else{

@@ -14,7 +14,6 @@ public class DateTime {
 	public static Boolean is24hTimeFormat(String string){
 		if(string.length() == 4){
 			try{
-				int stringInt = Integer.parseInt(string);
 				if(isOnlyNumbers(string)){
 					return true;
 				}

@@ -4,7 +4,6 @@ import interpreter.Interpreter;
 
 import java.time.DateTimeException;
 
-import logic.History;
 import storage.Storage;
 import util.DisplayData;
 import util.Task;

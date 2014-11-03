@@ -114,14 +114,6 @@ public class Storage {
 		return result;
 	}
 
-	public ArrayList<Task> getTodayTasks() {
-		return getTasksOnADate(LocalDate.now());
-	}
-
-	public ArrayList<Task> getTomorrowTasks() {
-		return getTasksOnADate(LocalDate.now().plusDays(1));
-	}
-
 	public ArrayList<Task> getTasksOnADate(LocalDate referenceDate) {
 		ArrayList<Task> result = new ArrayList<Task>();
 
@@ -140,6 +132,18 @@ public class Storage {
 				}
 			}
 		}
+		sortByTime(result);
+		return result;
+	}
+	
+	public ArrayList<Task> getFloatingTasks() {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for (Task t : allTasks) {
+			if (!t.isDone() && t.isFloatingTask()) {
+				result.add(t);
+			}
+		}
+		sortByTime(result);
 		return result;
 	}
 

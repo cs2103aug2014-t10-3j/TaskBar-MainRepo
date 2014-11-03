@@ -1,5 +1,9 @@
 package commands;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+
+import interpreter.DateTimeLocal;
 import interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
@@ -11,32 +15,37 @@ public class Show extends Command {
 	}
 
 	public enum ShowCommandType {
-		ALL, TODAY, TOMORROW, DONE, KEYWORD, LABEL;
+		ALL, DONE, KEYWORD, LABEL, DATE, FLOATING;
 	}
 
 	@Override
 	public boolean execute() {
-		switch(Interpreter.interpretShow(userInput)){
-		case ALL:
-			setDisplayData("Showing all tasks that are not yet done.", storage.getAllNotDoneTasks());
-			break;
-		case TODAY:
-			setDisplayData("Showing all tasks on today.", storage.getTodayTasks());
-			break;
-		case TOMORROW:
-			setDisplayData("Showing all tasks on tomorrow.", storage.getTomorrowTasks());
-			break;
-		case DONE:
-			setDisplayData("Showing all tasks that are already done.", storage.getAllDoneTasks());
-			break;
-		case KEYWORD:
-			setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
-					storage.getTaskByKeyword(Interpreter.getParameter(userInput)));
-			break;
-		case LABEL:
-			setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.",
-					storage.getTaskByLabel(Interpreter.getParameter(userInput).substring(1)));
-			break;
+		try {
+			switch(Interpreter.interpretShow(userInput)){
+			case ALL:
+				setDisplayData("Showing all undone tasks.", storage.getAllNotDoneTasks());
+				break;
+			case DONE:
+				setDisplayData("Showing all completed tasks.", storage.getAllDoneTasks());
+				break;
+			case FLOATING:
+				setDisplayData("Showing all floating tasks", storage.getFloatingTasks());
+			case KEYWORD:
+				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
+						storage.getTaskByKeyword(Interpreter.getParameter(userInput)));
+				break;
+			case LABEL:
+				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.",
+						storage.getTaskByLabel(Interpreter.getParameter(userInput).substring(1)));
+				break;
+			case DATE:
+				LocalDate date = DateTimeLocal.getDateTime(Interpreter.getParameter(userInput)).toLocalDate();
+				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
+						storage.getTasksOnADate(date));
+			}
+		} catch (DateTimeException e) {
+			setDisplayData("Invalid date/time input!");
+			return false;
 		}
 		return true;
 	}

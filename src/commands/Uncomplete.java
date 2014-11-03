@@ -2,7 +2,6 @@ package commands;
 
 import java.util.ArrayList;
 
-import interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
 import util.Task;
