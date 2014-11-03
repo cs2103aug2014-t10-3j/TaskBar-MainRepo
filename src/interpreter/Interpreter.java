@@ -137,6 +137,7 @@ public class Interpreter {
 		case"add":
 		case"delete":
 		case"update":
+		case"uncomplete":
 		case"complete":
 		case"undo":
 		case"show":

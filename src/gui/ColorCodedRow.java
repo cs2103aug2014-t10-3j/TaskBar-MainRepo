@@ -21,24 +21,28 @@ public class ColorCodedRow<T> implements Callback<TableView<T>, TableRow<T>> {
 				super.updateItem(task, empty);
 				getStyleClass().remove("pastDeadline");
 				getStyleClass().remove("nearDeadline");
+				getStyleClass().remove("done");
 				Data currentTask = empty ? null : (Data) getItem();
 				LocalDate today = LocalDateTime.now().toLocalDate();
 				if (currentTask!=null) {
 					Task taskData = ((Data)task).getTask();
-					if (taskData.isDeadLineTask()) {
-						if (!taskData.getDeadline().toLocalDate().isAfter(today)) {
-							getStyleClass().add("pastDeadline");
-						} else if (!taskData.getDeadline().toLocalDate().isAfter(today.plusDays(3))) {
-							getStyleClass().add("nearDeadline");
+					if (taskData.isDone()) {
+						getStyleClass().add("done");
+					} else {
+						if (taskData.isDeadLineTask()) {
+							if (!taskData.getDeadline().toLocalDate().isAfter(today)) {
+								getStyleClass().add("pastDeadline");
+							} else if (!taskData.getDeadline().toLocalDate().isAfter(today.plusDays(3))) {
+								getStyleClass().add("nearDeadline");
+							}
 						}
-					}
-					if (taskData.isEvent()) {
-						if (taskData.getEndTime().toLocalDate().isBefore(today)) {
-							getStyleClass().add("pastDeadline");
+						if (taskData.isEvent()) {
+							if (taskData.getEndTime().toLocalDate().isBefore(today)) {
+								getStyleClass().add("pastDeadline");
+							}
 						}
 					}
 				}
-			
 			}
 		};
 		return row;

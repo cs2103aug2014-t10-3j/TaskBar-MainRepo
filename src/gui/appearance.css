@@ -79,3 +79,7 @@
 .nearDeadline {
 	-fx-control-inner-background: #F7DA64 !important;
 }
+
+.done {
+	-fx-control-inner-background: #2ecc71 !important;
+}
