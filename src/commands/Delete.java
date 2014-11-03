@@ -1,12 +1,14 @@
 package commands;
 
+import java.util.ArrayList;
+
 import interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
 import util.Task;
 
 public class Delete extends UndoableCommand {
-	private Task task;
+	private ArrayList<Task> tasks = new ArrayList<Task>();
 	
 	public Delete(DisplayData dd, Storage s, String ui) {
 		super(dd, s, ui);
@@ -15,13 +17,23 @@ public class Delete extends UndoableCommand {
 	@Override
 	public boolean execute() {
 		try {
-			int index = Integer.parseInt(Interpreter.getParameter(userInput)) - 1;
-			assert index >= 0 : "Invalid task index number.";
-			task = displayData.getListOfTasks().get(index);
-			storage.deleteTask(task);
-
-			setDisplayData("Task \" " + task.getDescription() + "\" deleted successfully",
-					storage.getAllNotDoneTasks());
+			ArrayList<Integer> indexList = massCommandIndex(userInput);
+			for (int index:indexList) {
+				Task task = displayData.getListOfTasks().get(index);
+				tasks.add(task);
+			}
+			
+			for (Task task: tasks) {
+				storage.deleteTask(task);
+			}
+			
+			if (tasks.size()==1) {
+				setDisplayData("Task " + getDescriptions(tasks) + " deleted successfully",
+						storage.getAllNotDoneTasks());
+			} else {
+				setDisplayData("Tasks " + getDescriptions(tasks) + " deleted successfully",
+						storage.getAllNotDoneTasks());
+			}
 		} catch (IndexOutOfBoundsException e) {
 			int listSize = displayData.getListOfTasks().size();
 			if (listSize==0) {
@@ -41,15 +53,30 @@ public class Delete extends UndoableCommand {
 	
 	@Override
 	public void undo() {
-		storage.addTask(task);
-		setDisplayData("Undo: Delete task \""+ task.getDescription() + "\"",
-				storage.getAllNotDoneTasks());
+		for (Task task:tasks) {
+			storage.addTask(task);			
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Undo: Delete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Undo: Delete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
 	}
 
 	@Override
 	public void redo() {
-		storage.deleteTask(task);
-		setDisplayData("Redo: Delete task \"" + task.getDescription() + "\"",
-				storage.getAllNotDoneTasks());
+		for (Task task:tasks) {
+			storage.deleteTask(task);
+		}
+		
+		if (tasks.size()==1) {
+			setDisplayData("Redo: Delete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Redo: Delete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
 	}
 }

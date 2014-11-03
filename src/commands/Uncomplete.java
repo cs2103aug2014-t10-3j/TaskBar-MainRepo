@@ -1,12 +1,14 @@
 package commands;
 
+import java.util.ArrayList;
+
 import interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
 import util.Task;
 
 public class Uncomplete extends UndoableCommand {
-	private Task task;
+	private ArrayList<Task> tasks = new ArrayList<Task>();
 	
 	public Uncomplete(DisplayData dd, Storage s, String ui) {
 		super(dd, s, ui);
@@ -15,17 +17,25 @@ public class Uncomplete extends UndoableCommand {
 	@Override
 	public boolean execute() {
 		try {
-			int index = Integer.parseInt(Interpreter.getParameter(userInput)) - 1;
-			assert index >= 0 : "Invalid task index number.";
-			task = displayData.getListOfTasks().get(index);
-			if(task.isDone() ==  false){
-				//an exception is thrown and caught locally if the task specified is not yet done.
-				throw new UnsupportedOperationException();
+			ArrayList<Integer> indexList = massCommandIndex(userInput);
+			for (int index:indexList) {
+				Task task = displayData.getListOfTasks().get(index);
+				if (task.isDone()) {
+					tasks.add(task);
+				}
 			}
-			storage.completeTask(task);
+			
+			for (Task task: tasks) {
+				storage.uncompleteTask(task);
+			}
 
-			setDisplayData("Task successfully marked as Not Yet Done. Showing all not yet done tasks.",
-					storage.getAllNotDoneTasks());
+			if (tasks.size()==1) {
+				setDisplayData("Task " + getDescriptions(tasks) + " marked as undone",
+						storage.getAllNotDoneTasks());
+			} else {
+				setDisplayData("Tasks " + getDescriptions(tasks) + " marked as undone",
+						storage.getAllNotDoneTasks());
+			}
 		} catch (IndexOutOfBoundsException e) {
 			int listSize = displayData.getListOfTasks().size();
 			if (listSize == 0) {
@@ -37,12 +47,8 @@ public class Uncomplete extends UndoableCommand {
 						+ " tasks in the list");
 			}
 			return false;
-		} catch (UnsupportedOperationException e){
-			setDisplayData("The task is not marked as done yet!");
-			return false;
-		}
-		catch (Exception e) {
-			setDisplayData("Invalid complete command. format: uncomplete <number>");
+		} catch (Exception e) {
+			setDisplayData("Invalid uncomplete command. format: uncomplete <number>");
 			return false;
 		}
 		return true;
@@ -50,15 +56,29 @@ public class Uncomplete extends UndoableCommand {
 
 	@Override
 	public void undo() {
-		storage.completeTask(task);
-		setDisplayData("Undo: Uncomplete task \"" + task.getDescription() + "\"",
-				storage.getAllNotDoneTasks());
+		for (Task task:tasks) {
+			storage.completeTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Undo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Undo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
 	}
 
 	@Override
 	public void redo() {
-		storage.uncompleteTask(task);
-		setDisplayData("Redo: Uncomplete task \"" + task.getDescription() + "\"",
-				storage.getAllNotDoneTasks());
+		for (Task task:tasks) {
+			storage.completeTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Redo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Redo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
 	}
 }

@@ -3,13 +3,14 @@ package commands;
 import interpreter.Interpreter;
 
 import java.lang.UnsupportedOperationException;
+import java.util.ArrayList;
 
 import storage.Storage;
 import util.DisplayData;
 import util.Task;
 
 public class Complete extends UndoableCommand {
-	private Task task;
+	private ArrayList<Task> tasks = new ArrayList<Task>();
 
 	public Complete(DisplayData dd, Storage s, String ui) {
 		super(dd, s, ui);
@@ -18,17 +19,25 @@ public class Complete extends UndoableCommand {
 	@Override
 	public boolean execute() {
 		try {
-			int index = Integer.parseInt(Interpreter.getParameter(userInput)) - 1;
-			assert index >= 0 : "Invalid task index number.";
-			task = displayData.getListOfTasks().get(index);
-			if(task.isDone() ==  true){
-				//an exception is thrown and caught locally if the task specified is already done.
-				throw new UnsupportedOperationException();
+			ArrayList<Integer> indexList = massCommandIndex(userInput);
+			for (int index:indexList) {
+				Task task = displayData.getListOfTasks().get(index);
+				if (!task.isDone()) {
+					tasks.add(task);
+				}
 			}
-			storage.completeTask(task);
+			
+			for (Task task: tasks) {
+				storage.completeTask(task);
+			}
 
-			setDisplayData("Task successfully marked as completed!",
-					storage.getAllNotDoneTasks());
+			if (tasks.size()==1) {
+				setDisplayData("Task " + getDescriptions(tasks) + " marked as complete",
+						storage.getAllNotDoneTasks());
+			} else {
+				setDisplayData("Tasks " + getDescriptions(tasks) + " marked as complete",
+						storage.getAllNotDoneTasks());
+			}
 		} catch (IndexOutOfBoundsException e) {
 			int listSize = displayData.getListOfTasks().size();
 			if (listSize == 0) {
@@ -40,11 +49,7 @@ public class Complete extends UndoableCommand {
 						+ " tasks in the list");
 			}
 			return false;
-		} catch (UnsupportedOperationException e){
-			setDisplayData("The task is already maked as done!");
-			return false;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			setDisplayData("Invalid complete command. format: complete <number>");
 			return false;
 		}
@@ -53,15 +58,29 @@ public class Complete extends UndoableCommand {
 
 	@Override
 	public void undo() {
-		storage.uncompleteTask(task);
-		setDisplayData("Undo: Complete task \""+ task.getDescription() + "\"",
-				storage.getAllNotDoneTasks());
+		for (Task task:tasks) {
+			storage.uncompleteTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Undo: Complete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Undo: Complete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
 	}
 
 	@Override
 	public void redo() {
-		storage.completeTask(task);
-		setDisplayData("Redo: Complete task \"" + task.getDescription() + "\"",
-				storage.getAllNotDoneTasks());
+		for (Task task:tasks) {
+			storage.completeTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Redo: Complete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Redo: Complete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
 	}
 }

@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="outerPane" prefHeight="694.0" prefWidth="714.0" stylesheets="@appearance.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
    <children>
-      <AnchorPane fx:id="pane" layoutY="19.0" prefHeight="501.0" prefWidth="714.0">
+      <AnchorPane fx:id="pane" layoutY="19.0" prefHeight="517.0" prefWidth="714.0">
          <children>
             <TextField fx:id="textbox" layoutX="22.0" layoutY="42.0" prefHeight="25.0" prefWidth="667.0" promptText="Enter command" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="21.0">
                <font>
@@ -26,7 +26,7 @@
                   <TableColumn fx:id="timeCol" prefWidth="90.0" resizable="false" sortable="false" text="Time" />
                </columns>
             </TableView>
-            <Label fx:id="status" layoutX="24.0" layoutY="459.0" prefHeight="27.0" prefWidth="491.0" text="Label">
+            <Label fx:id="status" layoutX="24.0" layoutY="462.0" prefHeight="45.0" prefWidth="671.0" text="Label&#10;Label">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
@@ -55,7 +55,7 @@
             <Font name="Segoe UI Semilight" size="26.0" />
          </font>
       </Label>
-      <TextFlow fx:id="helpText" layoutY="520.0" prefHeight="175.0" prefWidth="714.0" style="-fx-padding: 20 10 0 10; -fx-background-color: #d3d7e8;">
+      <TextFlow fx:id="helpText" layoutY="535.0" prefHeight="175.0" prefWidth="714.0" style="-fx-padding: 20 10 0 10; -fx-background-color: #d3d7e8;">
          <children>
             <Text fill="#c32c2c" strokeType="OUTSIDE" strokeWidth="0.0" text="Add a new task :">
                <font>
@@ -129,7 +129,7 @@
             </Text>
          </children>
       </TextFlow>
-      <Label fx:id="helpBtn" alignment="CENTER" contentDisplay="CENTER" layoutY="508.0" prefHeight="27.0" prefWidth="110.0" text="Show help" textAlignment="CENTER">
+      <Label fx:id="helpBtn" alignment="CENTER" contentDisplay="CENTER" layoutY="523.0" prefHeight="27.0" prefWidth="110.0" text="Show help" textAlignment="CENTER">
          <font>
             <Font name="Segoe UI Semilight" size="18.0" />
          </font>
