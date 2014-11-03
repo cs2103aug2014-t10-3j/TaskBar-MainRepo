@@ -1,7 +1,12 @@
+.root {
+	-fx-text-inner-color: white;
+}
+
 #outerPane {
 	-fx-background-color: transparent;
 	-fx-focus-color: derive(-fx-base,30%);
 }
+
 
 #pane {
 	-fx-base: #3d3e43;	
@@ -11,6 +16,7 @@
 #textbox {
 	-fx-background-color: white;
 	-fx-background-radius: 0;
+	-fx-text-fill: black;
 }
 
 #textbox:focused {
@@ -24,7 +30,7 @@
 	-fx-background-color: -fx-base;
 	-fx-background-insets: 0;
 	-fx-control-inner-background: -fx-base;
-	-fx-text-inner-color: white;
+
 	-fx-table-cell-border-color: transparent;
 	-fx-table-header-border-color: transparent;
 }
@@ -64,6 +70,10 @@
 
 .pastDeadline {
 	-fx-control-inner-background: #E25041 !important;	
+}
+
+.pastDeadline .text {
+	-fx-fill: white;
 }
 
 .nearDeadline {

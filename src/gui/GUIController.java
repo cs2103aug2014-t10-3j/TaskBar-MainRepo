@@ -97,10 +97,16 @@ public class GUIController implements Initializable{
 	}
 	
 	private void configureTable() {
+		table.setItems(list);
+		data = ctrl.loadAllTasks();
+		showToUser(data);
+		table.setRowFactory(new ColorCodedRow<>());
+		
 		GUIUtility.setClickable(table, false);
 		
 		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
 		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
+		//descCol.setCellFactory(new AutoWrappingCell<>());
 		descCol.setComparator(new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
@@ -133,36 +139,11 @@ public class GUIController implements Initializable{
 		});
 		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
 		table.setPlaceholder(new Label("There is nothing to show"));
-		table.setRowFactory(new Callback<TableView<Data>, TableRow<Data>>() {
-			@Override
-			public TableRow<Data> call(TableView<Data> tv) {
-				TableRow<Data> row = new TableRow<Data>() {
-					@Override
-					protected void updateItem(Data task, boolean empty) {
-						super.updateItem(task, empty);
-						getStyleClass().remove("pastDeadline");
-						getStyleClass().remove("nearDeadline");
-						Data currentTask = empty ? null : (Data) getItem();
-						if (currentTask!=null) {
-							Task taskData = task.getTask();
-							LocalDate today = LocalDateTime.now().toLocalDate();
-							if (taskData.isDeadLineTask()) {
-								if (!taskData.getDeadline().toLocalDate().isAfter(today)) {
-									getStyleClass().add("pastDeadline");
-								} else if (!taskData.getDeadline().toLocalDate().isAfter(today.plusDays(3))) {
-									getStyleClass().add("nearDeadline");
-								}
-							}
-						}
-					}
-				};
-				return row;
-			}
-		});
+		
+		
 
-		table.setItems(list);
-		data = ctrl.loadAllTasks();
-		showToUser(data);
+		
+		
 		
 		GUIUtility.setKeyboardScrolling(table, textbox, data);
 	}
