@@ -24,7 +24,7 @@ public class Add extends UndoableCommand {
 	}
 	
 	@Override
-	public boolean execute() {
+	public boolean execute() throws DateTimeException{
 		try {
 			task = Interpreter.interpretAdd(userInput);
 			storage.addTask(task);

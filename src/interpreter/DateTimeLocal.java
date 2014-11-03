@@ -83,7 +83,7 @@ public class DateTimeLocal {
 				if(DateTime.isWordMonth(splitStrSpace[1])){
 					String date = splitStrSpace[0];
 					String month = splitStrSpace[1];
-					if(DateTime.isIntDate(date)){
+					if(DateTime.isOnlyNumbers(date)){
 						return timeFromIntDateAndWordMonth(date, month);
 					}
 				}else{
@@ -249,13 +249,11 @@ public class DateTimeLocal {
 		int min = Integer.parseInt(time.substring(2));
 		if(date.equals("tomorrow") || date.equals("tmr")){
 			LocalDateTime specified = current.plusDays(1);
-			specified = specified.withHour(hour);
-			specified = specified.withMinute(min);
+			specified = specified.withHour(hour).withMinute(min);
 			return specified;
 		}else{
 			LocalDateTime specified = current.plusDays(differenceInDays(date, current));
-			specified = specified.withHour(hour);
-			specified = specified.withMinute(min);
+			specified = specified.withHour(hour).withMinute(min);
 			return specified;
 		}
 	}

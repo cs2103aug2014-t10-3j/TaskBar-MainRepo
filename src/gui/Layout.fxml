@@ -19,7 +19,7 @@
             </TextField>
             <TableView fx:id="table" focusTraversable="false" prefHeight="371.0" prefWidth="671.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="86.0">
                <columns>
-                  <TableColumn fx:id="noCol" editable="false" prefWidth="31.0" resizable="false" text="#" />
+                  <TableColumn fx:id="noCol" editable="false" prefWidth="31.0" resizable="false" />
                   <TableColumn fx:id="descCol" editable="false" prefWidth="212.0" resizable="false" text="Description" />
                   <TableColumn fx:id="tagCol" editable="false" prefWidth="173.0" resizable="false" sortable="false" text="Tags" />
                   <TableColumn fx:id="dateCol" prefWidth="163.0" resizable="false" text="Date" />

@@ -15,7 +15,7 @@ public class DateTime {
 		if(string.length() == 4){
 			try{
 				int stringInt = Integer.parseInt(string);
-				if(isOnlyNumbers(string) && stringInt <= 2359){
+				if(isOnlyNumbers(string)){
 					return true;
 				}
 			}catch(NumberFormatException e){
@@ -54,11 +54,11 @@ public class DateTime {
 		if(string.contains("/")){
 			String splitStrSlash[] = string.split("\\/");
 			try{
-				if(isIntDate(splitStrSlash[0]) && isIntMonth(splitStrSlash[1]) && isYear(splitStrSlash[2])){
+				if(isOnlyNumbers(splitStrSlash[0]) && isOnlyNumbers(splitStrSlash[1]) && isOnlyNumbers(splitStrSlash[2])){
 				return true;
 				}
 			}catch(IndexOutOfBoundsException e){
-				if(isIntDate(splitStrSlash[0]) && isIntMonth(splitStrSlash[1])){
+				if(isOnlyNumbers(splitStrSlash[0]) && isOnlyNumbers(splitStrSlash[1])){
 					return true;
 				}
 			}
@@ -70,11 +70,11 @@ public class DateTime {
 		if(string.contains(" ")){
 			String splitStrSpace[] = string.split("\\s");
 			if(splitStrSpace.length == 2){
-				if(isIntDate(splitStrSpace[0]) && isWordMonth(splitStrSpace[1])){
+				if(isOnlyNumbers(splitStrSpace[0]) && isWordMonth(splitStrSpace[1])){
 					return true;
 				}
 			}else if(splitStrSpace.length == 3){
-				if(isIntDate(splitStrSpace[0]) && isWordMonth(splitStrSpace[1]) && isYear(splitStrSpace[2])){
+				if(isOnlyNumbers(splitStrSpace[0]) && isWordMonth(splitStrSpace[1]) && isOnlyNumbers(splitStrSpace[2])){
 					return true;
 				}
 			}
@@ -89,39 +89,6 @@ public class DateTime {
 		}catch(NumberFormatException nfe){
 			return false;
 		}
-	}
-	
-	public static Boolean isIntDate(String string){
-		try{
-			int date = Integer.parseInt(string);
-			if(date >= 1 && date <= 31){
-				return true;
-			}else{
-				return false;
-			}
-		}catch(NumberFormatException nfe){
-			return false;
-		}
-	}
-	
-	public static Boolean isIntMonth(String string){
-		try{
-			int month = Integer.parseInt(string);
-			if(month >= 1 && month <= 12){
-				return true;
-			}else{
-				return false;
-			}
-		}catch(NumberFormatException nfe){
-			return false;
-		}
-	}
-	
-	public static Boolean isYear(String string){
-		if(string.length() == 2 || string.length() == 4){
-			return true;
-		}
-		return false;
 	}
 	
 	public static Boolean isWordMonth(String string){
