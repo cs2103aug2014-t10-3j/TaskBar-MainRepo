@@ -133,11 +133,18 @@ public class Interpreter {
 		String commandKeyword = splitInputTokens[0].toLowerCase();
 		switch(commandKeyword){
 		case"add":
+		//case"a": TODO refactor interpretAdd() to only receive chopped parameter 
 		case"delete":
+		case"del":
+		case"d":
 		case"update":
+		case"u":
 		case"uncomplete":
+		case"unc":
 		case"complete":
+		case"c":
 		case"undo":
+		case"redo":
 		case"show":
 			return true;
 		default:
@@ -151,14 +158,20 @@ public class Interpreter {
 		String commandKeyword = splitInputTokens[0].toLowerCase();
 		switch(commandKeyword){
 		case"add":
+		//case"a": TODO refactor interpretAdd() to only receive chopped parameter 
 			return new Add(displayData, storage, userInput, duringUpdate);
 		case"delete":
+		case"del":
+		case"d":
 			return new Delete(displayData, storage, userInput);
 		case"update":
+		case"u":
 			return new Update(displayData, storage, userInput);
 		case"complete":
+		case"c":
 			return new Complete(displayData, storage, userInput);
 		case"uncomplete":
+		case"unc":
 			return new Uncomplete(displayData, storage, userInput);
 		case"undo":
 			return new Undo(displayData, storage, history);

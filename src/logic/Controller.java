@@ -2,9 +2,6 @@ package logic;
 
 import interpreter.Interpreter;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javafx.scene.input.KeyEvent;
 import commands.Command;
 import commands.UndoableCommand;
@@ -20,7 +17,6 @@ public class Controller {
 	private boolean duringUpdate = false;
 	//private String input;
 
-	// TODO modify constructor to suit the new architecture.
 	public Controller() {
 		storage = Storage.getInstance();
 		displayData = new DisplayData();
