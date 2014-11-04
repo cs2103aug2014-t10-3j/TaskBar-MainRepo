@@ -219,27 +219,6 @@ public class Storage {
 		}
 	}
 
-	// TODO Refactor this to sort a given ArrayList
-	public ArrayList<Task> sortByImportance() {
-		boolean swapped = true;
-		int j = 0;
-		Task tmp;
-		while (swapped) {
-			swapped = false;
-			j++;
-			for (int i = 0; i < allTasks.size() - j; i++) {
-				if (allTasks.get(i).getImportance() < allTasks.get(i + 1)
-						.getImportance()) {
-					tmp = allTasks.get(i);
-					allTasks.set(i, allTasks.get(i + 1));
-					allTasks.set(i + 1, tmp);
-					swapped = true;
-				}
-
-			}
-		}
-		return allTasks;
-	}
 
 	public void writeFile() throws IOException {
 		String fileName = "task.xml";
@@ -276,9 +255,6 @@ public class Storage {
 					i++;
 				}
 				task1.setLabels(labels);
-
-				task1.setImportance(Integer.parseInt(taskElement
-						.getChildText("Importance")));
 
 				if (taskElement.getChildText("TimeStamp1") != "") {
 					task1.setDeadline(LocalDateTime.parse(
