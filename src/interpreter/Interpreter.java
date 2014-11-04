@@ -38,24 +38,23 @@ public class Interpreter {
 		String userInput = command.toLowerCase();
 		String userInputOnly = CommandDetails.removeImportanceTagString(command);
 		String commandDescription = CommandDetails.getDescription(userInputOnly);
-		int commandImportance = CommandDetails.getImportance(userInput);
 		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
 		String typeOfTask = CommandDetails.getTypeOfTask(userInput);
 		if(typeOfTask == "task"){
 			LocalDateTime normalTime = DateTimeLocal.getNormalDateTime(userInputOnly);
-			Task task = new Task(commandDescription, commandTag, commandImportance, normalTime);
+			Task task = new Task(commandDescription, commandTag, normalTime);
 			return task;
 		}else if(typeOfTask == "scheduled task"){
 			LocalDateTime scheduledTime = DateTimeLocal.getScheduledDateTime(userInputOnly);
-			Task task = new Task(commandDescription, commandTag, commandImportance, scheduledTime);
+			Task task = new Task(commandDescription, commandTag, scheduledTime);
 			return task;
 		}else if(typeOfTask == "event"){
 			LocalDateTime startTime = DateTimeLocal.getStartDateTime(userInputOnly);
 			LocalDateTime endTime = DateTimeLocal.getEndDateTime(userInputOnly);
-			Task task = new Task(commandDescription, commandTag, commandImportance, startTime, endTime);
+			Task task = new Task(commandDescription, commandTag, startTime, endTime);
 			return task;
 		}else if(typeOfTask == "floating"){
-			Task task = new Task(commandDescription, commandTag, commandImportance);
+			Task task = new Task(commandDescription, commandTag);
 			return task;
 		}
 		return null;
@@ -79,11 +78,6 @@ public class Interpreter {
 		int numOfLabels = task.getNumLabels();
 		for(int i=0; i<numOfLabels; i++){
 			result = result + " #" + task.getLabels().get(i);
-		}
-		
-		int importance = task.getImportance();
-		for(int i=0; i<importance;i++){
-			result = result + "!";
 		}
 		
 		return result;

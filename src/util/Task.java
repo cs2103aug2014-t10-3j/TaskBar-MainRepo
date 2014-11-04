@@ -8,7 +8,6 @@ public class Task {
 	private String description;
 	private boolean isDone;
 	private ArrayList<String> labels;
-	private int importance;
 
 	private LocalDateTime timeStamp1;
 	private LocalDateTime timeStamp2;
@@ -18,25 +17,24 @@ public class Task {
 		this.isDone = false;
 	}
 
-	public Task(String description, ArrayList<String> labels, int importance) {
+	public Task(String description, ArrayList<String> labels) {
 		super();
 		this.description = description;
 		this.labels = labels;
-		this.importance = importance;
 		this.isDone = false;
 		timeStamp1 = timeStamp2 = null;
 	}
 
-	public Task(String description, ArrayList<String> labels, int importance,
+	public Task(String description, ArrayList<String> labels,
 			LocalDateTime time) {
-		this(description, labels, importance);
+		this(description, labels);
 		timeStamp1 = time;
 		timeStamp2 = null;
 	}
 
-	public Task(String description, ArrayList<String> labels, int importance,
+	public Task(String description, ArrayList<String> labels,
 			LocalDateTime start, LocalDateTime end) {
-		this(description, labels, importance);
+		this(description, labels);
 		timeStamp1 = start;
 		timeStamp2 = end;
 	}
@@ -81,14 +79,6 @@ public class Task {
 		return labels.size();
 	}
 
-	public int getImportance() {
-		return importance;
-	}
-
-	public void setImportance(int importance) {
-		this.importance = importance;
-	}
-
 	// Specific to DeadlineTask
 	public LocalDateTime getDeadline() {
 		return timeStamp1;
@@ -129,8 +119,6 @@ public class Task {
 			thisString += labels.get(i);
 			thisString += "\n";
 		}
-		thisString += Integer.toString(importance);
-		thisString += "\n";
 		DateTimeFormatter formatter = DateTimeFormatter
 				.ofPattern("yyyy-MM-dd HH:mm");
 		if (timeStamp1 != null && timeStamp2 != null) {
