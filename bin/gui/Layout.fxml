@@ -62,12 +62,12 @@
                   <Font name="Segoe UI Semibold" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="20.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" add &lt;description&gt; &lt;time&gt;&#10;">
+            <Text layoutX="20.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" add + &lt;description&gt; + &lt;time&gt;&#10;">
                <font>
                   <Font name="Segoe UI Light" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="20.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;add do tutorial by tmr 830pm&quot; or &quot;add CCA meeting on 5/11 from 2pm to 4pm&quot;&#10;">
+            <Text layoutX="20.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;add budget report by tmr 830pm&quot; or &quot;add project review meeting on 5/11 from 2pm to 4pm&quot;&#10;">
                <font>
                   <Font name="Segoe UI Light" size="12.0" />
                </font>
@@ -77,12 +77,12 @@
                   <Font name="Segoe UI Semibold" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="20.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;command&gt; &lt;number&gt;&#10;">
+            <Text layoutX="20.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;command&gt; + &lt;id number(s) | id range&gt;&#10;">
                <font>
                   <Font name="Segoe UI Light" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="20.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;complete 2&quot;,  &quot;delete 1&quot;, &quot;update 15&quot; or &quot;uncomplete 5&quot;&#10;">
+            <Text layoutX="20.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;update 10&quot;, &quot;complete 2-4&quot;,  &quot;delete 1 3 5&quot;,  or &quot;uncomplete 1-3, 5&quot;&#10;">
                <font>
                   <Font name="Segoe UI Light" size="12.0" />
                </font>
@@ -92,12 +92,12 @@
                   <Font name="Segoe UI Semibold" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="20.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;keyword&gt;&#10;">
+            <Text layoutX="20.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;keyword&gt;, &lt;#tag&gt; or &lt;date&gt;&#10;">
                <font>
                   <Font name="Segoe UI Light" size="12.0" />
                </font>
             </Text>
-            <Text layoutX="20.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;today&quot; or &quot;all&quot; or &quot;CS2101&quot;&#10;">
+            <Text layoutX="20.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&#9;e.g. &quot;all&quot;, &quot;meeting&quot;, &quot;#family&quot;, &quot;today&quot;, &quot;sunday&quot;, &quot;12 oct&quot;&#10;">
                <font>
                   <Font name="Segoe UI Light" size="12.0" />
                </font>

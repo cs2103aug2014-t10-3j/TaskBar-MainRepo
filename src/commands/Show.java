@@ -15,13 +15,14 @@ public class Show extends Command {
 	}
 
 	public enum ShowCommandType {
-		ALL, DONE, KEYWORD, LABEL, DATE, FLOATING;
+		ALL, DONE, KEYWORD, LABEL, DATE, PERIOD, FLOATING;
 	}
 
 	@Override
 	public boolean execute() {
 		try {
 			switch(Interpreter.interpretShow(userInput)){
+			//TODO implement searching for a duration (month, week, ...)
 			case ALL:
 				setDisplayData("Showing all undone tasks.", storage.getAllNotDoneTasks());
 				break;
