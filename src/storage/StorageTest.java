@@ -17,7 +17,6 @@ public class StorageTest {
 		Storage storage = Storage.getInstance();
 		Task task1 = new Task();
 		task1.setDescription("bed");
-		task1.setImportance(5);
 		ArrayList<String> labels = new ArrayList<String>();
 		labels.add("sleep");
 		labels.add("wake up");
@@ -34,7 +33,6 @@ public class StorageTest {
 		
 		Task task2 = new Task();
 		task2.setDescription("hello");
-		task2.setImportance(2);
 		storage.addTask(task2);
 		try {
 			storage.writeFile();

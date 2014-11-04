@@ -44,9 +44,6 @@ public class WriteFileJDOM {
 				tasks.addContent(labs);
 				labs.setText(labels.get(i));
 			}
-			
-			tasks.addContent(new Element("Importance").setText(""
-					+ task.getImportance()));
 
 			if (task.getDeadline()!=null) {
 				tasks.addContent(new Element("TimeStamp1").setText(task
