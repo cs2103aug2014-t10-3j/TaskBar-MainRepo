@@ -1,3 +1,4 @@
+//@author A0115718E
 /**
  * This class handles the input from user and translate the raw input into a task object.
  * One backslash is used to separate the information
