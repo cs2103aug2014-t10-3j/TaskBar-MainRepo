@@ -25,7 +25,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import logic.Controller;
 
@@ -86,9 +85,6 @@ public class GUIController implements Initializable{
 					if (event.getCode()==KeyCode.H) {
 						GUIUtility.toggleVisibility(helpBtn, helpText);
 					}
-					if (event.getCode()==KeyCode.M) {
-						((Stage) pane.getScene().getWindow()).setIconified(true);;
-					}
 					if (event.getCode()==KeyCode.Z || event.getCode()==KeyCode.Y) {
 						data = ctrl.handleHotkey(event);
 						showToUser(data);
@@ -108,6 +104,7 @@ public class GUIController implements Initializable{
 		
 		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
 		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
+		//descCol.setCellFactory(new AutoWrappingCell<>());
 		descCol.setComparator(new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {

@@ -4,13 +4,10 @@ package gui;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 import util.DisplayData;
-
 
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
-
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -29,7 +26,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GUIUtility {
@@ -53,8 +49,7 @@ public class GUIUtility {
 	
 	public static void setCloseBtn(Label closeBtn) {
 		closeBtn.setOnMouseClicked((event) -> {
-			Platform.exit();
-			
+			Platform.exit();			
 		});
 	}
 	
