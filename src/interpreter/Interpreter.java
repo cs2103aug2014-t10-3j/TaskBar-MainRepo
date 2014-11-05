@@ -87,6 +87,7 @@ public class Interpreter {
 		String showCommandParameter = getParameter(userInput).toLowerCase();
 		switch(showCommandParameter){
 		case "all":
+		case "":
 			return ShowCommandType.ALL;
 		case "done":
 			return ShowCommandType.DONE;
