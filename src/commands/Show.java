@@ -32,6 +32,7 @@ public class Show extends Command {
 				break;
 			case FLOATING:
 				setDisplayData("Showing all floating tasks", storage.getFloatingTasks());
+				break;
 			case KEYWORD:
 				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
 						storage.getTaskByKeyword(Interpreter.getParameter(userInput)));
