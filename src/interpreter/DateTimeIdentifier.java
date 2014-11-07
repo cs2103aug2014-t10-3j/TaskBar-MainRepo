@@ -102,4 +102,11 @@ public class DateTimeIdentifier {
 		return false;
 	}
 	
+	public static Boolean isNextWeek(String string){
+		if(string.contains("next ") || string.contains("nx ")){
+			return true;
+		}
+		return false;
+	}
+	
 }

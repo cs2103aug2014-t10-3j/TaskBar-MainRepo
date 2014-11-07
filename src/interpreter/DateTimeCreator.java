@@ -5,6 +5,7 @@ package interpreter;
  */
 
 
+
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
@@ -78,6 +79,9 @@ public class DateTimeCreator {
 
 	public static LocalDateTime getDateTime(String string) throws DateTimeException{
 		String dateTime = string.trim();
+		if(DateTimeIdentifier.isNextWeek(string)){
+			return timeFromNextWeek(string);
+		}
 		if(dateTime.contains(" ")){
 			String splitStrSpace[] = dateTime.split("\\s");
 			if(splitStrSpace.length == 2){
@@ -382,6 +386,36 @@ public class DateTimeCreator {
 			return specified.withHour(0).withMinute(0);
 		}
 	}
+	
+	public static LocalDateTime timeFromNextWeek(String dayTime){
+		LocalDateTime specified = null;
+		String splitStrSpace[] = dayTime.split("\\s");
+		String day = splitStrSpace[1];
+		LocalDateTime current = LocalDateTime.now();
+		DayOfWeek currentDay = current.getDayOfWeek();
+		int currentDayInt = currentDay.getValue();
+		int dayFromString = getIntFromDay(day);
+		if(dayFromString > currentDayInt){
+			int difference = dayFromString - currentDayInt;
+			int finalDiffInt = difference + 7;
+			long temp = Long.valueOf(String.valueOf(finalDiffInt));
+			specified = current.plusDays(temp);
+		}else{
+			specified = timeFromDayDate(day);
+		}
+		
+		if(splitStrSpace.length == 3){
+			String time = splitStrSpace[2];
+			if(DateTimeIdentifier.is12hTimeFormat(time)){
+				LocalDateTime tmp1 = timeFrom12hTime(time);
+				return specified.withHour(tmp1.getHour()).withMinute(tmp1.getMinute());
+			}else if(DateTimeIdentifier.is24hTimeFormat(time)){
+				LocalDateTime tmp2 = timeFrom24hTime(time);
+				return specified.withHour(tmp2.getHour()).withMinute(tmp2.getMinute());
+			}
+		}
+		return specified.withHour(0).withMinute(0);
+	}
 
 	public static LocalDateTime timeFromNumDate(String dateTime) throws DateTimeException{
 		String splitStrSpace[] = dateTime.split("/");
@@ -401,44 +435,65 @@ public class DateTimeCreator {
 		}
 		return specified;
 	}
+	
+	public static int getIntFromDay(String day){
+		int dayInt = 0;
+		if(day.equals("monday") || day.equals("mon")){
+			dayInt = 1;
+		}else if(day.equals("tuesday") || day.equals("tue")){
+			dayInt = 2;
+		}else if(day.equals("wednesday") || day.equals("wed")){
+			dayInt = 3;
+		}else if(day.equals("thursday") || day.equals("thu")){
+			dayInt = 4;
+		}else if(day.equals("friday") || day.equals("fri")){
+			dayInt = 5;
+		}else if(day.equals("saturday") || day.equals("sat")){
+			dayInt = 6;
+		}else if(day.equals("sunday") || day.equals("sun")){
+			dayInt = 7;
+		}
+		return dayInt;
+	}
 
 	public static long differenceInDays(String day, LocalDateTime current){
 		DayOfWeek currentDay = current.getDayOfWeek();
 		int currentDayInt = currentDay.getValue();
 		int difference = 0;
-		if(day.toLowerCase().equals("monday") || day.toLowerCase().equals("mon")){
+		int dayInt = getIntFromDay(day);
+		if(dayInt == 1){
 			difference = 1 + 7 - currentDayInt;
-		}else if(day.toLowerCase().equals("tuesday") || day.toLowerCase().equals("tue")){
+		}else if(dayInt == 2){
 			if(2 > currentDayInt){
 				difference = 2 - currentDayInt;
 			}else{
 				difference = 2 + 7 - currentDayInt;
 			}
-		}else if(day.toLowerCase().equals("wednesday") || day.toLowerCase().equals("wed")){
+		}else if(dayInt == 3){
 			if(3 > currentDayInt){
 				difference = 3 - currentDayInt;
 			}else{
 				difference = 3 + 7 - currentDayInt;
 			}
-		}else if(day.toLowerCase().equals("thursday") || day.toLowerCase().equals("thu")){
+		}else if(dayInt == 4){
 			if(4 > currentDayInt){
 				difference = 4 - currentDayInt;
 			}else{
 				difference = 4 + 7 - currentDayInt;
 			}
-		}else if(day.toLowerCase().equals("friday") || day.toLowerCase().equals("fri")){
+		}else if(dayInt == 5){
 			if(5 > currentDayInt){
 				difference = 5 - currentDayInt;
 			}else{
 				difference = 5 + 7 - currentDayInt;
 			}
-		}else if(day.toLowerCase().equals("saturday") || day.toLowerCase().equals("sat")){
+		}else if(dayInt == 6){
 			if(6 > currentDayInt){
 				difference = 6 - currentDayInt;
 			}else{
 				difference = 6 + 7 - currentDayInt;
 			}
-		}else if(day.toLowerCase().equals("sunday") || day.toLowerCase().equals("sun")){
+		}else if(dayInt == 7){
 			if(7 > currentDayInt){
 				difference = 7 - currentDayInt;
 			}else{
@@ -450,29 +505,29 @@ public class DateTimeCreator {
 	}
 
 	public static int getIntFromMonth(String string){
-		if(string.toLowerCase().equals("january") || string.toLowerCase().equals("jan")){
+		if(string.equals("january") || string.equals("jan")){
 			return 1;
-		}else if(string.toLowerCase().equals("february") || string.toLowerCase().equals("feb")){
+		}else if(string.equals("february") || string.equals("feb")){
 			return 2;
-		}else if(string.toLowerCase().equals("march") || string.toLowerCase().equals("mar")){
+		}else if(string.equals("march") || string.equals("mar")){
 			return 3;
-		}else if(string.toLowerCase().equals("april") || string.toLowerCase().equals("apr")){
+		}else if(string.equals("april") || string.equals("apr")){
 			return 4;
-		}else if(string.toLowerCase().equals("may")){
+		}else if(string.equals("may")){
 			return 5;
-		}else if(string.toLowerCase().equals("june") || string.toLowerCase().equals("jun")){
+		}else if(string.equals("june") || string.equals("jun")){
 			return 6;
-		}else if(string.toLowerCase().equals("july") || string.toLowerCase().equals("jul")){
+		}else if(string.equals("july") || string.equals("jul")){
 			return 7;
-		}else if(string.toLowerCase().equals("august") || string.toLowerCase().equals("aug")){
+		}else if(string.equals("august") || string.equals("aug")){
 			return 8;
-		}else if(string.toLowerCase().equals("september") || string.toLowerCase().equals("sep")){
+		}else if(string.equals("september") || string.equals("sep")){
 			return 9;
-		}else if(string.toLowerCase().equals("october") || string.toLowerCase().equals("oct")){
+		}else if(string.equals("october") || string.equals("oct")){
 			return 10;
-		}else if(string.toLowerCase().equals("november") || string.toLowerCase().equals("nov")){
+		}else if(string.equals("november") || string.equals("nov")){
 			return 11;
-		}else if(string.toLowerCase().equals("december") || string.toLowerCase().equals("dec")){
+		}else if(string.equals("december") || string.equals("dec")){
 			return 12;
 		}
 		return 0;
