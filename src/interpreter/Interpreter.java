@@ -42,16 +42,16 @@ public class Interpreter {
 		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
 		String typeOfTask = CommandDetails.getTypeOfTask(userInput);
 		if(typeOfTask == "task"){
-			LocalDateTime normalTime = DateTimeLocal.getNormalDateTime(userInputOnly);
+			LocalDateTime normalTime = DateTimeCreator.getNormalDateTime(userInputOnly);
 			Task task = new Task(commandDescription, commandTag, normalTime);
 			return task;
 		}else if(typeOfTask == "scheduled task"){
-			LocalDateTime scheduledTime = DateTimeLocal.getScheduledDateTime(userInputOnly);
+			LocalDateTime scheduledTime = DateTimeCreator.getScheduledDateTime(userInputOnly);
 			Task task = new Task(commandDescription, commandTag, scheduledTime);
 			return task;
 		}else if(typeOfTask == "event"){
-			LocalDateTime startTime = DateTimeLocal.getStartDateTime(userInputOnly);
-			LocalDateTime endTime = DateTimeLocal.getEndDateTime(userInputOnly);
+			LocalDateTime startTime = DateTimeCreator.getStartDateTime(userInputOnly);
+			LocalDateTime endTime = DateTimeCreator.getEndDateTime(userInputOnly);
 			Task task = new Task(commandDescription, commandTag, startTime, endTime);
 			return task;
 		}else if(typeOfTask == "floating"){
@@ -95,9 +95,9 @@ public class Interpreter {
 		case "floating":
 			return ShowCommandType.FLOATING;
 		default:
-			if (DateTime.isDayDateFormat(showCommandParameter) ||
-					DateTime.isWordDateFormat(showCommandParameter) ||
-						DateTime.isNumberDateFormat(showCommandParameter)) {
+			if (DateTimeIdentifier.isDayDateFormat(showCommandParameter) ||
+					DateTimeIdentifier.isWordDateFormat(showCommandParameter) ||
+						DateTimeIdentifier.isNumberDateFormat(showCommandParameter)) {
 				return ShowCommandType.DATE;
 			}
 			

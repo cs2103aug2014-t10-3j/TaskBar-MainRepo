@@ -12,14 +12,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class DateTimeLocal {
+public class DateTimeCreator {
 
 	public static LocalDateTime getStartDateTime(String userInput) throws DateTimeException{
 		//return start time from user input
 		String startDateTime = null;
 		startDateTime = userInput.substring(userInput.lastIndexOf(" from ")+6, userInput.lastIndexOf(" to "));
 		LocalDateTime startTime = getDateTime(startDateTime);
-		if(DateTime.hasEventDate(userInput)){
+		if(DateTimeIdentifier.hasEventDate(userInput)){
 			LocalDateTime eventDate = getEventDate(userInput);
 			LocalDateTime timeStart = LocalDateTime.of(eventDate.getYear(), eventDate.getMonthValue(), eventDate.getDayOfMonth(), startTime.getHour(), startTime.getMinute());
 			return timeStart;
@@ -32,7 +32,7 @@ public class DateTimeLocal {
 		String endDateTime = null;
 		endDateTime = userInput.substring(userInput.lastIndexOf(" to ")+4, userInput.length());
 		LocalDateTime endTime = getDateTime(endDateTime);
-		if(DateTime.hasEventDate(userInput)){
+		if(DateTimeIdentifier.hasEventDate(userInput)){
 			LocalDateTime eventDate = getEventDate(userInput);
 			LocalDateTime timeEnd = LocalDateTime.of(eventDate.getYear(), eventDate.getMonthValue(), eventDate.getDayOfMonth(), endTime.getHour(), endTime.getMinute());
 			return timeEnd;
@@ -81,22 +81,22 @@ public class DateTimeLocal {
 		if(dateTime.contains(" ")){
 			String splitStrSpace[] = dateTime.split("\\s");
 			if(splitStrSpace.length == 2){
-				if(DateTime.isWordMonth(splitStrSpace[1])){
+				if(DateTimeIdentifier.isWordMonth(splitStrSpace[1])){
 					String date = splitStrSpace[0];
 					String month = splitStrSpace[1];
-					if(DateTime.isOnlyNumbers(date)){
+					if(DateTimeIdentifier.isOnlyNumbers(date)){
 						return timeFromIntDateAndWordMonth(date, month);
 					}
 				}else{
 					String date = splitStrSpace[0];
 					String time = splitStrSpace[1];
-					if(DateTime.isNumberDateFormat(date) && DateTime.is12hTimeFormat(time)){
+					if(DateTimeIdentifier.isNumberDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
 						return timeFromNumDateAnd12hTime(date, time);
-					}else if(DateTime.isNumberDateFormat(date) && DateTime.is24hTimeFormat(time)){
+					}else if(DateTimeIdentifier.isNumberDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
 						return timeFromNumDateAnd24hTime(date, time);
-					}else if(DateTime.isDayDateFormat(date) && DateTime.is12hTimeFormat(time)){
+					}else if(DateTimeIdentifier.isDayDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
 						return timeFromDayDateAnd12hTime(date, time);
-					}else if(DateTime.isDayDateFormat(date) && DateTime.is24hTimeFormat(time)){
+					}else if(DateTimeIdentifier.isDayDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
 						return timeFromDayDateAnd24hTime(date, time);
 					}
 				}
@@ -104,31 +104,31 @@ public class DateTimeLocal {
 			if(splitStrSpace.length == 3){
 				String date = splitStrSpace[0] + " " + splitStrSpace[1];
 				String time = splitStrSpace[2];
-				if(DateTime.isWordDateFormat(date) && DateTime.is12hTimeFormat(time)){
+				if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
 					return timeFromWordNoYrAnd12hTime(date, time);
-				}else if(DateTime.isWordDateFormat(date) && DateTime.is24hTimeFormat(time)){
+				}else if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
 					return timeFromWordNoYrAnd24hTime(date, time);
 				}
 			}
 			if(splitStrSpace.length == 4){
 				String date = splitStrSpace[0] + " " + splitStrSpace[1] + " " + splitStrSpace[2];
 				String time = splitStrSpace[3];
-				if(DateTime.isWordDateFormat(date) && DateTime.is12hTimeFormat(time)){
+				if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
 					return timeFromWordAnd12hTime(date, time);
-				}else if(DateTime.isWordDateFormat(date) && DateTime.is24hTimeFormat(time)){
+				}else if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
 					return timeFromWordAnd24hTime(date, time);
 				}
 			}
-		}else if(DateTime.is12hTimeFormat(dateTime) || DateTime.is24hTimeFormat(dateTime)){
-			if(DateTime.is12hTimeFormat(dateTime)){
+		}else if(DateTimeIdentifier.is12hTimeFormat(dateTime) || DateTimeIdentifier.is24hTimeFormat(dateTime)){
+			if(DateTimeIdentifier.is12hTimeFormat(dateTime)){
 				return timeFrom12hTime(dateTime);
 			}
-			if(DateTime.is24hTimeFormat(dateTime)){
+			if(DateTimeIdentifier.is24hTimeFormat(dateTime)){
 				return timeFrom24hTime(dateTime);
 			}
-		}else if(DateTime.isDayDateFormat(dateTime)){
+		}else if(DateTimeIdentifier.isDayDateFormat(dateTime)){
 			return timeFromDayDate(dateTime);
-		}else if(DateTime.isNumberDateFormat(dateTime)){
+		}else if(DateTimeIdentifier.isNumberDateFormat(dateTime)){
 			return timeFromNumDate(dateTime);
 		}
 		return null;

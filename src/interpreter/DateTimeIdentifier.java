@@ -4,7 +4,7 @@ package interpreter;
  * @author Xiaofan
  */
 
-public class DateTime {
+public class DateTimeIdentifier {
 	
 	public static Boolean hasEventDate(String string){
 		if(string.contains(" on ") && string.contains(" from ") && string.contains(" to ")){

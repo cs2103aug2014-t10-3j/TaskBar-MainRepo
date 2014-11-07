@@ -4,7 +4,7 @@ package commands;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-import interpreter.DateTimeLocal;
+import interpreter.DateTimeCreator;
 import interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
@@ -42,7 +42,7 @@ public class Show extends Command {
 						storage.getTaskByLabel(Interpreter.getParameter(userInput).substring(1)));
 				break;
 			case DATE:
-				LocalDate date = DateTimeLocal.getDateTime(Interpreter.getParameter(userInput)).toLocalDate();
+				LocalDate date = DateTimeCreator.getDateTime(Interpreter.getParameter(userInput)).toLocalDate();
 				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
 						storage.getTasksOnADate(date));
 			}
