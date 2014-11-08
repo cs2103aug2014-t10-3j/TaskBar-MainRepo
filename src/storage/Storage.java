@@ -54,6 +54,7 @@ public class Storage {
 		return storage;
 	}
 
+
 	public ArrayList<Task> getAllNotDoneTasks() {
 		ArrayList<Task> result = new ArrayList<Task>();
 		for (Task t : allTasks) {
@@ -176,6 +177,21 @@ public class Storage {
 		}
 	}
 
+	//for testing purposes. Returns task that is deleted.
+	//Otherwise its same as deleteTask
+	public Task testdeleteTask(Task task) {
+		try {
+			assert allTasks.contains(task);
+			allTasks.remove(task);
+			writeFile();
+			return task;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
 	public void completeTask(Task task) {
 		try {
 			assert allTasks.contains(task);
@@ -232,7 +248,6 @@ public class Storage {
 		WriteFileJDOM.writeFileUsingJDOM(allTasks, fileName);
 	}
 
-	// IN PROGRESSS
 	public void readFile() {
 		final String fileName = "task.xml";
 		org.jdom2.Document jdomDoc;
@@ -285,6 +300,6 @@ public class Storage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 	}
 }
