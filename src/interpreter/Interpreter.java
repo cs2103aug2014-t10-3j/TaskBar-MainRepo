@@ -36,16 +36,16 @@ public class Interpreter {
 		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
 		String typeOfTask = CommandDetails.getTypeOfTask(userInput);
 		if(typeOfTask == "task"){
-			LocalDateTime normalTime = DateTimeCreator.getNormalDateTime(userInputOnly.toLowerCase());
+			LocalDateTime normalTime = DateTimeGetter.getNormalDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, normalTime);
 			return task;
 		}else if(typeOfTask == "scheduled task"){
-			LocalDateTime scheduledTime = DateTimeCreator.getScheduledDateTime(userInputOnly.toLowerCase());
+			LocalDateTime scheduledTime = DateTimeGetter.getScheduledDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, scheduledTime);
 			return task;
 		}else if(typeOfTask == "event"){
-			LocalDateTime startTime = DateTimeCreator.getStartDateTime(userInputOnly.toLowerCase());
-			LocalDateTime endTime = DateTimeCreator.getEndDateTime(userInputOnly.toLowerCase());
+			LocalDateTime startTime = DateTimeGetter.getStartDateTime(userInputOnly.toLowerCase());
+			LocalDateTime endTime = DateTimeGetter.getEndDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, startTime, endTime);
 			return task;
 		}else if(typeOfTask == "floating"){
