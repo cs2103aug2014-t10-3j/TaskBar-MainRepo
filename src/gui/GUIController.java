@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
-import javafx.animation.FadeTransition;
 import javafx.animation.SequentialTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,9 +24,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
-import javafx.util.Duration;
 import logic.Controller;
 
+/**
+ * The controller class for the entire GUI. The class is in charge of
+ * transferring the user input to the main logic of the programme and
+ * displays the feedback to users
+ * 
+ */
 public class GUIController implements Initializable{
 	@FXML private AnchorPane outerPane;
 	@FXML private AnchorPane pane;
@@ -38,12 +42,12 @@ public class GUIController implements Initializable{
 	
 	@FXML private TextField textbox;
 	
-	@FXML private TableView<Data> table;
-	@FXML private TableColumn<Data, String> noCol;
-	@FXML private TableColumn<Data, String> descCol;
-	@FXML private TableColumn<Data, String> tagCol;
-	@FXML private TableColumn<Data, String> dateCol;
-	@FXML private TableColumn<Data, String> timeCol;
+	@FXML private TableView<TableData> table;
+	@FXML private TableColumn<TableData, String> noCol;
+	@FXML private TableColumn<TableData, String> descCol;
+	@FXML private TableColumn<TableData, String> tagCol;
+	@FXML private TableColumn<TableData, String> dateCol;
+	@FXML private TableColumn<TableData, String> timeCol;
 	
 	@FXML private Label status;
 	
@@ -53,7 +57,7 @@ public class GUIController implements Initializable{
 	private DisplayData data = new DisplayData();
 	private Controller ctrl = new Controller();
 	
-	private ObservableList<Data> list = FXCollections.observableArrayList();
+	private ObservableList<TableData> list = FXCollections.observableArrayList();
 	private SequentialTransition seqTrans ;
 	
 	@Override
@@ -63,17 +67,20 @@ public class GUIController implements Initializable{
 		
 		GUIUtility.setCloseBtn(closeBtn);
 		GUIUtility.setClockAndDate(clock, day);
-		GUIUtility.setHelpBtn(helpBtn, helpText);
+		GUIUtility.setHelpBtn(helpBtn, helpText, "Show help", "Hide help");
 		
 		status.setOpacity(0);
-		defineTransition();
+		seqTrans = GUIUtility.defineTransition(status,4,1);
 		
 		configureTable();
 		
 		helpText.setVisible(false);
 		
 		GUIUtility.setFocus(textbox);
+		
+		//
 		textbox.setOnAction((event) -> {
+			Logging.getInstance().info("Command entered \"" + textbox.getText() + "\"");
 			data = ctrl.handleEnter(textbox.getText());
 			showToUser(data);		
 		});
@@ -83,78 +90,94 @@ public class GUIController implements Initializable{
 			public void handle(KeyEvent event) {
 				if (event.isControlDown()) {
 					if (event.getCode()==KeyCode.H) {
-						GUIUtility.toggleVisibility(helpBtn, helpText);
+						Logging.getInstance().info("Ctrl-H pressed");
+						GUIUtility.toggleVisibility(helpBtn, helpText, "Show help", "Hide help");
 					}
 					if (event.getCode()==KeyCode.Z || event.getCode()==KeyCode.Y) {
+						Logging.getInstance().info("Ctrl-" + event.getCode() + " pressed");
 						data = ctrl.handleHotkey(event);
 						showToUser(data);
 					}
 				}
 			}
 		});
+		
 	}
 	
+	/**
+	 * Sets up the <code>TableView</code> for displaying the tasks list.
+	 * This includes setting up the data and the format of display, implementing
+	 * color coding and some other operations
+	 * 
+	 */
 	private void configureTable() {
-		table.setItems(list);
-		data = ctrl.loadAllTasks();
-		showToUser(data);
-		table.setRowFactory(new ColorCodedRow<>());
-		
-		GUIUtility.setClickable(table, false);
-		
-		noCol.setCellValueFactory(new PropertyValueFactory<Data, String>("order"));
-		descCol.setCellValueFactory(new PropertyValueFactory<Data, String>("desc"));
-		//descCol.setCellFactory(new AutoWrappingCell<>());
-		descCol.setComparator(new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				return o1.compareToIgnoreCase(o2);
-			}
-		});
-		tagCol.setCellValueFactory(new PropertyValueFactory<Data, String>("tag"));
-		dateCol.setCellValueFactory(new PropertyValueFactory<Data, String>("date"));
-		dateCol.setComparator(new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				if (o1=="") {
-					if (o2=="") {
-						return 0;
-					} else {
-						return 1;
-					}						
-				} else {
-					if (o2=="") {
-						return -1;
-					} else {
-						DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
-						LocalDate d1 = LocalDate.parse(o1.substring(0, 8), dateFmt);
-						LocalDate d2 = LocalDate.parse(o2.substring(0, 8), dateFmt);
-						return d1.compareTo(d2);
-					}
+		try {
+			table.setItems(list);
+			data = ctrl.loadAllTasks();
+						
+			showToUser(data);
+			table.setRowFactory(new ColorCodedRow<>());
+			
+			GUIUtility.setClickable(table, false);
+			
+			noCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("order"));
+			descCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("desc"));
+			descCol.setComparator(new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					return o1.compareToIgnoreCase(o2);
 				}
-				
-			}
-		});
-		timeCol.setCellValueFactory(new PropertyValueFactory<Data, String>("time"));
-		table.setPlaceholder(new Label("There is nothing to show"));
-		
-		
-
-		
-		
-		
-		GUIUtility.setKeyboardScrolling(table, textbox, data);
+			});
+			tagCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("tag"));
+			dateCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("date"));
+			dateCol.setComparator(new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					if (o1=="") {
+						if (o2=="") {
+							return 0;
+						} else {
+							return 1;
+						}						
+					} else {
+						if (o2=="") {
+							return -1;
+						} else {
+							DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
+							LocalDate d1 = LocalDate.parse(o1.substring(0, 8), dateFmt);
+							LocalDate d2 = LocalDate.parse(o2.substring(0, 8), dateFmt);
+							return d1.compareTo(d2);
+						}
+					}
+					
+				}
+			});
+			timeCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("time"));
+			table.setPlaceholder(new Label("There is nothing to show"));
+			
+			GUIUtility.setKeyboardScrolling(table, textbox, data);
+			Logging.getInstance().info("Table view successfully configured");
+		} catch (Exception e) {
+			Logging.getInstance().warning("Table view configuration fails");
+			e.printStackTrace();
+		}
 	}
 	
-	
-	
+	/**
+	 * Produces the visible feedback to the users using the <code>DisplayData</code>
+	 * object returned by the logic
+	 * 
+	 * @param data an object containing information about how to show feedback to user
+	 */
 	private void showToUser(DisplayData data) {
+		assert data!=null;
+		
 		if (data.needToUpdate()) {
 			list.clear();
 			
 			if (data.getListOfTasks()!=null) {
 				for (Task t: data.getListOfTasks()) {
-					Data newTask = new Data(t,list.size()+1);
+					TableData newTask = new TableData(t,list.size()+1);
 					list.add(newTask);
 				}
 			}
@@ -170,16 +193,6 @@ public class GUIController implements Initializable{
 	private void fadeStatus() {		
 		seqTrans.stop();
 		seqTrans.play();
-	}
-	
-	private void defineTransition() {
-		FadeTransition ft1 = new FadeTransition(Duration.seconds(4.0), status);
-		ft1.setToValue(1);
-		ft1.setFromValue(1);
-		FadeTransition ft2 = new FadeTransition(Duration.seconds(1.0),status);
-		ft2.setToValue(0);
-		ft2.setFromValue(1);
-		seqTrans = new SequentialTransition(ft1, ft2);
 	}
 	
 }

@@ -9,6 +9,14 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
+/**
+ * A customized <code>RowFactory</code> that sets up
+ * the color coding system for the <code>TableView</code>
+ * according to urgency of tasks.  <p>
+ * The styles of the color coded row is described in the CSS
+ * stylesheet file.
+ * 
+ */
 public class ColorCodedRow<T> implements Callback<TableView<T>, TableRow<T>> {
 
 	@Override
@@ -20,10 +28,10 @@ public class ColorCodedRow<T> implements Callback<TableView<T>, TableRow<T>> {
 				getStyleClass().remove("pastDeadline");
 				getStyleClass().remove("nearDeadline");
 				getStyleClass().remove("done");
-				Data currentTask = empty ? null : (Data) getItem();
+				TableData currentTask = empty ? null : (TableData) getItem();
 				LocalDate today = LocalDateTime.now().toLocalDate();
 				if (currentTask!=null) {
-					Task taskData = ((Data)task).getTask();
+					Task taskData = ((TableData)task).getTask();
 					if (taskData.isDone()) {
 						getStyleClass().add("done");
 					} else {

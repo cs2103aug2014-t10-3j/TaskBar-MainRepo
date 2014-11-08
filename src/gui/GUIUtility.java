@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import util.DisplayData;
+import util.Logging;
 
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
@@ -28,7 +29,19 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
+/**
+ * A library class that provides static methods used for
+ * setting up the GUI in the primary stage
+ *
+ */
 public class GUIUtility {
+	/**
+	 * Sets up the node for dragging using the mouse. <p>
+	 * This method is useful for dragging an undecorated stage
+	 * 
+	 * @param node the node under effect
+	 * @param draggable <code>node</code> can be dragged if <code>draggable</code> is <code>true</code>
+	 */
 	public static void setDraggable(Node node, boolean draggable) {		
 		if (draggable) {
 			SimpleDoubleProperty x = new SimpleDoubleProperty();
@@ -47,12 +60,25 @@ public class GUIUtility {
 		}
 	}
 	
+	/**
+	 * Sets up a <code>Label</code> objects to be used as the Close button
+	 * 
+	 * @param closeBtn the <code>Label</code> object to be used
+	 */
 	public static void setCloseBtn(Label closeBtn) {
 		closeBtn.setOnMouseClicked((event) -> {
-			Platform.exit();			
+			Logging.getInstance().info("Program closed");
+			Platform.exit();	
 		});
 	}
 	
+
+	/**
+	 * Sets up two <code>Label</code> objects to be used as the Date and Time display
+	 * 
+	 * @param clock the <code>Label</code> object used for displaying time
+	 * @param day the <code>Label</code> object used for displaying date
+	 */
 	public static void setClockAndDate(Label clock, Label day) {
 		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("  EEE, dd MMM yy");
 		DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("  HH:mm:ss");
@@ -71,12 +97,27 @@ public class GUIUtility {
 		tline.play();
 	}
 	
-	public static void setHelpBtn(Label button, Node target) {
+	
+	/**
+	 * Sets up a <code>Label</code> object to be used as the visibility
+	 * switch of another node. The text of the label changes accordingly
+	 * 
+	 * @param button the <code>Label</code> object used as the button
+	 * @param target the node under control
+	 * @param showText prompt text on the <code>Label</code> for show
+	 * @param hideText prompt text on the <code>Label</code> for hide
+	 */
+	public static void setHelpBtn(Label button, Node target, String showText, String hideText) {
 		button.setOnMouseClicked((event) -> {
-			toggleVisibility(button, target);
+			toggleVisibility(button, target, showText, hideText);
 		});
 	}
 	
+	/**
+	 * Sets the cursor focus to be on the specified <code>Node</code>
+	 * 
+	 * @param node the <code>Node</code> to be focused on
+	 */
 	public static void setFocus(Node node) {
 		Platform.runLater(new Runnable() {			
 			@Override
@@ -86,6 +127,13 @@ public class GUIUtility {
 		});
 	}
 	
+	/**
+	 * Determines if the specified <code>node</code> can be clicked
+	 * using the mouse
+	 * 
+	 * @param node the <code>Node</code> under control
+	 * @param clickable if <code>false</code>, makes the node invisible to mouse clicks
+	 */
 	public static void setClickable(Node node, boolean clickable) {
 		if (!clickable) {
 			node.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -97,10 +145,22 @@ public class GUIUtility {
 		}
 	}
 	
+	/**
+	 * Sets up a remote scrolling system for a <code>TableView</code>\
+	 * The <code>table</code> can be scrolled using up/down arrow keys while
+	 * focus is on the <code>source</code>
+	 * 
+	 * @param table the <code>TableView</code> under control
+	 * @param source the controller source of the table
+	 * @param data contains information of the data being displayed by the table 
+	 */
+	
+	@SuppressWarnings("rawtypes")
 	public static void setKeyboardScrolling(TableView table, Node source, DisplayData data) {
 		SimpleIntegerProperty checkFirstVisible = new SimpleIntegerProperty(-1);
 		
 		source.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void handle(KeyEvent event) {
 				ObservableList<Node> nodes = ((TableViewSkin)table.getSkin()).getChildren();
@@ -122,23 +182,42 @@ public class GUIUtility {
 		});
 	}
 	
-	public static void defineTransition(SequentialTransition seqTrans, Node node) {
-		FadeTransition ft1 = new FadeTransition(Duration.seconds(4.0), node);
+	/**
+	 * Defines a custom fade transition where a node is shown for
+	 * a period of time before being faded to transparency
+	 * 
+	 * @param node		the node under control
+	 * @param showTime	number of seconds for which the node is shown 
+	 * @param fadeTime	number of seconds for which the fading lasts 
+	 * @return the desired transition as a <code>SequentialTransition</code>
+	 */
+	public static SequentialTransition defineTransition(Node node, double showTime, double fadeTime) {
+		FadeTransition ft1 = new FadeTransition(Duration.seconds(showTime), node);
 		ft1.setToValue(1);
 		ft1.setFromValue(1);
-		FadeTransition ft2 = new FadeTransition(Duration.seconds(1.0),node);
+		FadeTransition ft2 = new FadeTransition(Duration.seconds(fadeTime),node);
 		ft2.setToValue(0);
 		ft2.setFromValue(1);
-		seqTrans = new SequentialTransition(ft1, ft2);
+		SequentialTransition seqTrans = new SequentialTransition(ft1, ft2);
+		return seqTrans;
 	}
 	
-	public static void toggleVisibility(Label button, Node target) {
+	/**
+	 * Toggles the visibility of the <code>target</code> while
+	 * changing the text of the <code>button</code> accordingly
+	 * 
+	 * @param button	the controller button
+	 * @param target	the node under control
+	 * @param showText prompt text on the <code>button</code> for show
+	 * @param hideText prompt text on the <code>button</code> for hide
+	 */
+	public static void toggleVisibility(Label button, Node target, String showText, String hideText) {
 		if (!target.visibleProperty().get()) {
 			target.setVisible(true);
-			button.setText("Hide help");
+			button.setText(hideText);
 		} else {
 			target.setVisible(false);
-			button.setText("Show help");
+			button.setText(showText);
 		}
 	}
 }

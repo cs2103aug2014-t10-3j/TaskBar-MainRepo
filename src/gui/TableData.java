@@ -13,8 +13,15 @@ import java.util.ArrayList;
 
 
 import javafx.beans.property.SimpleStringProperty;
-
-public class Data {
+/**
+ * A specialized data structure representing a <code>Task</code> which can be
+ * read by a <code>TableView</code>, have its properties extracted and displayed
+ * in a <code>TableRow</code> <p>
+ * The accessors of each property must follow the same format <code>get</code> +
+ * <code>property's name<code>
+ *
+ */
+public class TableData {
 	private SimpleStringProperty order;
 	private SimpleStringProperty desc;
 	private SimpleStringProperty tag;
@@ -22,10 +29,10 @@ public class Data {
 	private SimpleStringProperty time;
 	private Task task;
 	
-	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("EEE dd.MM.yy");
+	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("EEE dd.MM.yy");	//e.g. Mon, 12.07.14 
 	DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 	
-	public Data(Task task, int ord) {
+	public TableData(Task task, int ord) {
 		String newDesc = task.getDescription();
 		ArrayList<String> newTag = task.getLabels();
 		LocalDateTime time1 = task.getStartTime();
@@ -38,27 +45,47 @@ public class Data {
 		time = new SimpleStringProperty(processTime(time1, time2));
 		this.task = task; 
 	}
-	
+	/**
+	 * Gets the <code>order</code> property of this <code>Data</code>
+	 * 
+	 */
 	public String getOrder() {
 		return order.get();
 	}
 	
+	/**
+	 * Gets the <code>desc</code> property of this <code>Data</code>
+	 * 
+	 */
 	public String getDesc() {
 		return desc.get();
 	}
 	
+	/**
+	 * Gets the <code>tag</code> property of this <code>Data</code>
+	 * 
+	 */
 	public String getTag() {
 		return tag.get();
 	}
 	
+	/**
+	 * Gets the <code>date</code> property of this <code>Data</code>
+	 * 
+	 */
 	public String getDate() {
 		return date.get();
 	}
 	
+	/**
+	 * Gets the <code>time</code> property of this <code>Data</code>
+	 * 
+	 */
 	public String getTime() {
 		return time.get();
 	}
 	
+
 	public Task getTask() {
 		return task;
 	}
@@ -94,6 +121,11 @@ public class Data {
 		return str;
 	}
 	
+	/**
+	 * Return the String representation of the date components
+	 * of the two time stamps
+	 * 
+	 */
 	private String processDate(LocalDateTime t1, LocalDateTime t2) {
 		assert (t1!=null || t2==null);		
 		String str="";
@@ -113,6 +145,10 @@ public class Data {
 		return str;
 	}
 	
+	/**
+	 * Format the <code>LocalDateTime</code> to a <code>String</code>
+	 *   
+	 */
 	private String toCustomString(LocalDateTime t) {
 		String str = "";
 		LocalDate today = LocalDateTime.now().toLocalDate();
@@ -126,13 +162,18 @@ public class Data {
 		return str;
 	}
 	
+	/**
+	 * Return the String representation of the time components
+	 * of the two time stamps
+	 * 
+	 */
 	private String processTime(LocalDateTime t1, LocalDateTime t2) {
 		assert (t1!=null || t2==null);
 		String str = "";
 		
 		if (t1!=null) {
 			if (t2==null) {
-				if (!isZeroTime(t1)) {
+				if (!isZeroTime(t1)) {			//the time is not shown if it is 00:00
 					str += t1.format(timeFmt);
 				}				
 			} else {
