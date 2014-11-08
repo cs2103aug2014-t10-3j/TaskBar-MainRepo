@@ -1,13 +1,13 @@
 package logic;
 
 import interpreter.Interpreter;
-
 import javafx.scene.input.KeyEvent;
 import commands.Command;
 import commands.UndoableCommand;
 import commands.Update;
 import storage.Storage;
 import util.DisplayData;
+import util.Logging;
 
 public class Controller {
 
@@ -37,11 +37,11 @@ public class Controller {
 		if(command instanceof UndoableCommand){
 			if(command.execute()) {
 				history.addExecutedCommand((UndoableCommand) command);
-				Logging.getInstance().info("Controller: undoable command successfully executed.");
+				Logging.getInstance().info("undoable command successfully executed.");
 			}
 		}else{
 			command.execute();
-			Logging.getInstance().info("Controller: non-undoable command successfully executed.");
+			Logging.getInstance().info("non-undoable command successfully executed.");
 		}
 		
 		if (command instanceof Update) {
