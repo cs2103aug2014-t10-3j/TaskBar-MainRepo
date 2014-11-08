@@ -13,9 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
-import org.jdom2.JDOMException;
-import org.jdom2.input.DOMBuilder;
 import org.jdom2.Element;
 
 import util.Task;
@@ -35,8 +32,7 @@ public class Storage {
 			readFile();
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO add in proper handling for IOException
+			System.out.println("Invalid File or File format detected");
 		}
 	}
 
@@ -163,8 +159,6 @@ public class Storage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// TODO maybe figure out a way to make incremental modificaiton to the
-		// recorded file?
 	}
 
 	public void deleteTask(Task task) {
@@ -212,7 +206,7 @@ public class Storage {
 		}
 	}
 
-	// TODO add in search by time date, getDoneTasks, getNotDoneTasks
+
 
 	public void sortByTime(ArrayList<Task> list) {
 		boolean swapped = true;
