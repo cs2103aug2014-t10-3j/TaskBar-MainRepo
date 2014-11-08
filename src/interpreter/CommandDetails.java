@@ -1,8 +1,5 @@
 //@author A0115718E
 package interpreter;
-/**
- * @author Xiaofan
- */
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
