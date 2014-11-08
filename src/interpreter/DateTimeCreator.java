@@ -69,10 +69,6 @@ public class DateTimeCreator {
 		}else if(DateTimeIdentifier.isNumberDateFormat(dateTime)){
 			specified = timeFromNumDate(dateTime);
 		}
-		
-		if(specified.isBefore(current)){
-			return specified.withYear(current.getYear()+1);
-		}
 		return specified;
 	}
 
