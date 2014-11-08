@@ -1,35 +1,36 @@
 package util;
 
 import java.io.IOException;
+import java.util.logging.Handler;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class Logging {
-
 	static FileHandler fileTxt;
 	static SimpleFormatter formatter;
-	public static Logger self;
+	public static Logger logger;
 	
 	public static Logger getInstance(){
-		if (self == null){
-			self = Logger.getLogger("ET");
+		if (logger == null){
+			logger = Logger.getLogger("ET");
 			try {
 				fileTxt = new FileHandler("ETLog.txt",true);
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			formatter = new SimpleFormatter();  
-			self.setLevel(Level.ALL);
+			logger.setLevel(Level.ALL);
 	        fileTxt.setFormatter(formatter);
-			self.addHandler(fileTxt);
+			logger.addHandler(fileTxt);
 		}
-		return self;
+		return logger;
 	}
-
 }
+
+
+
