@@ -91,17 +91,10 @@ public class CommandDetails {
 			return userInput.substring(userInput.indexOf("add ")+4, userInput.length());
 		}
 	}
-
-	public static int getImportance(String userInput){
-		int count = userInput.length() - userInput.replaceAll("\\!", "").length();
-
-		return count;
-	}
 	
-	public static String removeImportanceTagString(String userInput){
-		String cutUserInput1 = userInput.replaceAll("\\!", "");
-		String cutUserInput2 = cutUserInput1.replaceAll("\\s+#[^\\s]+", "");
-		return cutUserInput2;
+	public static String removeTagString(String userInput){
+		String cutUserInput = userInput.replaceAll("\\s+#[^\\s]+", "");
+		return cutUserInput;
 	}
 	
 	public static ArrayList<String> getTag(String userInput){

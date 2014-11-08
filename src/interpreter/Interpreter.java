@@ -31,7 +31,7 @@ import util.Task;
 public class Interpreter {
 	public static Task interpretAdd(String command) throws DateTimeException {
 		String userInput = command.toLowerCase();
-		String userInputOnly = CommandDetails.removeImportanceTagString(userInput);
+		String userInputOnly = CommandDetails.removeTagString(userInput);
 		String commandDescription = CommandDetails.getDescription(userInputOnly);
 		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
 		String typeOfTask = CommandDetails.getTypeOfTask(userInput);
