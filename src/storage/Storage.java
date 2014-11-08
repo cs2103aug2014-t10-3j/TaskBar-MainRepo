@@ -14,8 +14,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
 import org.jdom2.Element;
 
+import util.Logging;
 import util.Task;
 
 public class Storage {
@@ -27,13 +29,14 @@ public class Storage {
 	 * Constructor for the class. Since Singleton pattern is applied, this
 	 * constructor is made private access.
 	 */
-	private Storage() {
+	private Storage() throws IOException {
 		try {
 			allTasks = new ArrayList<Task>();
 			readFile();
 
 		} catch (Exception e) {
-			System.out.println("Invalid File or File format detected");
+			Logging.getInstance().info("Reading of File failed, File might be Corrupted");
+			throw new IOException();
 		}
 	}
 
@@ -43,8 +46,9 @@ public class Storage {
 	 * class Storage.
 	 * 
 	 * @return The static storage instance.
+	 * @throws IOException 
 	 */
-	public static Storage getInstance() {
+	public static Storage getInstance() throws IOException {
 		if (storage == null) {
 			storage = new Storage();
 		}
