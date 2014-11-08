@@ -37,9 +37,11 @@ public class Controller {
 		if(command instanceof UndoableCommand){
 			if(command.execute()) {
 				history.addExecutedCommand((UndoableCommand) command);
+				Logging.getInstance().info("Controller: undoable command successfully executed.");
 			}
 		}else{
 			command.execute();
+			Logging.getInstance().info("Controller: non-undoable command successfully executed.");
 		}
 		
 		if (command instanceof Update) {
