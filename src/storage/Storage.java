@@ -80,7 +80,7 @@ public class Storage {
 
 		ArrayList<Task> searchedTasks = new ArrayList<Task>();
 
-		for (Task t : allTasks) {
+		outer: for (Task t : allTasks) {
 			if (!t.isDone()
 					&& t.getDescription().toLowerCase()
 							.contains(keyWord.toLowerCase())) {
@@ -90,6 +90,9 @@ public class Storage {
 				ArrayList<String> labels = t.getLabels();
 				for (String l : labels) {
 					if (l.contains(keyWord.toLowerCase())) {
+						if(searchedTasks.contains(t)){
+							continue outer;
+						}
 						searchedTasks.add(t);
 					}
 				}
@@ -101,11 +104,14 @@ public class Storage {
 
 	public ArrayList<Task> getTaskByLabel(String parameter) {
 		ArrayList<Task> result = new ArrayList<Task>();
-		for (Task t : allTasks) {
+		outer: for (Task t : allTasks) {
 			if (!t.isDone() && !t.getLabels().isEmpty()) {
 				ArrayList<String> labels = t.getLabels();
 				for (String l : labels) {
 					if (l.contains(parameter.toLowerCase())) {
+						if(result.contains(t)){
+							continue outer;
+						}
 						result.add(t);
 					}
 				}
