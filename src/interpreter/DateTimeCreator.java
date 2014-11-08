@@ -12,7 +12,6 @@ public class DateTimeCreator {
 	public static LocalDateTime getDateTime(String string) throws DateTimeException{
 		String dateTime = string.trim();
 		LocalDateTime specified = null;
-		LocalDateTime current = LocalDateTime.now();
 		if(DateTimeIdentifier.isNextWeek(string)){
 			specified = timeFromNextWeek(string);
 		}
@@ -117,26 +116,17 @@ public class DateTimeCreator {
 	}
 
 	public static LocalDateTime timeFromDayDateAnd12hTime(String date, String time) throws DateTimeException{
-		LocalDateTime current = LocalDateTime.now();
-		LocalDateTime specified;
-		if(date.equals("tomorrow") || date.equals("tmr")){
-			specified = current.plusDays(1L);
-		}else{
-			specified = current.plusDays(differenceInDays(date, current));
-		}
-		specified = specified.withHour(timeFrom12hTime(time).getHour()).withMinute(timeFrom12hTime(time).getMinute());
+		LocalDateTime dateTmp = timeFromDayDate(date);
+		LocalDateTime timeTmp = timeFrom12hTime(time);
+		LocalDateTime specified = LocalDateTime.of(dateTmp.getYear(), dateTmp.getMonthValue(), dateTmp.getDayOfMonth(), timeTmp.getHour(), timeTmp.getMinute());
 		return specified;
 	}
 
 	public static LocalDateTime timeFromDayDateAnd24hTime(String date, String time) throws DateTimeException{
-		LocalDateTime current = LocalDateTime.now();
-		LocalDateTime specified = current.withHour(timeFrom24hTime(time).getHour()).withMinute(timeFrom24hTime(time).getMinute());
-		if(date.equals("tomorrow") || date.equals("tmr")){
-			specified = current.plusDays(1);
-		}else{
-			specified = current.plusDays(differenceInDays(date, current));
-		}
-			return specified;
+		LocalDateTime dateTmp = timeFromDayDate(date);
+		LocalDateTime timeTmp = timeFrom24hTime(time);
+		LocalDateTime specified = LocalDateTime.of(dateTmp.getYear(), dateTmp.getMonthValue(), dateTmp.getDayOfMonth(), timeTmp.getHour(), timeTmp.getMinute());
+		return specified;
 	}
 
 	public static LocalDateTime timeFromWordNoYrAnd12hTime(String date, String time) throws DateTimeException{
@@ -222,13 +212,15 @@ public class DateTimeCreator {
 
 	public static LocalDateTime timeFromDayDate(String dateTime) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
+		LocalDateTime specified = null;
 		if(dateTime.equals("tomorrow") || dateTime.equals("tmr")){
-			LocalDateTime specified = current.plusDays(1L);
-			return specified.withHour(0).withMinute(0);
+			specified = current.plusDays(1L);
+		}else if(dateTime.equals("today")){
+			specified = current;
 		}else{
-			LocalDateTime specified = current.plusDays(differenceInDays(dateTime, current));
-			return specified.withHour(0).withMinute(0);
+			specified = current.plusDays(differenceInDays(dateTime, current));
 		}
+		return specified.withHour(0).withMinute(0);
 	}
 	
 	public static LocalDateTime timeFromNextWeek(String dayTime){
