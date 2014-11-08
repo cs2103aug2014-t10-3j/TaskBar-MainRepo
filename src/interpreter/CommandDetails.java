@@ -28,15 +28,6 @@ public class CommandDetails {
 		return command;
 	}
 
-	public static String getDescriptionOnly(String userInput){
-		try{
-			int whiteSpaceIndex = userInput.indexOf(' ');
-			return userInput.substring(whiteSpaceIndex, userInput.length());
-		}catch(IllegalArgumentException e){
-			return null;
-		}
-	}
-
 	public static Boolean isPrepPresent(String userInput){
 		if(userInput.contains(AT) || userInput.contains(BY) ||
 				userInput.contains(FROM) || userInput.contains(ON)){
