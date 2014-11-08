@@ -1,11 +1,9 @@
-//@author A0111499B
-/*
- * This is a better way of file handling, using JDOM XML. Under Construction
- * This is Writing File portion. 
- * 
- * Writer: Zi Jie 
- * 
- */
+/**
+* ReadFileJDOM writes the arraylist of tasks to a XML file: ETtasks.xml 
+* @author A0111499B
+* Zi Jie
+*
+*/
 package storage;
 
 import java.io.FileOutputStream;

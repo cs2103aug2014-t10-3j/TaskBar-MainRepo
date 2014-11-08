@@ -1,11 +1,9 @@
-//@author A0111499B
-/*
- * This is a better way of file handling, using JDOM XML. Under Construction
- * This is Read File portion. 
- * 
- * Writer: Zi Jie 
- * 
- */
+/**
+* ReadFileJDOM reads the file from a XML file. 
+* @author A0111499B
+* Zi Jie
+*
+*/
 package storage;
 
 import java.io.File;

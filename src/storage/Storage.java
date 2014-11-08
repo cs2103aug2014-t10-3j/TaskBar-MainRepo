@@ -1,10 +1,10 @@
-//@author A0111499B
-/*
- * Storage class
- * Writer: ZiJie
- *
- *TODO: EXCEPTION HANDLING, TESTING, LOGGING:Logging.getInstance().info("").warning = Refer to controller handle enter method ,
- */
+/**
+* Storage class, handles all the changes to the arraylist of tasks
+* also deals with the reading and writing to XML files. 
+* @author A0111499B
+* Zi Jie
+*
+*/
 package storage;
 
 import java.io.FileNotFoundException;
@@ -178,9 +178,11 @@ public class Storage {
 			Logging.getInstance().warning("Writing of File UnSuccessful");;
 		}
 	}
-
-	//for testing purposes. Returns task that is deleted.
-	//Otherwise its same as deleteTask
+	
+	/**
+	* for testing purposes. Returns task that is deleted
+	*Else, it is the same as deleteTask(Task)
+	*/
 	public Task testdeleteTask(Task task) {
 		try {
 			assert allTasks.contains(task);
