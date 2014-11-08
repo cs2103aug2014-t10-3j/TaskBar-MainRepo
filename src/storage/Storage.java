@@ -3,6 +3,7 @@
  * Storage class
  * Writer: ZiJie
  *
+ *TODO: EXCEPTION HANDLING, TESTING, LOGGING: ,
  */
 package storage;
 
@@ -238,12 +239,12 @@ public class Storage {
 
 
 	public void writeFile() throws IOException {
-		String fileName = "task.xml";
+		String fileName = "ETtasks.xml";
 		WriteFileJDOM.writeFileUsingJDOM(allTasks, fileName);
 	}
 
 	public void readFile() {
-		final String fileName = "task.xml";
+		final String fileName = "ETtasks.xml";
 		org.jdom2.Document jdomDoc;
 		try {
 			// we can create JDOM Document from DOM, SAX and STAX Parser Builder
