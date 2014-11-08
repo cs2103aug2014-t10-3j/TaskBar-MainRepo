@@ -3,7 +3,7 @@
  * Storage class
  * Writer: ZiJie
  *
- *TODO: EXCEPTION HANDLING, TESTING, LOGGING: ,
+ *TODO: EXCEPTION HANDLING, TESTING, LOGGING:Logging.getInstance().info("").warning = Refer to controller handle enter method ,
  */
 package storage;
 
