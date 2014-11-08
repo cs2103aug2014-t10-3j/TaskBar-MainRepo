@@ -125,7 +125,7 @@ public class Storage {
 		ArrayList<Task> result = new ArrayList<Task>();
 
 		for (Task t : allTasks) {
-			if (!t.isDone() && !t.isFloatingTask()) {
+			if (!t.isFloatingTask()) {
 				if (t.isDeadLineTask()) {
 					if (t.getDeadline().toLocalDate().equals(referenceDate)) {
 						result.add(t);
