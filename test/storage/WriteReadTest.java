@@ -2,6 +2,7 @@ package storage;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import util.Task;
 public class WriteReadTest {
 	// Test XML writing and reading.
 	@Test
-	public void testWrite() {
+	public void testWrite() throws IOException {
 
 		// time task. DATE with HH:MM to HH::MM
 		// 2 labels #sleep, #wake up
@@ -42,7 +43,7 @@ public class WriteReadTest {
 	}
 
 	@Test
-	public void testRead() {
+	public void testRead() throws IOException {
 		Storage storage = Storage.getInstance();
 		ArrayList<Task> list = storage.getAllNotDoneTasks();
 		Task task1 = list.get(list.size() - 2);
