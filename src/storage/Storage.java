@@ -33,9 +33,10 @@ public class Storage {
 		try {
 			allTasks = new ArrayList<Task>();
 			readFile();
+			Logging.getInstance().info("Reading of File Successful");
 
 		} catch (Exception e) {
-			Logging.getInstance().info("Reading of File failed, File might be Corrupted");
+			Logging.getInstance().warning("Reading of File failed, File might be Corrupted");
 			throw new IOException();
 		}
 	}
@@ -161,8 +162,9 @@ public class Storage {
 			assert !allTasks.contains(taskFromLogic);
 			allTasks.add(taskFromLogic);
 			writeFile();
+			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logging.getInstance().warning("Writing of File UnSuccessful");
 		}
 	}
 
@@ -171,8 +173,9 @@ public class Storage {
 			assert allTasks.contains(task);
 			allTasks.remove(task);
 			writeFile();
+			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logging.getInstance().warning("Writing of File UnSuccessful");;
 		}
 	}
 
@@ -183,9 +186,10 @@ public class Storage {
 			assert allTasks.contains(task);
 			allTasks.remove(task);
 			writeFile();
+			Logging.getInstance().info("Writing of File Successful");
 			return task;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logging.getInstance().warning("Writing of File UnSuccessful");;
 		}
 		return null;
 	}
@@ -196,8 +200,9 @@ public class Storage {
 			assert allTasks.contains(task);
 			task.setDone(true);
 			writeFile();
+			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logging.getInstance().warning("Writing of File UnSuccessful");;
 		}
 	}
 
@@ -206,8 +211,9 @@ public class Storage {
 			assert allTasks.contains(task);
 			task.setDone(false);
 			writeFile();
+			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logging.getInstance().warning("Writing of File UnSuccessful");;
 		}
 	}
 
@@ -254,6 +260,7 @@ public class Storage {
 			// we can create JDOM Document from DOM, SAX and STAX Parser Builder
 			// classes
 			jdomDoc = ReadFileJDOM.useDOMParser(fileName);
+			Logging.getInstance().info("Reading of File Successful");
 			Element root = jdomDoc.getRootElement();
 			List<Element> taskListElements = root.getChildren("Task");
 			DateTimeFormatter formatter = DateTimeFormatter
@@ -297,7 +304,7 @@ public class Storage {
 		} catch (FileNotFoundException e) {
 			allTasks = new ArrayList<Task>();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logging.getInstance().warning("File might be Corrupted. Reading UnSuccessful");
 		}
 		
 	}
