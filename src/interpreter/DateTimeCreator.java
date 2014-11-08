@@ -145,140 +145,68 @@ public class DateTimeCreator {
 	public static LocalDateTime timeFromNumDateAnd12hTime(String date, String time) throws DateTimeException{
 		String splitSlash[] = date.split("\\/");
 		LocalDateTime current = LocalDateTime.now();
-		if(splitSlash.length == 2){
-			int day = Integer.parseInt(splitSlash[0]);
-			int month = Integer.parseInt(splitSlash[1]);
-			String timeSub = time.substring(0, time.length()-2);
-			int time12h = Integer.parseInt(timeSub);
-			int hour;
-			int minute;
-			if (time12h<=12) {
-				hour = time12h;
-				minute = 0;							
-			} else {
-				hour = time12h/100;
-				minute = time12h%100;
-			}
-			if(time.contains("pm") && hour!=12){					
-				hour = hour + 12;					
-			}
-			LocalDateTime time1 = LocalDateTime.of(current.getYear(), month, day, hour, minute);
-			return time1;
-		}else if(splitSlash.length == 3){
-			int day = Integer.parseInt(splitSlash[0]);
-			int month = Integer.parseInt(splitSlash[1]);
+		int day = Integer.parseInt(splitSlash[0]);
+		int month = Integer.parseInt(splitSlash[1]);
+		if(splitSlash.length == 3){
 			int year = Integer.parseInt(splitSlash[2]);
-			String timeSub = time.substring(0, time.length()-2);
-			int time12h = Integer.parseInt(timeSub);
-			int hour;
-			int minute;
-			if (time12h<=12) {
-				hour = time12h;
-				minute = 0;							
-			} else {
-				hour = time12h/100;
-				minute = time12h%100;
-			}
-			if(time.contains("pm") && hour!=12){					
-				hour = hour + 12;					
-			}
 			if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
 				throw new DateTimeException("invalid year");
 			}
 			year = (year>999) ? year : 2000+year;
-			LocalDateTime time2 = LocalDateTime.of(year, month, day, hour, minute);
-			return time2;
+			LocalDateTime time1 = LocalDateTime.of(year, month, day, timeFrom12hTime(time).getHour(), timeFrom12hTime(time).getMinute());
+			return time1;
 		}
-		return null;
+		LocalDateTime time2 = LocalDateTime.of(current.getYear(), month, day, timeFrom12hTime(time).getHour(), timeFrom12hTime(time).getMinute());
+		return time2;
 	}
 
 	public static LocalDateTime timeFromNumDateAnd24hTime(String date, String time) throws DateTimeException{
 		String splitSlash[] = date.split("\\/");
 		LocalDateTime current = LocalDateTime.now();
-		if(splitSlash.length == 2){
-			int day = Integer.parseInt(splitSlash[0]);
-			int month = Integer.parseInt(splitSlash[1]);
-			int hour = Integer.parseInt(time.substring(0, time.length()-2));
-			int min = Integer.parseInt(time.substring(2));
-			LocalDateTime time1 = LocalDateTime.of(current.getYear(), month, day, hour, min);
-			return time1;
-		}else if(splitSlash.length == 3){
-			int day = Integer.parseInt(splitSlash[0]);
-			int month = Integer.parseInt(splitSlash[1]);
+		int day = Integer.parseInt(splitSlash[0]);
+		int month = Integer.parseInt(splitSlash[1]);
+		if(splitSlash.length == 3){
 			int year = Integer.parseInt(splitSlash[2]);
-			int hour = Integer.parseInt(time.substring(0, time.length()-2));
-			int min = Integer.parseInt(time.substring(2));
 			if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
 				throw new DateTimeException("invalid year");
 			}
 			year = (year>999) ? year : 2000+year;
-			LocalDateTime time2 = LocalDateTime.of(year, month, day, hour, min);
-			return time2;
+			LocalDateTime time1 = LocalDateTime.of(year, month, day, timeFrom24hTime(time).getHour(), timeFrom24hTime(time).getMinute());
+			return time1;
 		}
-		return null;
+		LocalDateTime time2 = LocalDateTime.of(current.getYear(), month, day, timeFrom24hTime(time).getHour(), timeFrom24hTime(time).getMinute());
+		return time2;
 	}
 
 	public static LocalDateTime timeFromDayDateAnd12hTime(String date, String time) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
-		String timeSub = time.substring(0, time.length()-2);
-		int time12h = Integer.parseInt(timeSub);
-		int hour;
-		int minute;
-		if (time12h<=12) {
-			hour = time12h;
-			minute = 0;							
-		} else {
-			hour = time12h/100;
-			minute = time12h%100;
-		}
-		if(time.contains("pm") && hour!=12){					
-			hour = hour + 12;					
-		}
 		LocalDateTime specified;
 		if(date.equals("tomorrow") || date.equals("tmr")){
 			specified = current.plusDays(1L);
 		}else{
 			specified = current.plusDays(differenceInDays(date, current));
 		}
-		specified = specified.withHour(hour).withMinute(minute);
+		specified = specified.withHour(timeFrom12hTime(time).getHour()).withMinute(timeFrom12hTime(time).getMinute());
 		return specified;
 	}
 
 	public static LocalDateTime timeFromDayDateAnd24hTime(String date, String time) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
-		int hour = Integer.parseInt(time.substring(0, time.length()-2));
-		int min = Integer.parseInt(time.substring(2));
+		LocalDateTime specified = current.withHour(timeFrom24hTime(time).getHour()).withMinute(timeFrom24hTime(time).getMinute());
 		if(date.equals("tomorrow") || date.equals("tmr")){
-			LocalDateTime specified = current.plusDays(1);
-			specified = specified.withHour(hour).withMinute(min);
-			return specified;
+			specified = current.plusDays(1);
 		}else{
-			LocalDateTime specified = current.plusDays(differenceInDays(date, current));
-			specified = specified.withHour(hour).withMinute(min);
-			return specified;
+			specified = current.plusDays(differenceInDays(date, current));
 		}
+			return specified;
 	}
 
 	public static LocalDateTime timeFromWordNoYrAnd12hTime(String date, String time) throws DateTimeException{
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
-		String timeSub = time.substring(0, time.length()-2);
-		int time12h = Integer.parseInt(timeSub);
 		LocalDateTime current = LocalDateTime.now();
-		int hour;
-		int minute;
-		if (time12h<=12) {
-			hour = time12h;
-			minute = 0;							
-		} else {
-			hour = time12h/100;
-			minute = time12h%100;
-		}
-		if(time.contains("pm") && hour!=12){					
-			hour = hour + 12;					
-		}
-		LocalDateTime specified = LocalDateTime.of(current.getYear(), month, day, hour, minute);
+		LocalDateTime specified = LocalDateTime.of(current.getYear(), month, day, timeFrom12hTime(time).getHour(), timeFrom12hTime(time).getMinute());
 		return specified;	
 	}
 
@@ -286,10 +214,8 @@ public class DateTimeCreator {
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
-		int hour = Integer.parseInt(time.substring(0, time.length()-2));
-		int min = Integer.parseInt(time.substring(2));
 		LocalDateTime current = LocalDateTime.now();
-		LocalDateTime specified = LocalDateTime.of(current.getYear(), month, day, hour, min);
+		LocalDateTime specified = LocalDateTime.of(current.getYear(), month, day, timeFrom24hTime(time).getHour(), timeFrom24hTime(time).getMinute());
 		return specified;
 	}
 
@@ -298,25 +224,11 @@ public class DateTimeCreator {
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
 		int year = Integer.parseInt(splitStrSpace[2]);
-		String timeSub = time.substring(0, time.length()-2);
-		int time12h = Integer.parseInt(timeSub);
-		int hour;
-		int minute;
-		if (time12h<=12) {
-			hour = time12h;
-			minute = 0;							
-		} else {
-			hour = time12h/100;
-			minute = time12h%100;
-		}
-		if(time.contains("pm") && hour!=12){					
-			hour = hour + 12;					
-		}
 		if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
 			throw new DateTimeException("invalid year");
 		}
 		year = (year>999) ? year : 2000+year;
-		LocalDateTime specified = LocalDateTime.of(year, month, day, hour, minute);
+		LocalDateTime specified = LocalDateTime.of(year, month, day, timeFrom12hTime(time).getHour(), timeFrom12hTime(time).getMinute());
 		return specified;
 	}
 
@@ -325,13 +237,11 @@ public class DateTimeCreator {
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
 		int year = Integer.parseInt(splitStrSpace[2]);
-		int hour = Integer.parseInt(time.substring(0, time.length()-2));
-		int min = Integer.parseInt(time.substring(2));
 		if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
 			throw new DateTimeException("invalid year");
 		}
 		year = (year>999) ? year : 2000+year;
-		LocalDateTime specified = LocalDateTime.of(year, month, day, hour, min);
+		LocalDateTime specified = LocalDateTime.of(year, month, day, timeFrom24hTime(time).getHour(), timeFrom24hTime(time).getMinute());
 		return specified;
 	}
 
@@ -403,11 +313,9 @@ public class DateTimeCreator {
 		if(splitStrSpace.length == 3){
 			String time = splitStrSpace[2];
 			if(DateTimeIdentifier.is12hTimeFormat(time)){
-				LocalDateTime tmp1 = timeFrom12hTime(time);
-				return specified.withHour(tmp1.getHour()).withMinute(tmp1.getMinute());
+				return specified.withHour(timeFrom12hTime(time).getHour()).withMinute(timeFrom12hTime(time).getMinute());
 			}else if(DateTimeIdentifier.is24hTimeFormat(time)){
-				LocalDateTime tmp2 = timeFrom24hTime(time);
-				return specified.withHour(tmp2.getHour()).withMinute(tmp2.getMinute());
+				return specified.withHour(timeFrom24hTime(time).getHour()).withMinute(timeFrom24hTime(time).getMinute());
 			}
 		}
 		return specified.withHour(0).withMinute(0);

@@ -4,26 +4,34 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 public class CommandDetailsTest {
+	
+	String input = "add extra lesson on monday 8am #mondaybluz #school";
+	
 
 	@Test
 	public void testGetDescription() {
-		fail("Not yet implemented");
+		assertEquals("extra lesson", CommandDetails.getDescription(input));
 	}
 
 	@Test
 	public void testRemoveImportanceTagString() {
-		fail("Not yet implemented");
+		assertEquals("add extra lesson on monday 8am", CommandDetails.removeTagString(input));
 	}
 
 	@Test
 	public void testGetTag() {
-		fail("Not yet implemented");
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add("mondaybluz");
+		tags.add("school");
+		assertEquals(tags, CommandDetails.getTag(input));
 	}
 
 	@Test
 	public void testGetTypeOfTask() {
-		fail("Not yet implemented");
+		assertEquals("task", CommandDetails.getTypeOfTask(input));
 	}
 
 }
