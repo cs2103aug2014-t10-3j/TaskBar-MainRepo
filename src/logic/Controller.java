@@ -1,5 +1,7 @@
 package logic;
 
+import java.io.IOException;
+
 import interpreter.Interpreter;
 import javafx.scene.input.KeyEvent;
 import commands.Command;
@@ -18,7 +20,7 @@ public class Controller {
 	//private String input;
 
 	public Controller() {
-		storage = Storage.getInstance();
+		
 		displayData = new DisplayData();
 		history = History.getInstance();
 	}
@@ -27,6 +29,13 @@ public class Controller {
 	 * For GUI's initialisation, creates a "all yet-to-be-done task" search 
 	 */
 	public DisplayData loadAllTasks() {
+		try {
+			storage = Storage.getInstance();
+		} catch (IOException e) {
+			displayData.setNeedToUpdate(true);
+			displayData.setPrompt("ETtasks.xml might have been corrupted. Please repair or delete it. "
+					+ "Consult User Guide for more.");
+		}
 		Command command = Interpreter.getCommand("all", displayData, storage, history, duringUpdate);
 		command.execute();
 		return displayData;
