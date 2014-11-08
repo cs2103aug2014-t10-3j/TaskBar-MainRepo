@@ -53,3 +53,5 @@ bin/taskbar/Storage.class
 task.xml
 
 ETLog.*
+*.xml
+*.xml

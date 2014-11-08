@@ -11,8 +11,10 @@ public class DateTimeCreator {
 
 	public static LocalDateTime getDateTime(String string) throws DateTimeException{
 		String dateTime = string.trim();
+		LocalDateTime specified = null;
+		LocalDateTime current = LocalDateTime.now();
 		if(DateTimeIdentifier.isNextWeek(string)){
-			return timeFromNextWeek(string);
+			specified = timeFromNextWeek(string);
 		}
 		if(dateTime.contains(" ")){
 			String splitStrSpace[] = dateTime.split("\\s");
@@ -21,19 +23,19 @@ public class DateTimeCreator {
 					String date = splitStrSpace[0];
 					String month = splitStrSpace[1];
 					if(DateTimeIdentifier.isOnlyNumbers(date)){
-						return timeFromIntDateAndWordMonth(date, month);
+						specified = timeFromIntDateAndWordMonth(date, month);
 					}
 				}else{
 					String date = splitStrSpace[0];
 					String time = splitStrSpace[1];
 					if(DateTimeIdentifier.isNumberDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
-						return timeFromNumDateAnd12hTime(date, time);
+						specified = timeFromNumDateAnd12hTime(date, time);
 					}else if(DateTimeIdentifier.isNumberDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
-						return timeFromNumDateAnd24hTime(date, time);
+						specified = timeFromNumDateAnd24hTime(date, time);
 					}else if(DateTimeIdentifier.isDayDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
-						return timeFromDayDateAnd12hTime(date, time);
+						specified = timeFromDayDateAnd12hTime(date, time);
 					}else if(DateTimeIdentifier.isDayDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
-						return timeFromDayDateAnd24hTime(date, time);
+						specified = timeFromDayDateAnd24hTime(date, time);
 					}
 				}
 			}
@@ -41,33 +43,37 @@ public class DateTimeCreator {
 				String date = splitStrSpace[0] + " " + splitStrSpace[1];
 				String time = splitStrSpace[2];
 				if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
-					return timeFromWordNoYrAnd12hTime(date, time);
+					specified = timeFromWordNoYrAnd12hTime(date, time);
 				}else if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
-					return timeFromWordNoYrAnd24hTime(date, time);
+					specified = timeFromWordNoYrAnd24hTime(date, time);
 				}
 			}
 			if(splitStrSpace.length == 4){
 				String date = splitStrSpace[0] + " " + splitStrSpace[1] + " " + splitStrSpace[2];
 				String time = splitStrSpace[3];
 				if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
-					return timeFromWordAnd12hTime(date, time);
+					specified = timeFromWordAnd12hTime(date, time);
 				}else if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
-					return timeFromWordAnd24hTime(date, time);
+					specified = timeFromWordAnd24hTime(date, time);
 				}
 			}
 		}else if(DateTimeIdentifier.is12hTimeFormat(dateTime) || DateTimeIdentifier.is24hTimeFormat(dateTime)){
 			if(DateTimeIdentifier.is12hTimeFormat(dateTime)){
-				return timeFrom12hTime(dateTime);
+				specified = timeFrom12hTime(dateTime);
 			}
 			if(DateTimeIdentifier.is24hTimeFormat(dateTime)){
-				return timeFrom24hTime(dateTime);
+				specified = timeFrom24hTime(dateTime);
 			}
 		}else if(DateTimeIdentifier.isDayDateFormat(dateTime)){
-			return timeFromDayDate(dateTime);
+			specified = timeFromDayDate(dateTime);
 		}else if(DateTimeIdentifier.isNumberDateFormat(dateTime)){
-			return timeFromNumDate(dateTime);
+			specified = timeFromNumDate(dateTime);
 		}
-		return null;
+		
+		if(specified.isBefore(current)){
+			return specified.withYear(current.getYear()+1);
+		}
+		return specified;
 	}
 
 	public static LocalDateTime timeFromIntDateAndWordMonth(String date, String month) throws DateTimeException{
