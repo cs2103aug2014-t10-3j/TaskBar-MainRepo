@@ -1,9 +1,5 @@
 //@author A0115718E
 package interpreter;
-/**
- * @author Xiaofan
- */
-
 
 
 import java.time.DateTimeException;
