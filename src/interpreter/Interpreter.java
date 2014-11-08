@@ -31,21 +31,21 @@ import util.Task;
 public class Interpreter {
 	public static Task interpretAdd(String command) throws DateTimeException {
 		String userInput = command.toLowerCase();
-		String userInputOnly = CommandDetails.removeTagString(userInput);
+		String userInputOnly = CommandDetails.removeTagString(command);
 		String commandDescription = CommandDetails.getDescription(userInputOnly);
 		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
 		String typeOfTask = CommandDetails.getTypeOfTask(userInput);
 		if(typeOfTask == "task"){
-			LocalDateTime normalTime = DateTimeCreator.getNormalDateTime(userInputOnly);
+			LocalDateTime normalTime = DateTimeCreator.getNormalDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, normalTime);
 			return task;
 		}else if(typeOfTask == "scheduled task"){
-			LocalDateTime scheduledTime = DateTimeCreator.getScheduledDateTime(userInputOnly);
+			LocalDateTime scheduledTime = DateTimeCreator.getScheduledDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, scheduledTime);
 			return task;
 		}else if(typeOfTask == "event"){
-			LocalDateTime startTime = DateTimeCreator.getStartDateTime(userInputOnly);
-			LocalDateTime endTime = DateTimeCreator.getEndDateTime(userInputOnly);
+			LocalDateTime startTime = DateTimeCreator.getStartDateTime(userInputOnly.toLowerCase());
+			LocalDateTime endTime = DateTimeCreator.getEndDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, startTime, endTime);
 			return task;
 		}else if(typeOfTask == "floating"){
