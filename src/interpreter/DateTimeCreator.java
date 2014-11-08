@@ -189,6 +189,9 @@ public class DateTimeCreator {
 		if(dateTime.contains("pm") && hour!=12){					
 			hour = hour + 12;					
 		}
+		if(dateTime.contains("am") && hour == 12){
+			hour = 0;
+		}
 		LocalDateTime specified = current.withHour(hour).withMinute(minute);
 		if(specified.isAfter(current)){
 			return specified;
