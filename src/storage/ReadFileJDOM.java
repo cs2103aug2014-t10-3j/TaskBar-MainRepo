@@ -1,7 +1,6 @@
+//@author A0111499B
 /**
 * ReadFileJDOM reads the file from a XML file. 
-* @author A0111499B
-* Zi Jie
 *
 */
 package storage;
