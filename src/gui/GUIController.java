@@ -88,7 +88,7 @@ public class GUIController implements Initializable{
 		textbox.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.isControlDown()) {
+				if (isValidHotkey(event)) {
 					if (event.getCode()==KeyCode.H) {
 						Logging.getInstance().info("Ctrl-H pressed");
 						GUIUtility.toggleVisibility(helpBtn, helpText, "Show help", "Hide help");
@@ -190,9 +190,23 @@ public class GUIController implements Initializable{
 		fadeStatus();
 	}
 	
+	/**
+	 * Determines if a key-pressed event is a supported
+	 * hotkey combination in the program
+	 * 
+	 * @param event <code>KeyEvent</code> sent from the input box
+	 * @return <code>true</code> if hotkey is supported
+	 */
+	private boolean isValidHotkey(KeyEvent event) {
+		return (event.isControlDown() &&
+				(event.getCode()==KeyCode.H || event.getCode()==KeyCode.Z ||event.getCode()==KeyCode.Y)); 
+	}
+	
 	private void fadeStatus() {		
 		seqTrans.stop();
 		seqTrans.play();
 	}
+	
+	
 	
 }
