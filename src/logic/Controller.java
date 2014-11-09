@@ -27,8 +27,10 @@ public class Controller {
 		history = History.getInstance();
 	}
 
-	/*
-	 * For GUI's initialisation, creates a "all yet-to-be-done task" search
+	/**
+	 * For GUI's initialization.
+	 * 
+	 * @return a DisplayData with all the tasks that are yet to be done.
 	 */
 	public DisplayData loadAllTasks() {
 		try {
@@ -45,6 +47,12 @@ public class Controller {
 		return displayData;
 	}
 
+	/**
+	 * Called when “enter” key is hit, returns a DisplayData with information to
+	 * shown after the operation specified by the user is executed.
+	 * @param userInput
+	 * @return
+	 */
 	public DisplayData handleEnter(String userInput) {
 		try {
 			Command command = Interpreter.getCommand(userInput, displayData,
@@ -70,31 +78,43 @@ public class Controller {
 		} catch (DateTimeException e) {
 			displayData.setNeedToUpdate(false);
 			displayData.setNeedToUpdateInputBox(false);
-			displayData.setPrompt("Invalid time/date format. Pls refer to User Guide if in doubt.");
+			displayData
+					.setPrompt("Invalid time/date format. Pls refer to User Guide if in doubt.");
 			Logging.getInstance().warning(
 					"Invalid input of time/date format received.");
-		}catch (IndexOutOfBoundsException e) {
+		} catch (IndexOutOfBoundsException e) {
 			displayData.setNeedToUpdate(false);
 			displayData.setNeedToUpdateInputBox(false);
 			int listSize = displayData.getListOfTasks().size();
-			if (listSize==0) {
+			if (listSize == 0) {
 				displayData.setPrompt("There is no task in the list");
-			} else if (listSize==1) {
+			} else if (listSize == 1) {
 				displayData.setPrompt("There is only 1 task in the list");
 			} else {
-				displayData.setPrompt("There are only " + listSize + " tasks in the list");
+				displayData.setPrompt("There are only " + listSize
+						+ " tasks in the list");
 			}
-			Logging.getInstance().warning("Index No. specified by user is not found.");
-		} catch (Exception e){
+			Logging.getInstance().warning(
+					"Index No. specified by user is not found.");
+		} catch (Exception e) {
+			e.printStackTrace();
 			displayData.setNeedToUpdate(false);
 			displayData.setNeedToUpdateInputBox(false);
-			displayData.setPrompt("Invalid command input. Press ctrl+H to see help or check User Guide.");
-			Logging.getInstance().warning("Invalid input from use received.");
+			displayData
+					.setPrompt("Invalid command input. Press ctrl+H to see help or check User Guide.");
+			Logging.getInstance().warning("Invalid input from user received.");
 		}
 
 		return displayData;
 	}
 
+	/**
+	 * Called when a hotkey combination is detected by GUI.
+	 * 
+	 * @param event
+	 *            The KeyEvent triggered.
+	 * @return a DisplayData with information to show to user.
+	 */
 	public DisplayData handleHotkey(KeyEvent event) {
 		Command command = Interpreter.getCommand(event, displayData, storage,
 				history);

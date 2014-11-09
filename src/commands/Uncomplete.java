@@ -67,7 +67,7 @@ public class Uncomplete extends UndoableCommand {
 	@Override
 	public void redo() {
 		for (Task task:tasks) {
-			storage.completeTask(task);
+			storage.uncompleteTask(task);
 		}
 		if (tasks.size()==1) {
 			setDisplayData("Redo: Mark undone "+ getDescriptions(tasks),
