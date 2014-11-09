@@ -5,26 +5,20 @@ import java.util.ArrayList;
 
 import storage.Storage;
 import util.DisplayData;
+import util.Logging;
 import util.Task;
 
 public class Complete extends UndoableCommand {
 	private ArrayList<Task> tasks = new ArrayList<Task>();
-
-	public Complete(DisplayData dd, Storage s, String ui) {
-		super(dd, s, ui);
+	
+	public Complete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
+		super(displayData, storage);
+		this.tasks = tasks;
 	}
 
 	@Override
 	public boolean execute() {
 		try {
-			ArrayList<Integer> indexList = massCommandIndex(userInput);
-			for (int index:indexList) {
-				Task task = displayData.getListOfTasks().get(index);
-				if (!task.isDone()) {
-					tasks.add(task);
-				}
-			}
-			
 			for (Task task: tasks) {
 				storage.completeTask(task);
 			}
@@ -51,6 +45,7 @@ public class Complete extends UndoableCommand {
 			setDisplayData("Invalid complete command. format: complete <number>");
 			return false;
 		}
+		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " marked as complete");
 		return true;
 	}
 
@@ -66,6 +61,7 @@ public class Complete extends UndoableCommand {
 			setDisplayData("Undo: Complete tasks "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
+		Logging.getInstance().info("Undone completing tasks " + getDescriptions(tasks));
 	}
 
 	@Override
@@ -80,5 +76,6 @@ public class Complete extends UndoableCommand {
 			setDisplayData("Redo: Complete tasks "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
+		Logging.getInstance().info("Redone completing tasks " + getDescriptions(tasks));
 	}
 }

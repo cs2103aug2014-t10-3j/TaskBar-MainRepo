@@ -10,12 +10,10 @@ import util.Task;
 public abstract class Command {
 	public DisplayData displayData;
 	public Storage storage;
-	public String userInput;
 	
-	public Command(DisplayData dd, Storage s, String ui){
-		displayData = dd;
-		storage = s;
-		userInput = ui;
+	public Command(DisplayData displayData, Storage storage){
+		this.displayData = displayData;
+		this.storage = storage;
 	}
 	
 	/**

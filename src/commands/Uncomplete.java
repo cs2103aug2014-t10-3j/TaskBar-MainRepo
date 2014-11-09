@@ -5,26 +5,20 @@ import java.util.ArrayList;
 
 import storage.Storage;
 import util.DisplayData;
+import util.Logging;
 import util.Task;
 
 public class Uncomplete extends UndoableCommand {
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	
-	public Uncomplete(DisplayData dd, Storage s, String ui) {
-		super(dd, s, ui);
+	public Uncomplete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
+		super(displayData, storage);
+		this.tasks = tasks;
 	}
 
 	@Override
 	public boolean execute() {
 		try {
-			ArrayList<Integer> indexList = massCommandIndex(userInput);
-			for (int index:indexList) {
-				Task task = displayData.getListOfTasks().get(index);
-				if (task.isDone()) {
-					tasks.add(task);
-				}
-			}
-			
 			for (Task task: tasks) {
 				storage.uncompleteTask(task);
 			}
@@ -51,6 +45,7 @@ public class Uncomplete extends UndoableCommand {
 			setDisplayData("Invalid uncomplete command. format: uncomplete <number>");
 			return false;
 		}
+		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " marked as undone");
 		return true;
 	}
 
@@ -66,6 +61,7 @@ public class Uncomplete extends UndoableCommand {
 			setDisplayData("Undo: Mark undone "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
+		Logging.getInstance().info("Undone uncompleting tasks " + getDescriptions(tasks));
 	}
 
 	@Override
@@ -80,5 +76,6 @@ public class Uncomplete extends UndoableCommand {
 			setDisplayData("Redo: Mark undone "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
+		Logging.getInstance().info("Redone uncompleting tasks " + getDescriptions(tasks));
 	}
 }

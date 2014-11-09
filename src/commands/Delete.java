@@ -5,24 +5,20 @@ import java.util.ArrayList;
 
 import storage.Storage;
 import util.DisplayData;
+import util.Logging;
 import util.Task;
 
 public class Delete extends UndoableCommand {
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	
-	public Delete(DisplayData dd, Storage s, String ui) {
-		super(dd, s, ui);
+	public Delete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
+		super(displayData, storage);
+		this.tasks = tasks;
 	}
 
 	@Override
 	public boolean execute() {
 		try {
-			ArrayList<Integer> indexList = massCommandIndex(userInput);
-			for (int index:indexList) {
-				Task task = displayData.getListOfTasks().get(index);
-				tasks.add(task);
-			}
-			
 			for (Task task: tasks) {
 				storage.deleteTask(task);
 			}
@@ -48,6 +44,7 @@ public class Delete extends UndoableCommand {
 			setDisplayData("Invalid delete command. format: delete <number>.");
 			return false;
 		}
+		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " deleted");
 		return true;
 	}
 	
@@ -63,6 +60,7 @@ public class Delete extends UndoableCommand {
 			setDisplayData("Undo: Delete tasks "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
+		Logging.getInstance().info("Undone deleting asks " + getDescriptions(tasks));
 	}
 
 	@Override
@@ -78,5 +76,6 @@ public class Delete extends UndoableCommand {
 			setDisplayData("Redo: Delete tasks "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
+		Logging.getInstance().info("Redone deleting asks " + getDescriptions(tasks));
 	}
 }

@@ -4,26 +4,60 @@ package commands;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-import interpreter.DateTimeCreator;
-import interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
+import util.Logging;
 
 public class Show extends Command {
-
-	public Show(DisplayData dd, Storage s, String ui) {
-		super(dd, s, ui);
+	ShowCommandType type;
+	String searchKey;
+	LocalDate date;
+	
+	/**
+	 * Constructor for Show commands of type ALL, DONE, FLOATING
+	 * @param displayData
+	 * @param storage
+	 * @param type
+	 */
+	public Show(DisplayData displayData, Storage storage, ShowCommandType type){
+		super(displayData, storage);
+		this.type = type;
+	}
+	
+	/**
+	 * Constructor for Show commands of type KEYWORD, LABEL
+	 * @param displayData
+	 * @param storage
+	 * @param type
+	 * @param key the keyword for search.
+	 */
+	public Show(DisplayData displayData, Storage storage, ShowCommandType type, String key){
+		super(displayData, storage);
+		this.type = type;
+		searchKey = key;
+	}
+	
+	/**
+	 * Constructor for Show commands of type DATE
+	 * @param displayData
+	 * @param storage
+	 * @param type
+	 * @param date
+	 */
+	public Show(DisplayData displayData, Storage storage, ShowCommandType type, LocalDate date){
+		super(displayData, storage);
+		this.type = type;
+		this.date = date;
 	}
 
 	public enum ShowCommandType {
-		ALL, DONE, KEYWORD, LABEL, DATE, PERIOD, FLOATING;
+		ALL, DONE, KEYWORD, LABEL, DATE, FLOATING;
 	}
 
 	@Override
 	public boolean execute() {
 		try {
-			switch(Interpreter.interpretShow(userInput)){
-			//TODO implement searching for a duration (month, week, ...)
+			switch(type){
 			case ALL:
 				setDisplayData("Showing all undone tasks.", storage.getAllNotDoneTasks());
 				break;
@@ -35,14 +69,13 @@ public class Show extends Command {
 				break;
 			case KEYWORD:
 				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
-						storage.getTaskByKeyword(Interpreter.getParameter(userInput)));
+						storage.getTaskByKeyword(searchKey));
 				break;
 			case LABEL:
 				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.",
-						storage.getTaskByLabel(Interpreter.getParameter(userInput).substring(1)));
+						storage.getTaskByLabel(searchKey));
 				break;
 			case DATE:
-				LocalDate date = DateTimeCreator.getDateTime(Interpreter.getParameter(userInput)).toLocalDate();
 				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
 						storage.getTasksOnADate(date));
 			}
@@ -50,6 +83,7 @@ public class Show extends Command {
 			setDisplayData("Invalid date/time input!");
 			return false;
 		}
+		Logging.getInstance().info("A show command of type " + type + " is executed");
 		return true;
 	}
 }

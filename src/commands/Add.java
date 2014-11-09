@@ -1,32 +1,27 @@
 //@author A0116756Y
 package commands;
 
-import interpreter.Interpreter;
-
 import java.time.DateTimeException;
 
 import storage.Storage;
 import util.DisplayData;
+import util.Logging;
 import util.Task;
 
 public class Add extends UndoableCommand {
 	private Task task;
 	private boolean duringUpdate;
 	
-	public Add(DisplayData dd, Storage s, String ui){
-		super(dd, s, ui);
-		duringUpdate = false;
+	public Add(DisplayData displayData, Storage storage, Task task, boolean updating){
+		super(displayData, storage);
+		this.task = task;
+		this.duringUpdate = updating;
 	}
-	
-	public Add(DisplayData dd, Storage s, String ui, boolean updating) {
-		super(dd, s, ui);
-		duringUpdate = updating;
-	}
+
 	
 	@Override
-	public boolean execute() throws DateTimeException{
+	public boolean execute(){
 		try {
-			task = Interpreter.interpretAdd(userInput);
 			storage.addTask(task);
 			if (duringUpdate) {
 				setDisplayData("Task successfully updated!",
@@ -39,6 +34,7 @@ public class Add extends UndoableCommand {
 			setDisplayData("Invalid date/time input. Please refer to the User Guide if in doubt.");
 			return false;
 		}
+		Logging.getInstance().info("Task \""+task.getDescription() + "\" is added.");
 		return true;
 	}
 
@@ -53,6 +49,7 @@ public class Add extends UndoableCommand {
 			setDisplayData("Undo: Add task \"" + task.getDescription() + "\"",
 					storage.getAllNotDoneTasks());
 		}
+		Logging.getInstance().info("Undone adding task \""+task.getDescription() + "\"");
 	}
 
 	@Override
@@ -60,6 +57,7 @@ public class Add extends UndoableCommand {
 		storage.addTask(task);
 		setDisplayData("Redo: Add task \"" + task.getDescription() + "\"",
 				storage.getAllNotDoneTasks());
+		Logging.getInstance().info("Redone adding task \""+task.getDescription() + "\"");
 	}
 	
 	public boolean isDuringUpdate(){
