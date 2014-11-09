@@ -1,4 +1,7 @@
 //@author A0115718E
+/**
+ * This class provides methods to create LocalDateTime objects for DateTimeGetter class to use;
+ */
 package interpreter;
 
 
@@ -11,6 +14,12 @@ import util.Logging;
 
 public class DateTimeCreator {
 
+	/**
+	 * 
+	 * @param string
+	 * @return a LocalDateTime object when a string is read, multiple formats of date and time are supported;
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime getDateTime(String string) throws DateTimeException{
 		String dateTime = string.trim();
 		LocalDateTime specified = null;
@@ -160,6 +169,12 @@ public class DateTimeCreator {
 		return specified;
 	}
 
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from a time string of 12h format e.g. 8am, 830pm;
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime timeFrom12hTime(String dateTime) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
 		String timeSub = dateTime.substring(0, dateTime.length()-2);
@@ -187,6 +202,12 @@ public class DateTimeCreator {
 		}
 	}
 
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from a time string of 24h format e.g. 2359;
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime timeFrom24hTime(String dateTime) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
 		int hour = Integer.parseInt(dateTime.substring(0, dateTime.length()-2));
@@ -199,7 +220,12 @@ public class DateTimeCreator {
 		}
 	}
 		
-
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from a time string of day date format e.g. monday, tomorrow
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime timeFromDayDate(String dateTime) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
 		LocalDateTime specified = null;
@@ -213,6 +239,11 @@ public class DateTimeCreator {
 		return specified.withHour(0).withMinute(0);
 	}
 	
+	/**
+	 * 
+	 * @param dayTime
+	 * @return
+	 */
 	public static LocalDateTime timeFromNextWeek(String dayTime){
 		LocalDateTime specified = null;
 		String splitStrSpace[] = dayTime.split("\\s");

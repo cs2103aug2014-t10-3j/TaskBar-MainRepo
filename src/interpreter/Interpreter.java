@@ -30,10 +30,21 @@ import util.Logging;
 import util.Task;
 
 public class Interpreter {
+	/**
+	 * 
+	 * @param command from user
+	 * @return a Task object with all required parameters
+	 * @throws DateTimeException
+	 * This method takes in a string, identifies and return the different parameters as a Task object
+	 * 
+	 */
 	public static Task interpretAdd(String command) throws DateTimeException {
 		String userInput = command.toLowerCase();
 		String userInputOnly = CommandDetails.removeTagString(command);
-		String userInputNoQuotes = CommandDetails.removeDescriptionString(userInputOnly);
+		String userInputNoQuotes = userInputOnly;
+		if(userInputOnly.contains("\"")){
+			userInputNoQuotes = CommandDetails.removeDescriptionString(userInputOnly);
+		}
 		String commandDescription = CommandDetails
 				.getDescription(userInputOnly);
 		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
@@ -67,6 +78,14 @@ public class Interpreter {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param task
+	 * @return a string of the current task for Update object to read in
+	 * The task object will be converted into a string that resembles the line of user input with all the parameters;
+	 * The returned string will be used when user requires an update of task;
+	 * Update object takes in the string and proceed to its operations; 
+	 */
 	public static String convertTaskToAddCommand(Task task) {
 		String result = "add";
 		result = result + " " + task.getDescription();
@@ -90,7 +109,13 @@ public class Interpreter {
 
 		return result;
 	}
-
+	
+	/**
+	 * 
+	 * @param time
+	 * @return a string of the time
+	 * LocalDateTime is converted back to string of a specific format;
+	 */
 	public static String getTimeExpression(LocalDateTime time) {
 		DateTimeFormatter formatter = DateTimeFormatter
 				.ofPattern("dd/MM/yyyy HHmm");
@@ -105,6 +130,15 @@ public class Interpreter {
 		return expr;
 	}
 
+	/**
+	 * 
+	 * @param event
+	 * @param displayData
+	 * @param storage
+	 * @param history
+	 * @return a Command object for controller to use;
+	 * This command object is created when hot keys are used;
+	 */
 	public static Command getCommand(KeyEvent event, DisplayData displayData,
 			Storage storage, History history) {
 		if (event.isControlDown() && event.getCode() == KeyCode.Z) {
@@ -116,6 +150,16 @@ public class Interpreter {
 
 	}
 
+	/**
+	 * 
+	 * @param userInput
+	 * @param displayData
+	 * @param storage
+	 * @param history
+	 * @param duringUpdate
+	 * @return a Command object for controller to use;
+	 * This command object is created for all commands;
+	 */
 	public static Command getCommand(String userInput, DisplayData displayData,
 			Storage storage, History history, boolean duringUpdate) {
 		String[] splitInputTokens = userInput.split(" ", 2);
@@ -147,6 +191,13 @@ public class Interpreter {
 		}
 	}
 
+	/**
+	 * 
+	 * @param displayData
+	 * @param storage
+	 * @param userInput
+	 * @return a Show object for controller to display data when user wants to search for a specific keyword/date or done tasks;
+	 */
 	public static Show createShow(DisplayData displayData, Storage storage,
 			String userInput) {
 		ShowCommandType type = interpretShow(userInput);
@@ -199,6 +250,11 @@ public class Interpreter {
 		}
 	}
 
+	/**
+	 * 
+	 * @param userInput
+	 * @return a string without the command word;
+	 */
 	public static String getParameter(String userInput) {
 		if (hasCommandKeyword(userInput)) {
 			String[] splitInputTokens = userInput.split(" ", 2);
@@ -207,7 +263,13 @@ public class Interpreter {
 		return userInput;
 
 	}
-
+	
+	/**
+	 * 
+	 * @param displayData
+	 * @param userInput
+	 * @return an arraylist of tasks when mass commands are used;
+	 */
 	public static ArrayList<Task> getMassCommandTaskList(
 			DisplayData displayData, String userInput) {
 		ArrayList<Integer> indexList = new ArrayList<Integer>();
