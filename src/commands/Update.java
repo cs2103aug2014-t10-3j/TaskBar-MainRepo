@@ -18,11 +18,7 @@ public class Update extends UndoableCommand {
 	@Override
 	public boolean execute() {
 		try {
-			// Delete the task, and add again by modifying reverse interpreted
-			// text input box.
-			/*int index = Integer.parseInt(Interpreter.getParameter(userInput)) - 1;
-			assert index >= 0 : "Invalid task index number.";
-			task = displayData.getListOfTasks().get(index);*/
+			// Delete the task, and add again by modifying reverse interpreted text input box.
 			storage.deleteTask(task);
 
 			setDisplayData(

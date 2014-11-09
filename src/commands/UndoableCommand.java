@@ -1,4 +1,9 @@
 //@author A0116756Y
+/**
+ * UndoableCommand defines undo() and redo() abstract methods for it subclasses.
+ * It also provides a getDescriptions() utility method to read descriptions of 
+ * multiple Tasks at once. 
+ */
 package commands;
 
 import java.util.ArrayList;

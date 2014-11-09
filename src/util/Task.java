@@ -1,4 +1,11 @@
 //@author A0116756Y
+/**
+ * Task is a utility used extensively throughout ET.
+ * It is an object presentation of a task saved into ET by the user.
+ * It provides setter and getter methods for all the parameter 
+ * and determines the nature of it self, being either a floating task,
+ * a deadline task or a event task. 
+ */
 package util;
 
 import java.time.LocalDateTime;

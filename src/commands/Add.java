@@ -59,7 +59,13 @@ public class Add extends UndoableCommand {
 				storage.getAllNotDoneTasks());
 		Logging.getInstance().info("Redone adding task \""+task.getDescription() + "\"");
 	}
-	
+	/**
+	 * This method differentiates the Add to be either independently created,
+	 * or created following an "update" command.
+	 * Since ET currently implement update in a "delete and add-again" fashion, this method
+	 * makes the coupled undo/redo for Update & Add possible 
+	 * @return true if the Add command is created during an update; false otherwise.
+	 */
 	public boolean isDuringUpdate(){
 		return duringUpdate;
 	}

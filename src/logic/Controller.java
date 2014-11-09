@@ -1,3 +1,10 @@
+//@author A0116756Y
+/**
+ * Controller functions as described below:
+ * 1. It is the contact point between GUI and the rest of ET.
+ * 3. It depends on Interpreter to get Command object from user input passed from GUI.
+ * 2. It executes Command objects and store UndoableCommand objects into History.
+ */
 package logic;
 
 import java.io.IOException;

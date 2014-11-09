@@ -1,3 +1,8 @@
+//@author A0116756Y
+/**
+ * History maintains a record of UndoableCommands that have already been executed,
+ * provides undo and redo functionality.
+ */
 package logic;
 
 import java.util.Stack;
@@ -14,7 +19,11 @@ public class History {
 		canBeUndoneCommands = new Stack<UndoableCommand>();
 		canBeRedoneCommands = new Stack<UndoableCommand>();
 	}
-
+	/**
+	 * History implements Singleton Pattern. This method allows other class to
+	 * get the reference to the History instance in the current runtime.
+	 * @return the singleton instance of History in the current runtime.
+	 */
 	public static History getInstance() {
 		if (history == null) {
 			history = new History();
@@ -28,7 +37,6 @@ public class History {
 	}
 
 	/**
-	 * 
 	 * @return true when the command is successfully undone; false when there is no more commands to undo.
 	 */
 	public boolean undoOneStep(){
@@ -39,6 +47,8 @@ public class History {
 		command.undo();
 		canBeRedoneCommands.push(command);
 		
+		//Allows the coupled undo for Add&Update during an update.
+		//See isDuringUpdate() method in Add for more details.
 		if ((command instanceof Add) && ((Add) command).isDuringUpdate()) {
 			undoOneStep();
 		}
@@ -46,7 +56,6 @@ public class History {
 	}
 	
 	/**
-	 * 
 	 * @return true when the command is successfully undone; false when there is no more commands to undo.
 	 */
 	public boolean redoOneStep(){
@@ -57,6 +66,9 @@ public class History {
 		
 		command.redo();
 		canBeUndoneCommands.push(command);
+		
+		//Allows the coupled undo for Add&Update during an update.
+		//See isDuringUpdate() method in Add for more details.
 		if (command instanceof Update) {
 			redoOneStep();
 		}
