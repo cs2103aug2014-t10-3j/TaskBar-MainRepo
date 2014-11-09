@@ -1,4 +1,12 @@
 //@author A0115718E
+/**
+ * This class identifies the task's description and tags of the input string
+ * and returns them as the parameters for Task object;
+ * Input from user should include preposition i.e. "on" "at" "from" "by" "to";
+ * Any content with the double quotes " " will be escaped.
+ * Tags should come after "#";
+ * 
+ */
 package interpreter;
 
 import java.util.regex.Pattern;
@@ -16,14 +24,9 @@ public class CommandDetails {
 
 	public static int SINGLEWORD = -1;
 	
-	public static String getCommand(String userInput) {
-		int indexFirstSpace = userInput.indexOf(' ');
-		if (indexFirstSpace == SINGLEWORD) {
-			return userInput;
-		}
-		String command = userInput.substring(0, indexFirstSpace);
-		return command;
-	}
+	/**
+	 * @return boolean value, checks if preposition is present
+	 */
 
 	public static Boolean isPrepPresent(String userInput){
 		if(userInput.contains(AT) || userInput.contains(BY) ||
@@ -33,9 +36,24 @@ public class CommandDetails {
 		return false;
 	}
 
+	/**
+	 * @return the description of the task as a string object
+	 * Regular Expression "add(.*?\\s)at\\s" means anything between "add" and "at ";
+	 * Regular Expression "add(.*?\\s)by\\s" means anything between "add" and "by ";
+	 * Regular Expression "add(.*?\\s)from\\s" means anything between "add" and "from ";
+	 * Regular Expression "add(.*?\\s)on\\s" means anything between "add" and "on ";
+	 * UserInput.replaceAll("\\s+#[^\\s]+", "") with regular Expression "\\s+#[^\\s]+" 
+	 * means to remove all " #" followed by whatever word behind, e.g. " #school"
+	 * Regular Expression "#(\\w+|\\w+)" means any word followed by "#"
+	 * 
+	 */
+	
 	public static String getDescription(String userInput){
 		String description = null;
-		if(isPrepPresent(userInput)){
+		
+		if(containsTwoQuotes(userInput)){
+			description = getQuotedDescription(userInput);
+		}else if(isPrepPresent(userInput)){
 			int[] prepArray;
 			prepArray = new int[4];
 			Arrays.fill(prepArray, 1000);
@@ -90,12 +108,41 @@ public class CommandDetails {
 		}else{
 			return userInput.substring(userInput.indexOf("add ")+4, userInput.length());
 		}
+		return description;
 	}
+	
+	/**
+	 * @return a string without the tags for further operations
+	 */
 	
 	public static String removeTagString(String userInput){
 		String cutUserInput = userInput.replaceAll("\\s+#[^\\s]+", "");
 		return cutUserInput;
 	}
+	
+	/**
+	 * @return a string without the tags and the escaped substring for further operations
+	 */
+	
+	public static String removeDescriptionString(String userInput){
+		String tmp = getQuotedDescription(userInput);
+		String cutUserInput = userInput.replace(tmp, "");
+		return cutUserInput;
+	}
+	
+	/**
+	 * @return a string within double quotes
+	 */
+	
+	public static String getQuotedDescription(String userInput){
+		int index1 = userInput.indexOf('\"');
+		int index2 = userInput.lastIndexOf('\"');
+		return userInput.substring(index1+1, index2);
+	}
+	
+	/**
+	 * @return an arraylist of tags for further operations
+	 */
 	
 	public static ArrayList<String> getTag(String userInput){
 		Pattern tagPattern = Pattern.compile("#(\\w+|\\w+)");
@@ -120,5 +167,18 @@ public class CommandDetails {
 		}else{
 			return "floating";
 		}
+	}
+	
+	public static Boolean containsTwoQuotes(String str){
+		int count = 0;
+		for(int i=0;i<str.length();i++){
+			if(str.charAt(i) == '\"'){
+				count++;
+			}
+		}
+		if(count == 2){
+			return true;
+		}
+		return false;
 	}
 }

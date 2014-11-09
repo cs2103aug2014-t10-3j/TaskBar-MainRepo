@@ -33,32 +33,33 @@ public class Interpreter {
 	public static Task interpretAdd(String command) throws DateTimeException {
 		String userInput = command.toLowerCase();
 		String userInputOnly = CommandDetails.removeTagString(command);
+		String userInputNoQuotes = CommandDetails.removeDescriptionString(userInputOnly);
 		String commandDescription = CommandDetails
 				.getDescription(userInputOnly);
 		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
-		String typeOfTask = CommandDetails.getTypeOfTask(userInput);
-		if (typeOfTask == "task") {
+		String typeOfTask = CommandDetails.getTypeOfTask(userInputNoQuotes);
+		if (typeOfTask.equals("task")) {
 			LocalDateTime normalTime = DateTimeGetter
-					.getNormalDateTime(userInputOnly.toLowerCase());
+					.getNormalDateTime(userInputNoQuotes.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, normalTime);
 			Logging.getInstance().info("Scheduled task is successfuly identified and created.");
 			return task;
-		} else if (typeOfTask == "scheduled task") {
+		} else if (typeOfTask.equals("scheduled task")) {
 			LocalDateTime scheduledTime = DateTimeGetter
-					.getScheduledDateTime(userInputOnly.toLowerCase());
+					.getScheduledDateTime(userInputNoQuotes.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, scheduledTime);
 			Logging.getInstance().info("Scheduled task is successfuly identified and created.");
 			return task;
-		} else if (typeOfTask == "event") {
+		} else if (typeOfTask.equals("event")) {
 			LocalDateTime startTime = DateTimeGetter
-					.getStartDateTime(userInputOnly.toLowerCase());
-			LocalDateTime endTime = DateTimeGetter.getEndDateTime(userInputOnly
+					.getStartDateTime(userInputNoQuotes.toLowerCase());
+			LocalDateTime endTime = DateTimeGetter.getEndDateTime(userInputNoQuotes
 					.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, startTime,
 					endTime);
 			Logging.getInstance().info("Event task is successfuly identified and created.");
 			return task;
-		} else if (typeOfTask == "floating") {
+		} else if (typeOfTask.equals("floating")) {
 			Task task = new Task(commandDescription, commandTag);
 			Logging.getInstance().info("Floating task is successfuly identified and created.");
 			return task;
