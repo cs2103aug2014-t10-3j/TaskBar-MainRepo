@@ -19,6 +19,7 @@ public class Delete extends UndoableCommand {
 	@Override
 	public boolean execute() {
 		try {
+			assert tasks.size() > 0;
 			for (Task task: tasks) {
 				storage.deleteTask(task);
 			}

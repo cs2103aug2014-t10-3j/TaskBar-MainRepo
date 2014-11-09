@@ -19,6 +19,7 @@ public class Uncomplete extends UndoableCommand {
 	@Override
 	public boolean execute() {
 		try {
+			assert tasks.size() > 0;
 			for (Task task: tasks) {
 				storage.uncompleteTask(task);
 			}
