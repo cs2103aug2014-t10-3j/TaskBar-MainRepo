@@ -21,10 +21,12 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 public class ReadFileJDOM {
 	
-	//Get JDOM document from DOM Parser
+	/**
+	 * Get JDOM document from DOM Parser
+	 * 
+	 */
     protected static org.jdom2.Document useDOMParser(String fileName)
             throws ParserConfigurationException, SAXException, IOException {
-        //creating DOM Document
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         dBuilder = dbFactory.newDocumentBuilder();
