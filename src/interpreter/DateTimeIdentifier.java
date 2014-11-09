@@ -1,8 +1,16 @@
 //@author A0115718E
+/**
+ * This class identifies the different date and time format by returning boolean results.
+ */
 package interpreter;
 
 public class DateTimeIdentifier {
 	
+	/**
+	 * 
+	 * @param string
+	 * @return true if the user input has time in this format "on...from...to";
+	 */
 	public static Boolean hasEventDate(String string){
 		if(string.contains(" on ") && string.contains(" from ") && string.contains(" to ")){
 			return true;

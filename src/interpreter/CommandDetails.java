@@ -21,14 +21,12 @@ public class CommandDetails {
 	public static final String FROM = " from ";
 	public static final String BY = " by ";
 	public static final String TO = " to ";
-
-	public static int SINGLEWORD = -1;
 	
 	/**
 	 * @return boolean value, checks if preposition is present
 	 */
 
-	public static Boolean isPrepPresent(String userInput){
+	private static Boolean isPrepPresent(String userInput){
 		if(userInput.contains(AT) || userInput.contains(BY) ||
 				userInput.contains(FROM) || userInput.contains(ON)){
 			return true;
@@ -134,7 +132,7 @@ public class CommandDetails {
 	 * @return a string within double quotes
 	 */
 	
-	public static String getQuotedDescription(String userInput){
+	private static String getQuotedDescription(String userInput){
 		int index1 = userInput.indexOf('\"');
 		int index2 = userInput.lastIndexOf('\"');
 		return userInput.substring(index1+1, index2);
@@ -169,7 +167,7 @@ public class CommandDetails {
 		}
 	}
 	
-	public static Boolean containsTwoQuotes(String str){
+	private static Boolean containsTwoQuotes(String str){
 		int count = 0;
 		for(int i=0;i<str.length();i++){
 			if(str.charAt(i) == '\"'){

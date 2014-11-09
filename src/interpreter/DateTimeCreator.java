@@ -86,7 +86,7 @@ public class DateTimeCreator {
 		return specified;
 	}
 
-	public static LocalDateTime timeFromIntDateAndWordMonth(String date, String month) throws DateTimeException{
+	private static LocalDateTime timeFromIntDateAndWordMonth(String date, String month) throws DateTimeException{
 		int day = Integer.parseInt(date);
 		int intMonth = getIntFromMonth(month);
 		LocalDateTime current = LocalDateTime.now();
@@ -94,7 +94,7 @@ public class DateTimeCreator {
 		return specified;
 	}
 
-	public static LocalDateTime timeFromNumDateAnd12hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromNumDateAnd12hTime(String date, String time) throws DateTimeException{
 		LocalDateTime tmp = timeFromNumDate(date);
 		LocalDateTime tmp2 = timeFrom12hTime(time);
 		LocalDateTime specified = LocalDateTime.of(tmp.getYear(), tmp.getMonthValue(), tmp.getDayOfMonth(), tmp2.getHour(), tmp2.getMinute());
@@ -102,28 +102,28 @@ public class DateTimeCreator {
 		return specified;
 	}
 
-	public static LocalDateTime timeFromNumDateAnd24hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromNumDateAnd24hTime(String date, String time) throws DateTimeException{
 		LocalDateTime tmp = timeFromNumDate(date);
 		LocalDateTime tmp2 = timeFrom24hTime(time);
 		LocalDateTime specified = LocalDateTime.of(tmp.getYear(), tmp.getMonthValue(), tmp.getDayOfMonth(), tmp2.getHour(), tmp2.getMinute());
 		return specified;
 	}
 
-	public static LocalDateTime timeFromDayDateAnd12hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromDayDateAnd12hTime(String date, String time) throws DateTimeException{
 		LocalDateTime dateTmp = timeFromDayDate(date);
 		LocalDateTime timeTmp = timeFrom12hTime(time);
 		LocalDateTime specified = LocalDateTime.of(dateTmp.getYear(), dateTmp.getMonthValue(), dateTmp.getDayOfMonth(), timeTmp.getHour(), timeTmp.getMinute());
 		return specified;
 	}
 
-	public static LocalDateTime timeFromDayDateAnd24hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromDayDateAnd24hTime(String date, String time) throws DateTimeException{
 		LocalDateTime dateTmp = timeFromDayDate(date);
 		LocalDateTime timeTmp = timeFrom24hTime(time);
 		LocalDateTime specified = LocalDateTime.of(dateTmp.getYear(), dateTmp.getMonthValue(), dateTmp.getDayOfMonth(), timeTmp.getHour(), timeTmp.getMinute());
 		return specified;
 	}
 
-	public static LocalDateTime timeFromWordNoYrAnd12hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromWordNoYrAnd12hTime(String date, String time) throws DateTimeException{
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
@@ -132,7 +132,7 @@ public class DateTimeCreator {
 		return specified;	
 	}
 
-	public static LocalDateTime timeFromWordNoYrAnd24hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromWordNoYrAnd24hTime(String date, String time) throws DateTimeException{
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
@@ -141,7 +141,7 @@ public class DateTimeCreator {
 		return specified;
 	}
 
-	public static LocalDateTime timeFromWordAnd12hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromWordAnd12hTime(String date, String time) throws DateTimeException{
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
@@ -155,7 +155,7 @@ public class DateTimeCreator {
 		return specified;
 	}
 
-	public static LocalDateTime timeFromWordAnd24hTime(String date, String time) throws DateTimeException{
+	private static LocalDateTime timeFromWordAnd24hTime(String date, String time) throws DateTimeException{
 		String splitStrSpace[] = date.split("\\s");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = getIntFromMonth(splitStrSpace[1]);
@@ -175,7 +175,7 @@ public class DateTimeCreator {
 	 * @return a LocalDateTime object from a time string of 12h format e.g. 8am, 830pm;
 	 * @throws DateTimeException
 	 */
-	public static LocalDateTime timeFrom12hTime(String dateTime) throws DateTimeException{
+	private static LocalDateTime timeFrom12hTime(String dateTime) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
 		String timeSub = dateTime.substring(0, dateTime.length()-2);
 		int time12h = Integer.parseInt(timeSub);
@@ -208,7 +208,7 @@ public class DateTimeCreator {
 	 * @return a LocalDateTime object from a time string of 24h format e.g. 2359;
 	 * @throws DateTimeException
 	 */
-	public static LocalDateTime timeFrom24hTime(String dateTime) throws DateTimeException{
+	private static LocalDateTime timeFrom24hTime(String dateTime) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
 		int hour = Integer.parseInt(dateTime.substring(0, dateTime.length()-2));
 		int min = Integer.parseInt(dateTime.substring(2));
@@ -226,7 +226,7 @@ public class DateTimeCreator {
 	 * @return a LocalDateTime object from a time string of day date format e.g. monday, tomorrow
 	 * @throws DateTimeException
 	 */
-	public static LocalDateTime timeFromDayDate(String dateTime) throws DateTimeException{
+	private static LocalDateTime timeFromDayDate(String dateTime) throws DateTimeException{
 		LocalDateTime current = LocalDateTime.now();
 		LocalDateTime specified = null;
 		if(dateTime.equals("tomorrow") || dateTime.equals("tmr")){
@@ -242,9 +242,9 @@ public class DateTimeCreator {
 	/**
 	 * 
 	 * @param dayTime
-	 * @return
+	 * @return a LocalDateTime object if the user added time in next week
 	 */
-	public static LocalDateTime timeFromNextWeek(String dayTime){
+	private static LocalDateTime timeFromNextWeek(String dayTime){
 		LocalDateTime specified = null;
 		String splitStrSpace[] = dayTime.split("\\s");
 		String day = splitStrSpace[1];
@@ -271,8 +271,14 @@ public class DateTimeCreator {
 		}
 		return specified.withHour(0).withMinute(0);
 	}
-
-	public static LocalDateTime timeFromNumDate(String dateTime) throws DateTimeException{
+	
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from number date e.g. 12/12/2014
+	 * @throws DateTimeException
+	 */
+	private static LocalDateTime timeFromNumDate(String dateTime) throws DateTimeException{
 		String splitStrSpace[] = dateTime.split("/");
 		int day = Integer.parseInt(splitStrSpace[0]);
 		int month = Integer.parseInt(splitStrSpace[1]);
@@ -292,7 +298,7 @@ public class DateTimeCreator {
 		return specified;
 	}
 	
-	public static int getIntFromDay(String day){
+	private static int getIntFromDay(String day){
 		int dayInt = 0;
 		if(day.equals("monday") || day.equals("mon")){
 			dayInt = 1;
@@ -312,7 +318,7 @@ public class DateTimeCreator {
 		return dayInt;
 	}
 
-	public static long differenceInDays(String day, LocalDateTime current){
+	private static long differenceInDays(String day, LocalDateTime current){
 		DayOfWeek currentDay = current.getDayOfWeek();
 		int currentDayInt = currentDay.getValue();
 		int difference = 0;
@@ -360,7 +366,7 @@ public class DateTimeCreator {
 		return temp;
 	}
 
-	public static int getIntFromMonth(String string){
+	private static int getIntFromMonth(String string){
 		if(string.equals("january") || string.equals("jan")){
 			return 1;
 		}else if(string.equals("february") || string.equals("feb")){

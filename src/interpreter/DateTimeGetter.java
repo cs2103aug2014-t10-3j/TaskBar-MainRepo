@@ -1,3 +1,8 @@
+//@author A0115718E
+/**
+ * This class returns the suitable LocalDateTime objects to Interpreter according to the task type;
+ */
+
 package interpreter;
 
 import java.time.DateTimeException;
@@ -7,8 +12,13 @@ import java.util.regex.Pattern;
 
 public class DateTimeGetter {
 
+	/**
+	 * 
+	 * @param userInput
+	 * @return start time of an event
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime getStartDateTime(String userInput) throws DateTimeException{
-		//return start time from user input
 		String startDateTime = null;
 		startDateTime = userInput.substring(userInput.lastIndexOf(" from ")+6, userInput.lastIndexOf(" to "));
 		LocalDateTime startTime = DateTimeCreator.getDateTime(startDateTime);
@@ -20,8 +30,13 @@ public class DateTimeGetter {
 		return startTime;
 	}
 
+	/**
+	 * 
+	 * @param userInput
+	 * @return end time of an event
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime getEndDateTime(String userInput) throws DateTimeException{
-		//return end time from user input
 		String endDateTime = null;
 		endDateTime = userInput.substring(userInput.lastIndexOf(" to ")+4, userInput.length());
 		LocalDateTime endTime = DateTimeCreator.getDateTime(endDateTime);
@@ -36,6 +51,12 @@ public class DateTimeGetter {
 		return endTime;
 	}
 	
+	/**
+	 * 
+	 * @param userInput
+	 * @return a LocalDateTime object that has an event date separated from time e.g "on sunday from 2pm to 4pm";
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime getEventDate(String userInput) throws DateTimeException{
 		String date = null;
 		Pattern pattern = Pattern.compile("on(\\s.*?\\s)from\\s");
@@ -47,6 +68,12 @@ public class DateTimeGetter {
 		return eventDate;
 	}
 
+	/**
+	 * 
+	 * @param userInput
+	 * @return a LocalDateTime object
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime getScheduledDateTime(String userInput) throws DateTimeException{
 		//return scheduled time from user input
 		String scheduledDateTime = null;
@@ -55,6 +82,12 @@ public class DateTimeGetter {
 		return scheduledTime;
 	}
 
+	/**
+	 * 
+	 * @param userInput
+	 * @return return a LocalDateTime object
+	 * @throws DateTimeException
+	 */
 	public static LocalDateTime getNormalDateTime(String userInput) throws DateTimeException{
 		//return normal time from user input
 		String normalDateTime = null;
