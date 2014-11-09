@@ -26,6 +26,7 @@ import commands.Update;
 import commands.Show.ShowCommandType;
 import storage.Storage;
 import util.DisplayData;
+import util.Logging;
 import util.Task;
 
 public class Interpreter {
@@ -40,11 +41,13 @@ public class Interpreter {
 			LocalDateTime normalTime = DateTimeGetter
 					.getNormalDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, normalTime);
+			Logging.getInstance().info("Scheduled task is successfuly identified and created.");
 			return task;
 		} else if (typeOfTask == "scheduled task") {
 			LocalDateTime scheduledTime = DateTimeGetter
 					.getScheduledDateTime(userInputOnly.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, scheduledTime);
+			Logging.getInstance().info("Scheduled task is successfuly identified and created.");
 			return task;
 		} else if (typeOfTask == "event") {
 			LocalDateTime startTime = DateTimeGetter
@@ -53,9 +56,11 @@ public class Interpreter {
 					.toLowerCase());
 			Task task = new Task(commandDescription, commandTag, startTime,
 					endTime);
+			Logging.getInstance().info("Event task is successfuly identified and created.");
 			return task;
 		} else if (typeOfTask == "floating") {
 			Task task = new Task(commandDescription, commandTag);
+			Logging.getInstance().info("Floating task is successfuly identified and created.");
 			return task;
 		}
 		return null;
