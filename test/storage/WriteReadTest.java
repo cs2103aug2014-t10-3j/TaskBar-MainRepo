@@ -13,7 +13,13 @@ import storage.Storage;
 import util.Task;
 
 public class WriteReadTest {
-	// Test XML writing and reading.
+	/**
+	 * Methods tested:
+	 * readFile()
+	 * writeFile()
+	 * addTask(Task)
+	 * deleteTask(Task)
+	 */
 	@Test
 	public void testWrite() throws IOException {
 

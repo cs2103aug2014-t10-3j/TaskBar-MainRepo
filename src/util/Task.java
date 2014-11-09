@@ -112,10 +112,8 @@ public class Task {
 
 	public String toString() {
 		String thisString = "";
-		thisString += description;
-		thisString += "\n";
-		thisString += ("" + labels.size());
-		thisString += "\n";
+		thisString += description + "\n";
+		thisString += ("" + labels.size() + "\n");
 		for (int i = 0; i < labels.size(); i++) {
 			thisString += labels.get(i);
 			thisString += "\n";

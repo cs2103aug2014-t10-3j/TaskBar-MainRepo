@@ -19,7 +19,10 @@ import org.jdom2.output.XMLOutputter;
 import util.Task;
 
 public class WriteFileJDOM {
-
+	/**
+	 * Method writes file into XML file.
+	 * 
+	 */
 	protected static void writeFileUsingJDOM(ArrayList<Task> taskList,
 			String fileName) throws IOException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

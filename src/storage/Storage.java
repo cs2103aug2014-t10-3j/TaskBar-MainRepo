@@ -56,7 +56,10 @@ public class Storage {
 		return storage;
 	}
 
-
+	/**
+	 * Method returns all tasks that are not done
+	 * 
+	 */
 	public ArrayList<Task> getAllNotDoneTasks() {
 		ArrayList<Task> result = new ArrayList<Task>();
 		for (Task t : allTasks) {
@@ -67,7 +70,11 @@ public class Storage {
 		sortByTime(result);
 		return result;
 	}
-
+	
+	/**
+	 * Method returns all tasks that are done
+	 * 
+	 */
 	public ArrayList<Task> getAllDoneTasks() {
 		ArrayList<Task> result = new ArrayList<Task>();
 		for (Task t : allTasks) {
@@ -79,6 +86,10 @@ public class Storage {
 		return result;
 	}
 
+	/**
+	 * Method returns all tasks with the keyword
+	 * 
+	 */
 	public ArrayList<Task> getTaskByKeyword(String keyWord) {
 
 		ArrayList<Task> searchedTasks = new ArrayList<Task>();
@@ -104,7 +115,11 @@ public class Storage {
 		sortByTime(searchedTasks);
 		return searchedTasks;
 	}
-
+	
+	/**
+	 * Method returns all tasks that contains the label
+	 * 
+	 */
 	public ArrayList<Task> getTaskByLabel(String parameter) {
 		ArrayList<Task> result = new ArrayList<Task>();
 		outer: for (Task t : allTasks) {
@@ -123,7 +138,11 @@ public class Storage {
 		sortByTime(result);
 		return result;
 	}
-
+	
+	/**
+	 * Method returns all tasks that are on the given date
+	 * 
+	 */
 	public ArrayList<Task> getTasksOnADate(LocalDate referenceDate) {
 		ArrayList<Task> result = new ArrayList<Task>();
 
@@ -146,6 +165,11 @@ public class Storage {
 		return result;
 	}
 	
+	/**
+	 * Method returns all tasks that are does not have timeStamps
+	 * timeStamp1 = null, timeStamp2 = null
+	 * 
+	 */
 	public ArrayList<Task> getFloatingTasks() {
 		ArrayList<Task> result = new ArrayList<Task>();
 		for (Task t : allTasks) {
@@ -156,26 +180,31 @@ public class Storage {
 		sortByTime(result);
 		return result;
 	}
-
+	
+	/**
+	 * Method add Task to arrayList
+	 * 
+	 */
 	public void addTask(Task taskFromLogic) {
 		try {
 			assert !allTasks.contains(taskFromLogic);
 			allTasks.add(taskFromLogic);
 			writeFile();
-			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
 			Logging.getInstance().warning("Writing of File UnSuccessful");
 		}
 	}
-
+	/**
+	 * Method delete given Task from arrayList
+	 * 
+	 */
 	public void deleteTask(Task task) {
 		try {
 			assert allTasks.contains(task);
 			allTasks.remove(task);
 			writeFile();
-			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
-			Logging.getInstance().warning("Writing of File UnSuccessful");;
+			Logging.getInstance().warning("Writing of File UnSuccessful when deleting");;
 		}
 	}
 	
@@ -188,39 +217,45 @@ public class Storage {
 			assert allTasks.contains(task);
 			allTasks.remove(task);
 			writeFile();
-			Logging.getInstance().info("Writing of File Successful");
 			return task;
 		} catch (Exception e) {
-			Logging.getInstance().warning("Writing of File UnSuccessful");;
+			Logging.getInstance().warning("Writing of File UnSuccessful when deleting");;
 		}
 		return null;
 	}
-
 	
+	/**
+	 * Method marks a Task as done
+	 * 
+	 */
 	public void completeTask(Task task) {
 		try {
 			assert allTasks.contains(task);
 			task.setDone(true);
 			writeFile();
-			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
-			Logging.getInstance().warning("Writing of File UnSuccessful");;
+			Logging.getInstance().warning("Writing of File UnSuccessful when completing");;
 		}
 	}
-
+	
+	/**
+	 * Method marks a task as undone
+	 * 
+	 */
 	public void uncompleteTask(Task task) {
 		try {
 			assert allTasks.contains(task);
 			task.setDone(false);
 			writeFile();
-			Logging.getInstance().info("Writing of File Successful");
 		} catch (Exception e) {
-			Logging.getInstance().warning("Writing of File UnSuccessful");;
+			Logging.getInstance().warning("Writing of File UnSuccessful when uncompleting");;
 		}
 	}
 
-
-
+	/**
+	 * Method sorts the arraylist by time using bubblesort
+	 * 
+	 */
 	public void sortByTime(ArrayList<Task> list) {
 		boolean swapped = true;
 		int j = 0;
@@ -249,12 +284,20 @@ public class Storage {
 		}
 	}
 
-
+	
+	/**
+	 * Method writes ArrayList of Tasks into XML file: ETtasks.xml
+	 * 
+	 */
 	public void writeFile() throws IOException {
 		String fileName = "ETtasks.xml";
 		WriteFileJDOM.writeFileUsingJDOM(allTasks, fileName);
 	}
-
+	
+	/**
+	 * Method reads XML file: ETtasks.xml into an ArrayList of task
+	 * 
+	 */
 	public void readFile() {
 		final String fileName = "ETtasks.xml";
 		org.jdom2.Document jdomDoc;
