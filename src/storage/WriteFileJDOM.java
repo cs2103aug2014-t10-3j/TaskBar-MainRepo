@@ -1,7 +1,6 @@
+//@author A0111499B
 /**
 * ReadFileJDOM writes the arraylist of tasks to a XML file: ETtasks.xml 
-* @author A0111499B
-* Zi Jie
 *
 */
 package storage;
