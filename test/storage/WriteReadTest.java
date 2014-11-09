@@ -1,3 +1,4 @@
+//@author A0111499B
 package storage;
 
 import static org.junit.Assert.*;
@@ -41,11 +42,13 @@ public class WriteReadTest {
 		task1.setStartTime(dateTime1);
 		task1.setEndTime(dateTime2);
 		storage.addTask(task1);
+		
+		// Floating Task
 		Task task2 = new Task();
 		task2.setDescription("testing2");
 		storage.addTask(task2);
-		// by here, task should be added in correctly
-		// add task to the XML file.
+		
+		// Tasks should be added in correctly into the XML file
 	}
 
 	@Test
@@ -73,7 +76,7 @@ public class WriteReadTest {
 		// Task2
 		Task testtask2 = new Task();
 		testtask2.setDescription("testing2");
-
+		
 		// Deletes the task that we added in for testing
 		// If passes test, means it is written in and read out correctly such
 		// that it is able to detect and delete
