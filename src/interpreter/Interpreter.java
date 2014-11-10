@@ -116,7 +116,7 @@ public class Interpreter {
 	 * @return a string of the time
 	 * LocalDateTime is converted back to string of a specific format;
 	 */
-	public static String getTimeExpression(LocalDateTime time) {
+	private static String getTimeExpression(LocalDateTime time) {
 		DateTimeFormatter formatter = DateTimeFormatter
 				.ofPattern("dd/MM/yyyy HHmm");
 		DateTimeFormatter formatterWithoutTime = DateTimeFormatter
