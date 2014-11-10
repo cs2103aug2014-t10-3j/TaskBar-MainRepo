@@ -1,6 +1,7 @@
 package interpreter;
 
 import static org.junit.Assert.*;
+import logic.interpreter.Interpreter;
 
 import org.junit.Test;
 

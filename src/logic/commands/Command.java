@@ -4,7 +4,7 @@
  * used in ET. Besides the abstract execute() method, it provides a few 
  * variations of setDisplayData() for more efficient configuring of DisplayData.
  */
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 

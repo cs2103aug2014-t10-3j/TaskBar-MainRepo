@@ -4,7 +4,7 @@
  * It also provides a getDescriptions() utility method to read descriptions of 
  * multiple Tasks at once. 
  */
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 

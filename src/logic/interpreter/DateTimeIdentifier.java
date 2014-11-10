@@ -2,7 +2,7 @@
 /**
  * This class identifies the different date and time format by returning boolean results.
  */
-package interpreter;
+package logic.interpreter;
 
 public class DateTimeIdentifier {
 	

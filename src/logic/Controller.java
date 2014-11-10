@@ -10,11 +10,11 @@ package logic;
 import java.io.IOException;
 import java.time.DateTimeException;
 
-import interpreter.Interpreter;
 import javafx.scene.input.KeyEvent;
-import commands.Command;
-import commands.UndoableCommand;
-import commands.Update;
+import logic.commands.Command;
+import logic.commands.UndoableCommand;
+import logic.commands.Update;
+import logic.interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
 import util.Logging;

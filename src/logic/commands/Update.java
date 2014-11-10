@@ -1,7 +1,7 @@
 //@author A0116756Y
-package commands;
+package logic.commands;
 
-import interpreter.Interpreter;
+import logic.interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
 import util.Logging;

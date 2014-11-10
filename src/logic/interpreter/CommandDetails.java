@@ -7,7 +7,7 @@
  * Tags should come after "#";
  * 
  */
-package interpreter;
+package logic.interpreter;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;

@@ -1,5 +1,5 @@
 //@author A0116756Y
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 

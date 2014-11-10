@@ -2,7 +2,7 @@
 /**
  * This class provides methods to create LocalDateTime objects for DateTimeGetter class to use;
  */
-package interpreter;
+package logic.interpreter;
 
 
 import java.time.DateTimeException;

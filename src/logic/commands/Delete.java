@@ -1,5 +1,5 @@
 //@author A0116756Y
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 
@@ -8,10 +8,10 @@ import util.DisplayData;
 import util.Logging;
 import util.Task;
 
-public class Complete extends UndoableCommand {
+public class Delete extends UndoableCommand {
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	
-	public Complete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
+	public Delete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
 		super(displayData, storage);
 		this.tasks = tasks;
 	}
@@ -21,62 +21,62 @@ public class Complete extends UndoableCommand {
 		try {
 			assert tasks.size() > 0;
 			for (Task task: tasks) {
-				storage.completeTask(task);
+				storage.deleteTask(task);
 			}
-
+			
 			if (tasks.size()==1) {
-				setDisplayData("Task " + getDescriptions(tasks) + " marked as complete",
+				setDisplayData("Task " + getDescriptions(tasks) + " deleted successfully",
 						storage.getAllNotDoneTasks());
 			} else {
-				setDisplayData("Tasks " + getDescriptions(tasks) + " marked as complete",
+				setDisplayData("Tasks " + getDescriptions(tasks) + " deleted successfully",
 						storage.getAllNotDoneTasks());
 			}
 		} catch (IndexOutOfBoundsException e) {
 			int listSize = displayData.getListOfTasks().size();
-			if (listSize == 0) {
+			if (listSize==0) {
 				setDisplayData("There is no task in the list");
-			} else if (listSize == 1) {
+			} else if (listSize==1) {
 				setDisplayData("There is only 1 task in the list");
 			} else {
-				setDisplayData("There are only " + listSize
-						+ " tasks in the list");
+				setDisplayData("There are only " + listSize + " tasks in the list");
 			}
 			return false;
 		} catch (Exception e) {
-			setDisplayData("Invalid complete command. format: complete <number>");
+			setDisplayData("Invalid delete command. format: delete <number>.");
 			return false;
 		}
-		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " marked as complete");
+		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " deleted");
 		return true;
 	}
-
+	
 	@Override
 	public void undo() {
 		for (Task task:tasks) {
-			storage.uncompleteTask(task);
+			storage.addTask(task);			
 		}
 		if (tasks.size()==1) {
-			setDisplayData("Undo: Complete task "+ getDescriptions(tasks),
+			setDisplayData("Undo: Delete task "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		} else {
-			setDisplayData("Undo: Complete tasks "+ getDescriptions(tasks),
+			setDisplayData("Undo: Delete tasks "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
-		Logging.getInstance().info("Undone completing tasks " + getDescriptions(tasks));
+		Logging.getInstance().info("Undone deleting asks " + getDescriptions(tasks));
 	}
 
 	@Override
 	public void redo() {
 		for (Task task:tasks) {
-			storage.completeTask(task);
+			storage.deleteTask(task);
 		}
+		
 		if (tasks.size()==1) {
-			setDisplayData("Redo: Complete task "+ getDescriptions(tasks),
+			setDisplayData("Redo: Delete task "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		} else {
-			setDisplayData("Redo: Complete tasks "+ getDescriptions(tasks),
+			setDisplayData("Redo: Delete tasks "+ getDescriptions(tasks),
 					storage.getAllNotDoneTasks());
 		}
-		Logging.getInstance().info("Redone completing tasks " + getDescriptions(tasks));
+		Logging.getInstance().info("Redone deleting asks " + getDescriptions(tasks));
 	}
 }

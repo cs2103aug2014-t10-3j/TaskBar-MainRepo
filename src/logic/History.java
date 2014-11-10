@@ -7,9 +7,9 @@ package logic;
 
 import java.util.Stack;
 
-import commands.Add;
-import commands.UndoableCommand;
-import commands.Update;
+import logic.commands.Add;
+import logic.commands.UndoableCommand;
+import logic.commands.Update;
 
 public class History {
 	private static History history;

@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import logic.interpreter.CommandDetails;
+
 public class CommandDetailsTest {
 	
 	String input = "add extra lesson on monday 8am #mondaybluz #school";

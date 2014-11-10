@@ -3,7 +3,7 @@
  * This class handles the input from user and translate the raw input into a task object.
  *
  */
-package interpreter;
+package logic.interpreter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,16 +14,16 @@ import java.util.ArrayList;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import logic.History;
-import commands.Add;
-import commands.Command;
-import commands.Complete;
-import commands.Delete;
-import commands.Redo;
-import commands.Show;
-import commands.Uncomplete;
-import commands.Undo;
-import commands.Update;
-import commands.Show.ShowCommandType;
+import logic.commands.Add;
+import logic.commands.Command;
+import logic.commands.Complete;
+import logic.commands.Delete;
+import logic.commands.Redo;
+import logic.commands.Show;
+import logic.commands.Uncomplete;
+import logic.commands.Undo;
+import logic.commands.Update;
+import logic.commands.Show.ShowCommandType;
 import storage.Storage;
 import util.DisplayData;
 import util.Logging;

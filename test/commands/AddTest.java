@@ -1,7 +1,7 @@
 package commands;
 import static org.junit.Assert.*;
+import logic.commands.Add;
 
-import commands.Add;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
