@@ -1,0 +1,805 @@
+//@author: a0116760j
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\ColorCodedRow.java
+	 */
+
+package gui;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import util.Task;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.util.Callback;
+
+/**
+ * A customized <code>RowFactory</code> class that sets up
+ * the color coding system for the <code>TableView</code>
+ * according to urgency of tasks.  <p>
+ * The styles of the color coded row is described in the CSS
+ * stylesheet file.
+ * 
+ */
+public class ColorCodedRow<T> implements Callback<TableView<T>, TableRow<T>> {
+
+	@Override
+	public TableRow<T> call(TableView<T> tv) {
+		TableRow<T> row = new TableRow<T>() {
+			@Override
+			protected void updateItem(T task, boolean empty) {
+				super.updateItem(task, empty);
+				getStyleClass().remove("pastDeadline");
+				getStyleClass().remove("nearDeadline");
+				getStyleClass().remove("done");
+				TableData currentTask = empty ? null : (TableData) getItem();
+				LocalDate today = LocalDateTime.now().toLocalDate();
+				if (currentTask!=null) {
+					Task taskData = ((TableData)task).getTask();
+					if (taskData.isDone()) {
+						getStyleClass().add("done");
+					} else {
+						if (taskData.isDeadLineTask()) {
+							if (!taskData.getDeadline().toLocalDate().isAfter(today)) {
+								getStyleClass().add("pastDeadline");
+							} else if (!taskData.getDeadline().toLocalDate().isAfter(today.plusDays(3))) {
+								getStyleClass().add("nearDeadline");
+							}
+						}
+						if (taskData.isEvent()) {
+							if (taskData.getEndTime().toLocalDate().isBefore(today)) {
+								getStyleClass().add("pastDeadline");
+							}
+						}
+					}
+				}
+			}
+		};
+		return row;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\ColorCodedRow.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIController.java
+	 */
+
+package gui;
+
+import util.*;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.ResourceBundle;
+
+import javafx.animation.SequentialTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.TextFlow;
+import logic.Controller;
+
+/**
+ * The controller class for the entire GUI. The class is in charge of
+ * transferring the user input to the main logic of the programme and
+ * displays the feedback to users
+ * 
+ */
+public class GUIController implements Initializable{
+	@FXML private AnchorPane outerPane;
+	@FXML private AnchorPane pane;
+	
+	@FXML private Label day;
+	@FXML private Label clock;
+	@FXML private Label closeBtn;
+	
+	@FXML private TextField textbox;
+	
+	@FXML private TableView<TableData> table;
+	@FXML private TableColumn<TableData, String> noCol;
+	@FXML private TableColumn<TableData, String> descCol;
+	@FXML private TableColumn<TableData, String> tagCol;
+	@FXML private TableColumn<TableData, String> dateCol;
+	@FXML private TableColumn<TableData, String> timeCol;
+	
+	@FXML private Label status;
+	
+	@FXML private Label helpBtn;
+	@FXML private TextFlow helpText;
+	
+	private DisplayData data = new DisplayData();
+	private Controller ctrl = new Controller();
+	
+	private ObservableList<TableData> list = FXCollections.observableArrayList();
+	private SequentialTransition seqTrans ;
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		
+		GUIUtility.setDraggable(pane, true);
+		
+		GUIUtility.setCloseBtn(closeBtn);
+		GUIUtility.setClockAndDate(clock, day);
+		GUIUtility.setHelpBtn(helpBtn, helpText, "Show help", "Hide help");
+		
+		status.setOpacity(0);
+		seqTrans = GUIUtility.defineTransition(status,4,1);
+		
+		configureTable();
+		
+		helpText.setVisible(false);
+		
+		GUIUtility.setFocus(textbox);
+		
+		//
+		textbox.setOnAction((event) -> {
+			Logging.getInstance().info("Command entered \"" + textbox.getText() + "\"");
+			data = ctrl.handleEnter(textbox.getText());
+			showToUser(data);		
+		});
+		
+		textbox.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (isValidHotkey(event)) {
+					if (event.getCode()==KeyCode.H) {
+						Logging.getInstance().info("Ctrl-H pressed");
+						GUIUtility.toggleVisibility(helpBtn, helpText, "Show help", "Hide help");
+					}
+					if (event.getCode()==KeyCode.Z || event.getCode()==KeyCode.Y) {
+						Logging.getInstance().info("Ctrl-" + event.getCode() + " pressed");
+						data = ctrl.handleHotkey(event);
+						showToUser(data);
+					}
+				}
+			}
+		});
+		
+	}
+	
+	/**
+	 * Sets up the <code>TableView</code> for displaying the tasks list.
+	 * This includes setting up the data and the format of display, implementing
+	 * color coding and some other operations
+	 * 
+	 */
+	private void configureTable() {
+		try {
+			table.setItems(list);
+			data = ctrl.loadAllTasks();
+						
+			showToUser(data);
+			table.setRowFactory(new ColorCodedRow<>());
+			
+			GUIUtility.setClickable(table, false);
+			
+			noCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("order"));
+			descCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("desc"));
+			descCol.setComparator(new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					return o1.compareToIgnoreCase(o2);
+				}
+			});
+			tagCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("tag"));
+			dateCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("date"));
+			dateCol.setComparator(new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					if (o1=="") {
+						if (o2=="") {
+							return 0;
+						} else {
+							return 1;
+						}						
+					} else {
+						if (o2=="") {
+							return -1;
+						} else {
+							DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yy");
+							LocalDate d1 = LocalDate.parse(o1.substring(0, 8), dateFmt);
+							LocalDate d2 = LocalDate.parse(o2.substring(0, 8), dateFmt);
+							return d1.compareTo(d2);
+						}
+					}
+					
+				}
+			});
+			timeCol.setCellValueFactory(new PropertyValueFactory<TableData, String>("time"));
+			table.setPlaceholder(new Label("There is nothing to show"));
+			
+			GUIUtility.setKeyboardScrolling(table, textbox, data);
+			Logging.getInstance().info("Table view successfully configured");
+		} catch (Exception e) {
+			Logging.getInstance().warning("Table view configuration fails");
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Produces the visible feedback to the users using the <code>DisplayData</code>
+	 * object returned by the logic
+	 * 
+	 * @param data an object containing information about how to show feedback to user
+	 */
+	private void showToUser(DisplayData data) {
+		assert data!=null;
+		
+		if (data.needToUpdate()) {
+			list.clear();
+			
+			if (data.getListOfTasks()!=null) {
+				for (Task t: data.getListOfTasks()) {
+					TableData newTask = new TableData(t,list.size()+1);
+					list.add(newTask);
+				}
+			}
+		}
+		if (data.needToUpdateInputBox()) {
+			textbox.setText(data.getInputText());
+		}
+		status.setText(data.getPrompt());
+		status.setOpacity(1);
+		fadeStatus();
+	}
+	
+	/**
+	 * Determines if a key-pressed event is a supported
+	 * hotkey combination in the program
+	 * 
+	 * @param event <code>KeyEvent</code> sent from the input box
+	 * @return <code>true</code> if hotkey is supported
+	 */
+	private boolean isValidHotkey(KeyEvent event) {
+		return (event.isControlDown() &&
+				(event.getCode()==KeyCode.H || event.getCode()==KeyCode.Z ||event.getCode()==KeyCode.Y)); 
+	}
+	
+	private void fadeStatus() {		
+		seqTrans.stop();
+		seqTrans.play();
+	}
+	
+	
+	
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIController.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIUtility.java
+	 */
+
+package gui;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import util.DisplayData;
+import util.Logging;
+
+import com.sun.javafx.scene.control.skin.TableViewSkin;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
+
+/**
+ * A library class that provides static methods used for
+ * setting up the GUI in the primary stage
+ *
+ */
+public class GUIUtility {
+	/**
+	 * Sets up the node for dragging using the mouse. <p>
+	 * This method is useful for dragging an undecorated stage
+	 * 
+	 * @param node the node under effect
+	 * @param draggable <code>node</code> can be dragged if <code>draggable</code> is <code>true</code>
+	 */
+	public static void setDraggable(Node node, boolean draggable) {		
+		if (draggable) {
+			SimpleDoubleProperty x = new SimpleDoubleProperty();
+			SimpleDoubleProperty y = new SimpleDoubleProperty();
+			node.setOnMousePressed((event) -> {
+		        double windowX = node.getScene().getWindow().getX() - event.getScreenX();
+		        double windowY = node.getScene().getWindow().getY() - event.getScreenY();
+		        x.set(windowX);
+		        y.set(windowY);
+		    });
+
+		    node.setOnMouseDragged((event) -> {
+		        node.getScene().getWindow().setX(event.getScreenX() + x.get());
+		        node.getScene().getWindow().setY(event.getScreenY() + y.get());
+		    });
+		}
+	}
+	
+	/**
+	 * Sets up a <code>Label</code> objects to be used as the Close button
+	 * 
+	 * @param closeBtn the <code>Label</code> object to be used
+	 */
+	public static void setCloseBtn(Label closeBtn) {
+		closeBtn.setOnMouseClicked((event) -> {
+			Logging.getInstance().info("Program closed");
+			Platform.exit();	
+		});
+	}
+	
+
+	/**
+	 * Sets up two <code>Label</code> objects to be used as the Date and Time display
+	 * 
+	 * @param clock the <code>Label</code> object used for displaying time
+	 * @param day the <code>Label</code> object used for displaying date
+	 */
+	public static void setClockAndDate(Label clock, Label day) {
+		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("  EEE, dd MMM yy");
+		DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("  HH:mm:ss");
+		Timeline tline = new Timeline(new KeyFrame(Duration.seconds(0),
+				new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						LocalDateTime now = LocalDateTime.now();
+						clock.setText(now.format(timeFmt));
+						day.setText(now.format(dateFmt));				
+					}
+				}
+			), new KeyFrame(Duration.seconds(1))
+		);
+		tline.setCycleCount(Animation.INDEFINITE);
+		tline.play();
+	}
+	
+	
+	/**
+	 * Sets up a <code>Label</code> object to be used as the visibility
+	 * switch of another node. The text of the label changes accordingly
+	 * 
+	 * @param button the <code>Label</code> object used as the button
+	 * @param target the node under control
+	 * @param showText prompt text on the <code>Label</code> for show
+	 * @param hideText prompt text on the <code>Label</code> for hide
+	 */
+	public static void setHelpBtn(Label button, Node target, String showText, String hideText) {
+		button.setOnMouseClicked((event) -> {
+			toggleVisibility(button, target, showText, hideText);
+		});
+	}
+	
+	/**
+	 * Sets the cursor focus to be on the specified <code>Node</code>
+	 * 
+	 * @param node the <code>Node</code> to be focused on
+	 */
+	public static void setFocus(Node node) {
+		Platform.runLater(new Runnable() {			
+			@Override
+			public void run() {
+				node.requestFocus();
+			}
+		});
+	}
+	
+	/**
+	 * Determines if the specified <code>node</code> can be clicked
+	 * using the mouse
+	 * 
+	 * @param node the <code>Node</code> under control
+	 * @param clickable if <code>false</code>, makes the node invisible to mouse clicks
+	 */
+	public static void setClickable(Node node, boolean clickable) {
+		if (!clickable) {
+			node.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent ev) {
+					ev.consume();
+				}
+			});
+		}
+	}
+	
+	/**
+	 * Sets up a remote scrolling system for a <code>TableView</code>\
+	 * The <code>table</code> can be scrolled using up/down arrow keys while
+	 * focus is on the <code>source</code>
+	 * 
+	 * @param table the <code>TableView</code> under control
+	 * @param source the controller source of the table
+	 * @param data contains information of the data being displayed by the table 
+	 */
+	
+	@SuppressWarnings("rawtypes")
+	public static void setKeyboardScrolling(TableView table, Node source, DisplayData data) {
+		SimpleIntegerProperty checkFirstVisible = new SimpleIntegerProperty(-1);
+		
+		source.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void handle(KeyEvent event) {
+				ObservableList<Node> nodes = ((TableViewSkin)table.getSkin()).getChildren();
+				if (data.listOfTasksIsEmpty()) {
+					return;
+				}
+				VirtualFlow flow = (VirtualFlow) nodes.get(1); 
+				int firstVisible = flow.getFirstVisibleCell().getIndex();
+				if (event.getCode()==KeyCode.UP) {
+					table.scrollTo(firstVisible-1);
+				} else if (event.getCode()==KeyCode.DOWN) {
+					if (firstVisible!=checkFirstVisible.get())
+						table.scrollTo(firstVisible+1);
+					else
+						table.scrollTo(firstVisible+2);
+					checkFirstVisible.set(firstVisible);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Defines a custom fade transition where a node is shown for
+	 * a period of time before being faded to transparency
+	 * 
+	 * @param node		the node under control
+	 * @param showTime	number of seconds for which the node is shown 
+	 * @param fadeTime	number of seconds for which the fading lasts 
+	 * @return the desired transition as a <code>SequentialTransition</code>
+	 */
+	public static SequentialTransition defineTransition(Node node, double showTime, double fadeTime) {
+		FadeTransition ft1 = new FadeTransition(Duration.seconds(showTime), node);
+		ft1.setToValue(1);
+		ft1.setFromValue(1);
+		FadeTransition ft2 = new FadeTransition(Duration.seconds(fadeTime),node);
+		ft2.setToValue(0);
+		ft2.setFromValue(1);
+		SequentialTransition seqTrans = new SequentialTransition(ft1, ft2);
+		return seqTrans;
+	}
+	
+	/**
+	 * Toggles the visibility of the <code>target</code> while
+	 * changing the text of the <code>button</code> accordingly
+	 * 
+	 * @param button	the controller button
+	 * @param target	the node under control
+	 * @param showText prompt text on the <code>button</code> for show
+	 * @param hideText prompt text on the <code>button</code> for hide
+	 */
+	public static void toggleVisibility(Label button, Node target, String showText, String hideText) {
+		if (!target.visibleProperty().get()) {
+			target.setVisible(true);
+			button.setText(hideText);
+		} else {
+			target.setVisible(false);
+			button.setText(showText);
+		}
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIUtility.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\Main.java
+	 */
+
+
+
+package gui;
+	
+import util.Logging;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
+
+/**
+ * Main serves as the starting point of the program, which
+ * generates the stage for the GUI and loads all necessary
+ * resources, including FXML layout, CSS stylesheets, icon
+ * images and font files.
+ *
+ */
+public class Main extends Application {
+	/**
+	 * The main entry point of the JavaFX application
+	 * 
+	 */
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			primaryStage.initStyle(StageStyle.TRANSPARENT);
+			AnchorPane root = new AnchorPane();
+			root = FXMLLoader.load(getClass().getResource("Layout.fxml"));
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("appearance.css").toExternalForm());
+			scene.setFill(null);
+			primaryStage.setTitle("ET - Task scheduling made easy!");
+			primaryStage.getIcons().add(new Image ("resources/icon.png"));
+			primaryStage.setScene(scene);
+			primaryStage.show();
+			Logging.getInstance().info("Primary stage successfully constructed");
+		} catch(Exception e) {
+			Logging.getInstance().warning("Failure to construct primary stage");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * All initial setup can be done in this method,
+	 * before the stage is constructed 
+	 * 
+	 */
+	@Override
+	public void init() {
+		try {
+			Font.loadFont(getClass().getResource("../resources/segoeuil.ttf").toExternalForm(), 12);
+			Font.loadFont(getClass().getResource("../resources/seguisb.ttf").toExternalForm(), 12);
+			Logging.getInstance().info("Fonts loaded to system");
+		} catch (NullPointerException e) {
+			Logging.getInstance().warning("Failure to load Fonts resources");
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args) {
+		launch(args);
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\Main.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\TableData.java
+	 */
+
+package gui;
+
+import util.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+
+
+
+
+import javafx.beans.property.SimpleStringProperty;
+/**
+ * A specialized data structure representing a <code>Task</code> which can be
+ * read by a <code>TableView</code>, have its properties extracted and displayed
+ * in a <code>TableRow</code> <p>
+ * The accessors of each property must follow the same format <code>get</code> +
+ * <code>property's name<code>
+ *
+ */
+public class TableData {
+	private SimpleStringProperty order;
+	private SimpleStringProperty desc;
+	private SimpleStringProperty tag;
+	private SimpleStringProperty date;
+	private SimpleStringProperty time;
+	private Task task;
+	
+	DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("EEE dd.MM.yy");	//e.g. Mon, 12.07.14 
+	DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+	
+	public TableData(Task task, int ord) {
+		String newDesc = task.getDescription();
+		ArrayList<String> newTag = task.getLabels();
+		LocalDateTime time1 = task.getStartTime();
+		LocalDateTime time2 = task.getEndTime();
+		
+		order = new SimpleStringProperty(Integer.toString(ord));
+		desc = new SimpleStringProperty(newDesc);
+		tag = new SimpleStringProperty(arrayToString(newTag));
+		date = new SimpleStringProperty(processDate(time1, time2));
+		time = new SimpleStringProperty(processTime(time1, time2));
+		this.task = task; 
+	}
+	/**
+	 * Gets the <code>order</code> property of this <code>Data</code>
+	 * 
+	 */
+	public String getOrder() {
+		return order.get();
+	}
+	
+	/**
+	 * Gets the <code>desc</code> property of this <code>Data</code>
+	 * 
+	 */
+	public String getDesc() {
+		return desc.get();
+	}
+	
+	/**
+	 * Gets the <code>tag</code> property of this <code>Data</code>
+	 * 
+	 */
+	public String getTag() {
+		return tag.get();
+	}
+	
+	/**
+	 * Gets the <code>date</code> property of this <code>Data</code>
+	 * 
+	 */
+	public String getDate() {
+		return date.get();
+	}
+	
+	/**
+	 * Gets the <code>time</code> property of this <code>Data</code>
+	 * 
+	 */
+	public String getTime() {
+		return time.get();
+	}
+	
+
+	public Task getTask() {
+		return task;
+	}
+	
+	public void setOrder(int ord) {
+		order.set(Integer.toString(ord));
+	}
+	
+	public void setDesc(String newDesc) {
+		desc.set(newDesc);
+	}
+	
+	public void setTag(ArrayList<String> labels) {
+		tag.set(arrayToString(labels));
+	}
+	
+	public void setDate(LocalDateTime t1, LocalDateTime t2) {
+		date.set(processDate(t1, t2));
+	}
+	
+	public void setTime(LocalDateTime t1, LocalDateTime t2) {
+		time.set(processTime(t1, t2));
+	}
+	
+	private String arrayToString(ArrayList<String> arr) {
+		String str="";
+		if (arr.size()!=0) {
+			for (String s:arr) {
+				str += s + ", ";
+			}
+			str = str.substring(0, str.length()-2);
+		}
+		return str;
+	}
+	
+	/**
+	 * Return the String representation of the date components
+	 * of the two time stamps
+	 * 
+	 */
+	private String processDate(LocalDateTime t1, LocalDateTime t2) {
+		assert (t1!=null || t2==null);		
+		String str="";
+		
+		if (t1!=null) {
+			if (t2==null) {
+				str += toCustomString(t1);
+			} else {
+				if (t1.toLocalDate().isEqual(t2.toLocalDate())) {
+					str += toCustomString(t1);
+				} else {
+					str += toCustomString(t1) + " - " + toCustomString(t2);
+				}
+			}
+			
+		} 		
+		return str;
+	}
+	
+	/**
+	 * Format the <code>LocalDateTime</code> to a <code>String</code>
+	 *   
+	 */
+	private String toCustomString(LocalDateTime t) {
+		String str = "";
+		LocalDate today = LocalDateTime.now().toLocalDate();
+		if (t.toLocalDate().isEqual(today)) {
+			str = "Today";			
+		} else if (t.toLocalDate().isEqual(today.plusDays(1))) {
+			str = "Tomorrow";
+		} else {
+			str = t.format(dateFmt);
+		}
+		return str;
+	}
+	
+	/**
+	 * Return the String representation of the time components
+	 * of the two time stamps
+	 * 
+	 */
+	private String processTime(LocalDateTime t1, LocalDateTime t2) {
+		assert (t1!=null || t2==null);
+		String str = "";
+		
+		if (t1!=null) {
+			if (t2==null) {
+				if (!isZeroTime(t1)) {			//the time is not shown if it is 00:00
+					str += t1.format(timeFmt);
+				}				
+			} else {
+				if (t1.toLocalDate().isEqual(t2.toLocalDate())) {
+					str += t1.format(timeFmt) + " - " + t2.format(timeFmt);
+				}
+			}
+		}
+		
+		return str;
+	}
+	
+	private boolean isZeroTime(LocalDateTime t) {
+		return (t.getHour()==0) && (t.getMinute()==0);
+	}
+	
+
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\TableData.java
+
+
+
+
+

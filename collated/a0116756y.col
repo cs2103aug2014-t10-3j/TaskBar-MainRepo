@@ -1,0 +1,1235 @@
+//@author: a0116756y
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Add.java
+	 */
+
+package commands;
+
+import java.time.DateTimeException;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+import util.Task;
+
+public class Add extends UndoableCommand {
+	private Task task;
+	private boolean duringUpdate;
+	
+	public Add(DisplayData displayData, Storage storage, Task task, boolean updating){
+		super(displayData, storage);
+		this.task = task;
+		this.duringUpdate = updating;
+	}
+
+	
+	@Override
+	public boolean execute(){
+		try {
+			storage.addTask(task);
+			if (duringUpdate) {
+				setDisplayData("Task successfully updated!",
+						storage.getAllNotDoneTasks());
+			}else {
+				setDisplayData("Task successfully added!",
+						storage.getAllNotDoneTasks());
+			}
+		} catch (DateTimeException e) {
+			setDisplayData("Invalid date/time input. Please refer to the User Guide if in doubt.");
+			return false;
+		}
+		Logging.getInstance().info("Task \""+task.getDescription() + "\" is added.");
+		return true;
+	}
+
+	@Override
+	public void undo() {
+		if (duringUpdate) {
+			storage.deleteTask(task);
+			setDisplayData("Undo: Update task to \"" + task.getDescription() + "\"",
+					storage.getAllNotDoneTasks());
+		} else {
+			storage.deleteTask(task);
+			setDisplayData("Undo: Add task \"" + task.getDescription() + "\"",
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Undone adding task \""+task.getDescription() + "\"");
+	}
+
+	@Override
+	public void redo() {
+		storage.addTask(task);
+		setDisplayData("Redo: Add task \"" + task.getDescription() + "\"",
+				storage.getAllNotDoneTasks());
+		Logging.getInstance().info("Redone adding task \""+task.getDescription() + "\"");
+	}
+	/**
+	 * This method differentiates the Add to be either independently created,
+	 * or created following an "update" command.
+	 * Since ET currently implement update in a "delete and add-again" fashion, this method
+	 * makes the coupled undo/redo for Update & Add possible 
+	 * @return true if the Add command is created during an update; false otherwise.
+	 */
+	public boolean isDuringUpdate(){
+		return duringUpdate;
+	}
+	
+	
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Add.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Command.java
+	 */
+
+/**
+ * Abstract Class Command provides the template for all command objects
+ * used in ET. Besides the abstract execute() method, it provides a few 
+ * variations of setDisplayData() for more efficient configuring of DisplayData.
+ */
+package commands;
+
+import java.util.ArrayList;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
+
+public abstract class Command {
+	public DisplayData displayData;
+	public Storage storage;
+	
+	public Command(DisplayData displayData, Storage storage){
+		this.displayData = displayData;
+		this.storage = storage;
+	}
+	
+	/**
+	 * 
+	 * @return true when the command is successfully executed; false otherwise.
+	 */
+	public abstract boolean execute();
+	
+	/**
+	 * setDisplayData method for setting WITH the need to setting input box to something.
+	 */
+	public void setDisplayData(String inputText, String prompt,
+			ArrayList<Task> listOfTasks) {
+		displayData.setNeedToUpdate(true);
+		displayData.setNeedToUpdateInputBox(true);
+		displayData.setInputText(inputText);
+		displayData.setPrompt(prompt);
+		displayData.setListOfTasks(listOfTasks);
+	}
+
+	/**
+	 * setDisplayData method for setting CLEARING the input box.
+	 */
+	public void setDisplayData(String prompt, ArrayList<Task> listOfTasks) {
+		displayData.setNeedToUpdate(true);
+		displayData.setNeedToUpdateInputBox(true);
+		displayData.setInputText("");
+		displayData.setPrompt(prompt);
+		displayData.setListOfTasks(listOfTasks);
+	}
+
+	/**
+	 * setDisplayData method for setting RETAINING the input box text, and
+	 * without the need to update the list of tasks
+	 */
+	public void setDisplayData(String prompt) {
+		displayData.setNeedToUpdate(false);
+		displayData.setNeedToUpdateInputBox(false);
+		displayData.setPrompt(prompt);
+	}
+
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Command.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Complete.java
+	 */
+
+package commands;
+
+import java.util.ArrayList;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+import util.Task;
+
+public class Complete extends UndoableCommand {
+	private ArrayList<Task> tasks = new ArrayList<Task>();
+	
+	public Complete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
+		super(displayData, storage);
+		this.tasks = tasks;
+	}
+
+	@Override
+	public boolean execute() {
+		try {
+			assert tasks.size() > 0;
+			for (Task task: tasks) {
+				storage.completeTask(task);
+			}
+
+			if (tasks.size()==1) {
+				setDisplayData("Task " + getDescriptions(tasks) + " marked as complete",
+						storage.getAllNotDoneTasks());
+			} else {
+				setDisplayData("Tasks " + getDescriptions(tasks) + " marked as complete",
+						storage.getAllNotDoneTasks());
+			}
+		} catch (IndexOutOfBoundsException e) {
+			int listSize = displayData.getListOfTasks().size();
+			if (listSize == 0) {
+				setDisplayData("There is no task in the list");
+			} else if (listSize == 1) {
+				setDisplayData("There is only 1 task in the list");
+			} else {
+				setDisplayData("There are only " + listSize
+						+ " tasks in the list");
+			}
+			return false;
+		} catch (Exception e) {
+			setDisplayData("Invalid complete command. format: complete <number>");
+			return false;
+		}
+		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " marked as complete");
+		return true;
+	}
+
+	@Override
+	public void undo() {
+		for (Task task:tasks) {
+			storage.uncompleteTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Undo: Complete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Undo: Complete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Undone completing tasks " + getDescriptions(tasks));
+	}
+
+	@Override
+	public void redo() {
+		for (Task task:tasks) {
+			storage.completeTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Redo: Complete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Redo: Complete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Redone completing tasks " + getDescriptions(tasks));
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Complete.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Delete.java
+	 */
+
+package commands;
+
+import java.util.ArrayList;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+import util.Task;
+
+public class Delete extends UndoableCommand {
+	private ArrayList<Task> tasks = new ArrayList<Task>();
+	
+	public Delete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
+		super(displayData, storage);
+		this.tasks = tasks;
+	}
+
+	@Override
+	public boolean execute() {
+		try {
+			assert tasks.size() > 0;
+			for (Task task: tasks) {
+				storage.deleteTask(task);
+			}
+			
+			if (tasks.size()==1) {
+				setDisplayData("Task " + getDescriptions(tasks) + " deleted successfully",
+						storage.getAllNotDoneTasks());
+			} else {
+				setDisplayData("Tasks " + getDescriptions(tasks) + " deleted successfully",
+						storage.getAllNotDoneTasks());
+			}
+		} catch (IndexOutOfBoundsException e) {
+			int listSize = displayData.getListOfTasks().size();
+			if (listSize==0) {
+				setDisplayData("There is no task in the list");
+			} else if (listSize==1) {
+				setDisplayData("There is only 1 task in the list");
+			} else {
+				setDisplayData("There are only " + listSize + " tasks in the list");
+			}
+			return false;
+		} catch (Exception e) {
+			setDisplayData("Invalid delete command. format: delete <number>.");
+			return false;
+		}
+		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " deleted");
+		return true;
+	}
+	
+	@Override
+	public void undo() {
+		for (Task task:tasks) {
+			storage.addTask(task);			
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Undo: Delete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Undo: Delete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Undone deleting asks " + getDescriptions(tasks));
+	}
+
+	@Override
+	public void redo() {
+		for (Task task:tasks) {
+			storage.deleteTask(task);
+		}
+		
+		if (tasks.size()==1) {
+			setDisplayData("Redo: Delete task "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Redo: Delete tasks "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Redone deleting asks " + getDescriptions(tasks));
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Delete.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Redo.java
+	 */
+
+package commands;
+
+import logic.History;
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+
+public class Redo extends Command {
+	private History history;
+
+	public Redo(DisplayData displayData, Storage storage, History history) {
+		super(displayData, storage);
+		this.history = history;
+	}
+
+	@Override
+	public boolean execute() {
+		boolean isSuccessful = history.redoOneStep();
+		if(!isSuccessful){
+			setDisplayData("No more operation to redo.",
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Redo is executed");
+		return true;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Redo.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Show.java
+	 */
+
+package commands;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+
+public class Show extends Command {
+	ShowCommandType type;
+	String searchKey;
+	LocalDate date;
+	
+	/**
+	 * Constructor for Show commands of type ALL, DONE, FLOATING
+	 * @param displayData
+	 * @param storage
+	 * @param type
+	 */
+	public Show(DisplayData displayData, Storage storage, ShowCommandType type){
+		super(displayData, storage);
+		this.type = type;
+	}
+	
+	/**
+	 * Constructor for Show commands of type KEYWORD, LABEL
+	 * @param displayData
+	 * @param storage
+	 * @param type
+	 * @param key the keyword for search.
+	 */
+	public Show(DisplayData displayData, Storage storage, ShowCommandType type, String key){
+		super(displayData, storage);
+		this.type = type;
+		searchKey = key;
+	}
+	
+	/**
+	 * Constructor for Show commands of type DATE
+	 * @param displayData
+	 * @param storage
+	 * @param type
+	 * @param date
+	 */
+	public Show(DisplayData displayData, Storage storage, ShowCommandType type, LocalDate date){
+		super(displayData, storage);
+		this.type = type;
+		this.date = date;
+	}
+
+	public enum ShowCommandType {
+		ALL, DONE, KEYWORD, LABEL, DATE, FLOATING;
+	}
+
+	@Override
+	public boolean execute() {
+		try {
+			switch(type){
+			case ALL:
+				setDisplayData("Showing all undone tasks.", storage.getAllNotDoneTasks());
+				break;
+			case DONE:
+				setDisplayData("Showing all completed tasks.", storage.getAllDoneTasks());
+				break;
+			case FLOATING:
+				setDisplayData("Showing all floating tasks", storage.getFloatingTasks());
+				break;
+			case KEYWORD:
+				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
+						storage.getTaskByKeyword(searchKey));
+				break;
+			case LABEL:
+				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.",
+						storage.getTaskByLabel(searchKey));
+				break;
+			case DATE:
+				setDisplayData("<delete/update/complete> + <number> to perform action on a task in the list.", 
+						storage.getTasksOnADate(date));
+			}
+		} catch (DateTimeException e) {
+			setDisplayData("Invalid date/time input!");
+			return false;
+		}
+		Logging.getInstance().info("A show command of type " + type + " is executed");
+		return true;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Show.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Uncomplete.java
+	 */
+
+package commands;
+
+import java.util.ArrayList;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+import util.Task;
+
+public class Uncomplete extends UndoableCommand {
+	private ArrayList<Task> tasks = new ArrayList<Task>();
+	
+	public Uncomplete(DisplayData displayData, Storage storage, ArrayList<Task> tasks){
+		super(displayData, storage);
+		this.tasks = tasks;
+	}
+
+	@Override
+	public boolean execute() {
+		try {
+			assert tasks.size() > 0;
+			for (Task task: tasks) {
+				storage.uncompleteTask(task);
+			}
+
+			if (tasks.size()==1) {
+				setDisplayData("Task " + getDescriptions(tasks) + " marked as undone",
+						storage.getAllNotDoneTasks());
+			} else {
+				setDisplayData("Tasks " + getDescriptions(tasks) + " marked as undone",
+						storage.getAllNotDoneTasks());
+			}
+		} catch (IndexOutOfBoundsException e) {
+			int listSize = displayData.getListOfTasks().size();
+			if (listSize == 0) {
+				setDisplayData("There is no task in the list");
+			} else if (listSize == 1) {
+				setDisplayData("There is only 1 task in the list");
+			} else {
+				setDisplayData("There are only " + listSize
+						+ " tasks in the list");
+			}
+			return false;
+		} catch (Exception e) {
+			setDisplayData("Invalid uncomplete command. format: uncomplete <number>");
+			return false;
+		}
+		Logging.getInstance().info("Tasks " + getDescriptions(tasks) + " marked as undone");
+		return true;
+	}
+
+	@Override
+	public void undo() {
+		for (Task task:tasks) {
+			storage.completeTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Undo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Undo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Undone uncompleting tasks " + getDescriptions(tasks));
+	}
+
+	@Override
+	public void redo() {
+		for (Task task:tasks) {
+			storage.uncompleteTask(task);
+		}
+		if (tasks.size()==1) {
+			setDisplayData("Redo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		} else {
+			setDisplayData("Redo: Mark undone "+ getDescriptions(tasks),
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Redone uncompleting tasks " + getDescriptions(tasks));
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Uncomplete.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Undo.java
+	 */
+
+package commands;
+
+import logic.History;
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+
+public class Undo extends Command {
+	private History history;
+	
+	public Undo(DisplayData displayData, Storage storage, History history) {
+		super(displayData, storage);
+		this.history = history;
+	}
+
+
+	@Override
+	public boolean execute() {
+		boolean isSuccessful = history.undoOneStep();
+		if(!isSuccessful){
+			setDisplayData("No more operation to undo.",
+					storage.getAllNotDoneTasks());
+		}
+		Logging.getInstance().info("Undo is executed");
+		return true;
+	}
+
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Undo.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\UndoableCommand.java
+	 */
+
+/**
+ * UndoableCommand defines undo() and redo() abstract methods for it subclasses.
+ * It also provides a getDescriptions() utility method to read descriptions of 
+ * multiple Tasks at once. 
+ */
+package commands;
+
+import java.util.ArrayList;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
+
+public abstract class UndoableCommand extends Command{
+	
+
+	public UndoableCommand(DisplayData displayData, Storage storage) {
+		super(displayData, storage);
+	}
+
+	public abstract void undo();
+	public abstract void redo();
+	
+	public static String getDescriptions (ArrayList<Task> tasks) {
+		String str = "";
+		for (Task task:tasks) {
+			str += "\"" + task.getDescription() + "\", ";
+		}
+		str = str.substring(0, str.length()-2);
+		return str;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\UndoableCommand.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Update.java
+	 */
+
+package commands;
+
+import interpreter.Interpreter;
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+import util.Task;
+
+public class Update extends UndoableCommand {
+	private Task task;
+	
+	public Update(DisplayData displayData, Storage storage, Task task){
+		super(displayData, storage);
+		this.task = task;
+	}
+
+	@Override
+	public boolean execute() {
+		try {
+			// Delete the task, and add again by modifying reverse interpreted text input box.
+			storage.deleteTask(task);
+
+			setDisplayData(
+					Interpreter.convertTaskToAddCommand(task),
+					"Please update the task in the input box", null);
+		} catch (Exception e) {
+			setDisplayData("Invalid update command. format: update <number>");
+			return false;
+		}
+		Logging.getInstance().info("Task " + task.getDescription() + "is updated");
+		return true;
+	}
+
+	@Override
+	public void undo() {
+		storage.addTask(task);
+		setDisplayData("Undo: Update task \""+ task.getDescription() + "\"",
+				storage.getAllNotDoneTasks());
+		Logging.getInstance().info("Undone updating task " + task.getDescription());
+	}
+
+	@Override
+	public void redo() {
+		storage.deleteTask(task);
+		setDisplayData("Redo: Update task \"" + task.getDescription() + "\"",
+				storage.getAllNotDoneTasks());
+		Logging.getInstance().info("Redone updating task " + task.getDescription());
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Update.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\Controller.java
+	 */
+
+/**
+ * Controller functions as described below:
+ * 1. It is the contact point between GUI and the rest of ET.
+ * 3. It depends on Interpreter to get Command object from user input passed from GUI.
+ * 2. It executes Command objects and store UndoableCommand objects into History.
+ */
+package logic;
+
+import java.io.IOException;
+import java.time.DateTimeException;
+
+import interpreter.Interpreter;
+import javafx.scene.input.KeyEvent;
+import commands.Command;
+import commands.UndoableCommand;
+import commands.Update;
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+
+public class Controller {
+
+	private DisplayData displayData;
+	private Storage storage;
+	private History history;
+	private boolean duringUpdate = false;
+
+	// private String input;
+
+	public Controller() {
+
+		displayData = new DisplayData();
+		history = History.getInstance();
+	}
+
+	/**
+	 * For GUI's initialization.
+	 * 
+	 * @return a DisplayData with all the tasks that are yet to be done.
+	 */
+	public DisplayData loadAllTasks() {
+		try {
+			storage = Storage.getInstance();
+		} catch (IOException e) {
+			displayData.setNeedToUpdate(true);
+			displayData
+					.setPrompt("ETtasks.xml might have been corrupted. Please repair or delete it. "
+							+ "Consult User Guide for more.");
+		}
+		Command command = Interpreter.getCommand("all", displayData, storage,
+				history, duringUpdate);
+		command.execute();
+		return displayData;
+	}
+
+	/**
+	 * Called when “enter” key is hit, returns a DisplayData with information to
+	 * shown after the operation specified by the user is executed.
+	 * @param userInput
+	 * @return
+	 */
+	public DisplayData handleEnter(String userInput) {
+		try {
+			Command command = Interpreter.getCommand(userInput, displayData,
+					storage, history, duringUpdate);
+
+			if (command instanceof UndoableCommand) {
+				if (command.execute()) {
+					history.addExecutedCommand((UndoableCommand) command);
+					Logging.getInstance().info(
+							"undoable command successfully executed.");
+				}
+			} else {
+				command.execute();
+				Logging.getInstance().info(
+						"non-undoable command successfully executed.");
+			}
+
+			if (command instanceof Update) {
+				duringUpdate = true;
+			} else {
+				duringUpdate = false;
+			}
+		} catch (DateTimeException e) {
+			displayData.setNeedToUpdate(false);
+			displayData.setNeedToUpdateInputBox(false);
+			displayData
+					.setPrompt("Invalid time/date format. Pls refer to User Guide if in doubt.");
+			Logging.getInstance().warning(
+					"Invalid input of time/date format received.");
+		} catch (IndexOutOfBoundsException e) {
+			displayData.setNeedToUpdate(false);
+			displayData.setNeedToUpdateInputBox(false);
+			int listSize = displayData.getListOfTasks().size();
+			if (listSize == 0) {
+				displayData.setPrompt("There is no task in the list");
+			} else if (listSize == 1) {
+				displayData.setPrompt("There is only 1 task in the list");
+			} else {
+				displayData.setPrompt("There are only " + listSize
+						+ " tasks in the list");
+			}
+			Logging.getInstance().warning(
+					"Index No. specified by user is not found.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			displayData.setNeedToUpdate(false);
+			displayData.setNeedToUpdateInputBox(false);
+			displayData
+					.setPrompt("Invalid command input. Press ctrl+H to see help or check User Guide.");
+			Logging.getInstance().warning("Invalid input from user received.");
+		}
+
+		return displayData;
+	}
+
+	/**
+	 * Called when a hotkey combination is detected by GUI.
+	 * 
+	 * @param event
+	 *            The KeyEvent triggered.
+	 * @return a DisplayData with information to show to user.
+	 */
+	public DisplayData handleHotkey(KeyEvent event) {
+		Command command = Interpreter.getCommand(event, displayData, storage,
+				history);
+		if (command != null) {
+			command.execute();
+		}
+		return displayData;
+	}
+
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\Controller.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\History.java
+	 */
+
+/**
+ * History maintains a record of UndoableCommands that have already been executed,
+ * provides undo and redo functionality.
+ */
+package logic;
+
+import java.util.Stack;
+
+import commands.Add;
+import commands.UndoableCommand;
+import commands.Update;
+
+public class History {
+	private static History history;
+	private Stack<UndoableCommand> canBeUndoneCommands, canBeRedoneCommands;
+
+	private History() {
+		canBeUndoneCommands = new Stack<UndoableCommand>();
+		canBeRedoneCommands = new Stack<UndoableCommand>();
+	}
+	/**
+	 * History implements Singleton Pattern. This method allows other class to
+	 * get the reference to the History instance in the current runtime.
+	 * @return the singleton instance of History in the current runtime.
+	 */
+	public static History getInstance() {
+		if (history == null) {
+			history = new History();
+		}
+		return history;
+	}
+
+	public void addExecutedCommand(UndoableCommand command) {
+		canBeUndoneCommands.push(command);
+		canBeRedoneCommands.clear();
+	}
+
+	/**
+	 * @return true when the command is successfully undone; false when there is no more commands to undo.
+	 */
+	public boolean undoOneStep(){
+		if(canBeUndoneCommands.empty()){
+			return false;
+		}
+		UndoableCommand command = canBeUndoneCommands.pop();
+		command.undo();
+		canBeRedoneCommands.push(command);
+		
+		//Allows the coupled undo for Add&Update during an update.
+		//See isDuringUpdate() method in Add for more details.
+		if ((command instanceof Add) && ((Add) command).isDuringUpdate()) {
+			undoOneStep();
+		}
+		return true;
+	}
+	
+	/**
+	 * @return true when the command is successfully undone; false when there is no more commands to undo.
+	 */
+	public boolean redoOneStep(){
+		if(canBeRedoneCommands.empty()){
+			return false;
+		}
+		UndoableCommand command = canBeRedoneCommands.pop();
+		
+		command.redo();
+		canBeUndoneCommands.push(command);
+		
+		//Allows the coupled undo for Add&Update during an update.
+		//See isDuringUpdate() method in Add for more details.
+		if (command instanceof Update) {
+			redoOneStep();
+		}
+		
+		return true;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\History.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\DisplayData.java
+	 */
+
+/**
+ * DisplayData is extensively used by both Logic and GUI as a intermediate data package
+ *  for information that is going to be displayed to the user. 
+ */
+package util;
+
+import java.util.ArrayList;
+
+public class DisplayData {
+	private String inputText;
+	private String prompt;
+	private ArrayList<Task> listOfTasks;
+
+	private boolean needToUpdate;
+
+	private boolean needToUpdateInputBox;
+
+	public DisplayData() {
+		super();
+	}
+
+	public boolean needToUpdate() {
+		return needToUpdate;
+	}
+
+	public void setNeedToUpdate(boolean needToUpdate) {
+		this.needToUpdate = needToUpdate;
+	}
+
+	public boolean inputTextIsEmpty() {
+		return inputText == null || inputText.equals("");
+	}
+
+	public boolean promptIsEmpty() {
+		return prompt == null || prompt.equals("");
+	}
+
+	public boolean listOfTasksIsEmpty() {
+		return listOfTasks == null || listOfTasks.isEmpty();
+	}
+
+	public boolean needToUpdateInputBox() {
+		return needToUpdateInputBox;
+	}
+
+	public void setNeedToUpdateInputBox(boolean needToUpdateInputBox) {
+		this.needToUpdateInputBox = needToUpdateInputBox;
+	}
+
+	public String getInputText() {
+		return inputText;
+	}
+
+	public void setInputText(String inuptText) {
+		this.inputText = inuptText;
+	};
+
+	public String getPrompt() {
+		return prompt;
+	}
+
+	public void setPrompt(String prompt) {
+		this.prompt = prompt;
+	}
+
+	public ArrayList<Task> getListOfTasks() {
+		return listOfTasks;
+	}
+
+	public void setListOfTasks(ArrayList<Task> listOfTasks) {
+		this.listOfTasks = listOfTasks;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\DisplayData.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Logging.java
+	 */
+
+/**
+ * Provides the Logger utility to be used across all components of ET.
+ */
+package util;
+
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+public class Logging {
+	static FileHandler fileTxt;
+	static SimpleFormatter formatter;
+	public static Logger logger;
+	
+	/**
+	 * ET uses Logger in a Singleton fashion. This method allows other class to
+	 * get the reference to the Logger instance in the current runtime.
+	 * @return the singleton instance of Logger in the current runtime.
+	 */
+	public static Logger getInstance(){
+		if (logger == null){
+			logger = Logger.getLogger("ET");
+			try {
+				fileTxt = new FileHandler("ETLog.txt",true);
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			formatter = new SimpleFormatter();  
+			logger.setLevel(Level.ALL);
+	        fileTxt.setFormatter(formatter);
+			logger.addHandler(fileTxt);
+		}
+		return logger;
+	}
+}
+
+
+
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Logging.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Task.java
+	 */
+
+/**
+ * Task is a utility used extensively throughout ET.
+ * It is an object presentation of a task saved into ET by the user.
+ * It provides setter and getter methods for all the parameter 
+ * and determines the nature of it self, being either a floating task,
+ * a deadline task or a event task. 
+ */
+package util;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+public class Task {
+	private String description;
+	private boolean isDone;
+	private ArrayList<String> labels;
+
+	private LocalDateTime timeStamp1;
+	private LocalDateTime timeStamp2;
+
+	public Task() {
+		labels = new ArrayList<String>();
+		this.isDone = false;
+	}
+
+	public Task(String description, ArrayList<String> labels) {
+		super();
+		this.description = description;
+		this.labels = labels;
+		this.isDone = false;
+		timeStamp1 = timeStamp2 = null;
+	}
+
+	public Task(String description, ArrayList<String> labels,
+			LocalDateTime time) {
+		this(description, labels);
+		timeStamp1 = time;
+		timeStamp2 = null;
+	}
+
+	public Task(String description, ArrayList<String> labels,
+			LocalDateTime start, LocalDateTime end) {
+		this(description, labels);
+		timeStamp1 = start;
+		timeStamp2 = end;
+	}
+
+	public boolean isFloatingTask() {
+		return timeStamp1 == null && timeStamp2 == null;
+	}
+
+	public boolean isDeadLineTask() {
+		return timeStamp1 != null && timeStamp2 == null;
+	}
+
+	public boolean isEvent() {
+		return timeStamp1 != null && timeStamp2 != null;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public boolean isDone() {
+		return isDone;
+	}
+
+	public void setDone(boolean isDone) {
+		this.isDone = isDone;
+	}
+
+	public ArrayList<String> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(ArrayList<String> labels) {
+		this.labels = labels;
+	}
+
+	public int getNumLabels() {
+		return labels.size();
+	}
+
+	// Specific to DeadlineTask
+	public LocalDateTime getDeadline() {
+		return timeStamp1;
+	}
+
+	// Specific to DeadlineTask
+	public void setDeadline(LocalDateTime deadline) {
+		this.timeStamp1 = deadline;
+	}
+
+	// Specific to Event
+	public LocalDateTime getStartTime() {
+		return timeStamp1;
+	}
+
+	// Specific to Event
+	public void setStartTime(LocalDateTime startTime) {
+		this.timeStamp1 = startTime;
+	}
+
+	// Specific to Event
+	public LocalDateTime getEndTime() {
+		return timeStamp2;
+	}
+
+	// Specific to Event
+	public void setEndTime(LocalDateTime endTime) {
+		this.timeStamp2 = endTime;
+	}
+
+	public String toString() {
+		String thisString = "";
+		thisString += description + "\n";
+		thisString += ("" + labels.size() + "\n");
+		for (int i = 0; i < labels.size(); i++) {
+			thisString += labels.get(i);
+			thisString += "\n";
+		}
+		DateTimeFormatter formatter = DateTimeFormatter
+				.ofPattern("yyyy-MM-dd HH:mm");
+		if (timeStamp1 != null && timeStamp2 != null) {
+			thisString += timeStamp1.format(formatter);
+			thisString += "\n";
+			thisString += timeStamp2.format(formatter);
+		}
+		else if (timeStamp1 != null)
+		{
+			thisString += timeStamp1.format(formatter);
+		}
+		return thisString;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Task.java
+
+
+
+
+

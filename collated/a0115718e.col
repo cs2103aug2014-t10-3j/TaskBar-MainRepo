@@ -1,0 +1,1176 @@
+//@author: a0115718e
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\CommandDetails.java
+	 */
+
+/**
+ * This class identifies the task's description and tags of the input string
+ * and returns them as the parameters for Task object;
+ * Input from user should include preposition i.e. "on" "at" "from" "by" "to";
+ * Any content with the double quotes " " will be escaped.
+ * Tags should come after "#";
+ * 
+ */
+package interpreter;
+
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.Arrays;
+import java.util.ArrayList;
+
+public class CommandDetails {
+
+	public static final String ON = " on ";
+	public static final String AT = " at ";
+	public static final String FROM = " from ";
+	public static final String BY = " by ";
+	public static final String TO = " to ";
+	
+	/**
+	 * @return boolean value, checks if preposition is present
+	 */
+
+	private static Boolean isPrepPresent(String userInput){
+		if(userInput.contains(AT) || userInput.contains(BY) ||
+				userInput.contains(FROM) || userInput.contains(ON)){
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @return the description of the task as a string object
+	 * Regular Expression "add(.*?\\s)at\\s" means anything between "add" and "at ";
+	 * Regular Expression "add(.*?\\s)by\\s" means anything between "add" and "by ";
+	 * Regular Expression "add(.*?\\s)from\\s" means anything between "add" and "from ";
+	 * Regular Expression "add(.*?\\s)on\\s" means anything between "add" and "on ";
+	 * UserInput.replaceAll("\\s+#[^\\s]+", "") with regular Expression "\\s+#[^\\s]+" 
+	 * means to remove all " #" followed by whatever word behind, e.g. " #school"
+	 * Regular Expression "#(\\w+|\\w+)" means any word followed by "#"
+	 * 
+	 */
+	
+	public static String getDescription(String userInput){
+		String description = null;
+		
+		if(containsTwoQuotes(userInput)){
+			description = getQuotedDescription(userInput);
+		}else if(isPrepPresent(userInput)){
+			int[] prepArray;
+			prepArray = new int[4];
+			Arrays.fill(prepArray, 1000);
+
+			if(userInput.contains(AT)){
+				prepArray[0] = userInput.indexOf(AT);
+			}
+			if(userInput.contains(BY)){
+				prepArray[1] = userInput.indexOf(BY);
+			}
+			if(userInput.contains(FROM)){
+				prepArray[2] = userInput.indexOf(FROM);
+			}
+			if(userInput.contains(ON)){
+				prepArray[3] = userInput.indexOf(ON);
+			}
+
+			int smallestIndex = 0;
+
+			for(int i=1; i<4; i++){
+				if(prepArray[i] < prepArray[i-1]){
+					smallestIndex = i; 
+				}
+			}
+			
+			if(smallestIndex == 0){
+				Pattern pattern = Pattern.compile("add(.*?\\s)at\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}else if(smallestIndex == 1){
+				Pattern pattern = Pattern.compile("add(.*?\\s)by\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}else if(smallestIndex == 2){
+				Pattern pattern = Pattern.compile("add(.*?\\s)from\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}else if(smallestIndex == 3){
+				Pattern pattern = Pattern.compile("add(.*?\\s)on\\s");
+				Matcher matcher = pattern.matcher(userInput);
+				while(matcher.find()){
+					description = matcher.group(1);
+				}
+			}
+			return description.trim();
+		}else{
+			return userInput.substring(userInput.indexOf("add ")+4, userInput.length());
+		}
+		return description;
+	}
+	
+	/**
+	 * @return a string without the tags for further operations
+	 */
+	
+	public static String removeTagString(String userInput){
+		String cutUserInput = userInput.replaceAll("\\s+#[^\\s]+", "");
+		return cutUserInput;
+	}
+	
+	/**
+	 * @return a string without the tags and the escaped substring for further operations
+	 */
+	
+	public static String removeDescriptionString(String userInput){
+		String tmp = getQuotedDescription(userInput);
+		String cutUserInput = userInput.replace(tmp, "");
+		return cutUserInput;
+	}
+	
+	/**
+	 * @return a string within double quotes
+	 */
+	
+	private static String getQuotedDescription(String userInput){
+		int index1 = userInput.indexOf('\"');
+		int index2 = userInput.lastIndexOf('\"');
+		return userInput.substring(index1+1, index2);
+	}
+	
+	/**
+	 * @return an arraylist of tags for further operations
+	 */
+	
+	public static ArrayList<String> getTag(String userInput){
+		Pattern tagPattern = Pattern.compile("#(\\w+|\\w+)");
+		Matcher mat = tagPattern.matcher(userInput);
+		ArrayList<String> tags = new ArrayList<String>();
+		while(mat.find()){
+			tags.add(mat.group(1));
+		}
+		return tags;		
+	}
+
+	public static String getTypeOfTask(String userInput){
+		//"by" indicates a scheduled task
+		if(userInput.contains(BY)){
+			return "scheduled task";
+		}else if(userInput.contains(ON) && userInput.contains(FROM) && userInput.contains(TO)){
+			return "event";
+		}else if(userInput.contains(ON) || userInput.contains(AT)){
+			return "task";
+		}else if(userInput.contains(FROM) && userInput.contains(TO)){
+			return "event";
+		}else{
+			return "floating";
+		}
+	}
+	
+	private static Boolean containsTwoQuotes(String str){
+		int count = 0;
+		for(int i=0;i<str.length();i++){
+			if(str.charAt(i) == '\"'){
+				count++;
+			}
+		}
+		if(count == 2){
+			return true;
+		}
+		return false;
+	}
+}
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\CommandDetails.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeCreator.java
+	 */
+
+/**
+ * This class provides methods to create LocalDateTime objects for DateTimeGetter class to use;
+ */
+package interpreter;
+
+
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.DayOfWeek;
+
+import util.Logging;
+
+
+public class DateTimeCreator {
+
+	/**
+	 * 
+	 * @param string
+	 * @return a LocalDateTime object when a string is read, multiple formats of date and time are supported;
+	 * @throws DateTimeException
+	 */
+	public static LocalDateTime getDateTime(String string) throws DateTimeException{
+		String dateTime = string.trim();
+		LocalDateTime specified = null;
+		if(DateTimeIdentifier.isNextWeek(string)){
+			specified = timeFromNextWeek(string);
+		}
+		if(dateTime.contains(" ")){
+			String splitStrSpace[] = dateTime.split("\\s");
+			if(splitStrSpace.length == 2){
+				if(DateTimeIdentifier.isWordMonth(splitStrSpace[1])){
+					String date = splitStrSpace[0];
+					String month = splitStrSpace[1];
+					if(DateTimeIdentifier.isOnlyNumbers(date)){
+						specified = timeFromIntDateAndWordMonth(date, month);
+					}
+				}else{
+					String date = splitStrSpace[0];
+					String time = splitStrSpace[1];
+					if(DateTimeIdentifier.isNumberDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
+						specified = timeFromNumDateAnd12hTime(date, time);
+					}else if(DateTimeIdentifier.isNumberDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
+						specified = timeFromNumDateAnd24hTime(date, time);
+					}else if(DateTimeIdentifier.isDayDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
+						specified = timeFromDayDateAnd12hTime(date, time);
+					}else if(DateTimeIdentifier.isDayDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
+						specified = timeFromDayDateAnd24hTime(date, time);
+					}
+				}
+			}
+			if(splitStrSpace.length == 3){
+				String date = splitStrSpace[0] + " " + splitStrSpace[1];
+				String time = splitStrSpace[2];
+				if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
+					specified = timeFromWordNoYrAnd12hTime(date, time);
+				}else if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
+					specified = timeFromWordNoYrAnd24hTime(date, time);
+				}
+			}
+			if(splitStrSpace.length == 4){
+				String date = splitStrSpace[0] + " " + splitStrSpace[1] + " " + splitStrSpace[2];
+				String time = splitStrSpace[3];
+				if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is12hTimeFormat(time)){
+					specified = timeFromWordAnd12hTime(date, time);
+				}else if(DateTimeIdentifier.isWordDateFormat(date) && DateTimeIdentifier.is24hTimeFormat(time)){
+					specified = timeFromWordAnd24hTime(date, time);
+				}
+			}
+		}else if(DateTimeIdentifier.is12hTimeFormat(dateTime) || DateTimeIdentifier.is24hTimeFormat(dateTime)){
+			if(DateTimeIdentifier.is12hTimeFormat(dateTime)){
+				specified = timeFrom12hTime(dateTime);
+			}
+			if(DateTimeIdentifier.is24hTimeFormat(dateTime)){
+				specified = timeFrom24hTime(dateTime);
+			}
+		}else if(DateTimeIdentifier.isDayDateFormat(dateTime)){
+			specified = timeFromDayDate(dateTime);
+		}else if(DateTimeIdentifier.isNumberDateFormat(dateTime)){
+			specified = timeFromNumDate(dateTime);
+		}
+		if(specified == null){
+			Logging.getInstance().warning("Invalid date and time entered.");
+			throw new DateTimeException("Invalid time entered");
+		}
+		return specified;
+	}
+
+	private static LocalDateTime timeFromIntDateAndWordMonth(String date, String month) throws DateTimeException{
+		int day = Integer.parseInt(date);
+		int intMonth = getIntFromMonth(month);
+		LocalDateTime current = LocalDateTime.now();
+		LocalDateTime specified = LocalDateTime.of(current.getYear(), intMonth, day, 0, 0, 0, 0);
+		return specified;
+	}
+
+	private static LocalDateTime timeFromNumDateAnd12hTime(String date, String time) throws DateTimeException{
+		LocalDateTime tmp = timeFromNumDate(date);
+		LocalDateTime tmp2 = timeFrom12hTime(time);
+		LocalDateTime specified = LocalDateTime.of(tmp.getYear(), tmp.getMonthValue(), tmp.getDayOfMonth(), tmp2.getHour(), tmp2.getMinute());
+
+		return specified;
+	}
+
+	private static LocalDateTime timeFromNumDateAnd24hTime(String date, String time) throws DateTimeException{
+		LocalDateTime tmp = timeFromNumDate(date);
+		LocalDateTime tmp2 = timeFrom24hTime(time);
+		LocalDateTime specified = LocalDateTime.of(tmp.getYear(), tmp.getMonthValue(), tmp.getDayOfMonth(), tmp2.getHour(), tmp2.getMinute());
+		return specified;
+	}
+
+	private static LocalDateTime timeFromDayDateAnd12hTime(String date, String time) throws DateTimeException{
+		LocalDateTime dateTmp = timeFromDayDate(date);
+		LocalDateTime timeTmp = timeFrom12hTime(time);
+		LocalDateTime specified = LocalDateTime.of(dateTmp.getYear(), dateTmp.getMonthValue(), dateTmp.getDayOfMonth(), timeTmp.getHour(), timeTmp.getMinute());
+		return specified;
+	}
+
+	private static LocalDateTime timeFromDayDateAnd24hTime(String date, String time) throws DateTimeException{
+		LocalDateTime dateTmp = timeFromDayDate(date);
+		LocalDateTime timeTmp = timeFrom24hTime(time);
+		LocalDateTime specified = LocalDateTime.of(dateTmp.getYear(), dateTmp.getMonthValue(), dateTmp.getDayOfMonth(), timeTmp.getHour(), timeTmp.getMinute());
+		return specified;
+	}
+
+	private static LocalDateTime timeFromWordNoYrAnd12hTime(String date, String time) throws DateTimeException{
+		String splitStrSpace[] = date.split("\\s");
+		int day = Integer.parseInt(splitStrSpace[0]);
+		int month = getIntFromMonth(splitStrSpace[1]);
+		LocalDateTime current = LocalDateTime.now();
+		LocalDateTime specified = LocalDateTime.of(current.getYear(), month, day, timeFrom12hTime(time).getHour(), timeFrom12hTime(time).getMinute());
+		return specified;	
+	}
+
+	private static LocalDateTime timeFromWordNoYrAnd24hTime(String date, String time) throws DateTimeException{
+		String splitStrSpace[] = date.split("\\s");
+		int day = Integer.parseInt(splitStrSpace[0]);
+		int month = getIntFromMonth(splitStrSpace[1]);
+		LocalDateTime current = LocalDateTime.now();
+		LocalDateTime specified = LocalDateTime.of(current.getYear(), month, day, timeFrom24hTime(time).getHour(), timeFrom24hTime(time).getMinute());
+		return specified;
+	}
+
+	private static LocalDateTime timeFromWordAnd12hTime(String date, String time) throws DateTimeException{
+		String splitStrSpace[] = date.split("\\s");
+		int day = Integer.parseInt(splitStrSpace[0]);
+		int month = getIntFromMonth(splitStrSpace[1]);
+		int year = Integer.parseInt(splitStrSpace[2]);
+		if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+			Logging.getInstance().warning("Year entered is not valid.");
+			throw new DateTimeException("invalid year");
+		}
+		year = (year>999) ? year : 2000+year;
+		LocalDateTime specified = LocalDateTime.of(year, month, day, timeFrom12hTime(time).getHour(), timeFrom12hTime(time).getMinute());
+		return specified;
+	}
+
+	private static LocalDateTime timeFromWordAnd24hTime(String date, String time) throws DateTimeException{
+		String splitStrSpace[] = date.split("\\s");
+		int day = Integer.parseInt(splitStrSpace[0]);
+		int month = getIntFromMonth(splitStrSpace[1]);
+		int year = Integer.parseInt(splitStrSpace[2]);
+		if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+			Logging.getInstance().warning("Year entered is not valid.");
+			throw new DateTimeException("invalid year");
+		}
+		year = (year>999) ? year : 2000+year;
+		LocalDateTime specified = LocalDateTime.of(year, month, day, timeFrom24hTime(time).getHour(), timeFrom24hTime(time).getMinute());
+		return specified;
+	}
+
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from a time string of 12h format e.g. 8am, 830pm;
+	 * @throws DateTimeException
+	 */
+	private static LocalDateTime timeFrom12hTime(String dateTime) throws DateTimeException{
+		LocalDateTime current = LocalDateTime.now();
+		String timeSub = dateTime.substring(0, dateTime.length()-2);
+		int time12h = Integer.parseInt(timeSub);
+		int hour;
+		int minute;
+		if (time12h<=12) {
+			hour = time12h;
+			minute = 0;							
+		} else {
+			hour = time12h/100;
+			minute = time12h%100;
+		}
+		if(dateTime.contains("pm") && hour!=12){					
+			hour = hour + 12;					
+		}
+		if(dateTime.contains("am") && hour == 12){
+			hour = 0;
+		}
+		LocalDateTime specified = current.withHour(hour).withMinute(minute);
+		if(specified.isAfter(current)){
+			return specified;
+		}else{
+			return specified.plusDays(1L);
+		}
+	}
+
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from a time string of 24h format e.g. 2359;
+	 * @throws DateTimeException
+	 */
+	private static LocalDateTime timeFrom24hTime(String dateTime) throws DateTimeException{
+		LocalDateTime current = LocalDateTime.now();
+		int hour = Integer.parseInt(dateTime.substring(0, dateTime.length()-2));
+		int min = Integer.parseInt(dateTime.substring(2));
+		LocalDateTime specified = current.withHour(hour).withMinute(min);
+		if(specified.isAfter(current)){
+			return specified;
+		}else{
+			return specified.plusDays(1L);
+		}
+	}
+		
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from a time string of day date format e.g. monday, tomorrow
+	 * @throws DateTimeException
+	 */
+	private static LocalDateTime timeFromDayDate(String dateTime) throws DateTimeException{
+		LocalDateTime current = LocalDateTime.now();
+		LocalDateTime specified = null;
+		if(dateTime.equals("tomorrow") || dateTime.equals("tmr")){
+			specified = current.plusDays(1L);
+		}else if(dateTime.equals("today")){
+			specified = current;
+		}else{
+			specified = current.plusDays(differenceInDays(dateTime, current));
+		}
+		return specified.withHour(0).withMinute(0);
+	}
+	
+	/**
+	 * 
+	 * @param dayTime
+	 * @return a LocalDateTime object if the user added time in next week
+	 */
+	private static LocalDateTime timeFromNextWeek(String dayTime){
+		LocalDateTime specified = null;
+		String splitStrSpace[] = dayTime.split("\\s");
+		String day = splitStrSpace[1];
+		LocalDateTime current = LocalDateTime.now();
+		DayOfWeek currentDay = current.getDayOfWeek();
+		int currentDayInt = currentDay.getValue();
+		int dayFromString = getIntFromDay(day);
+		if(dayFromString > currentDayInt){
+			int difference = dayFromString - currentDayInt;
+			int finalDiffInt = difference + 7;
+			long temp = Long.valueOf(String.valueOf(finalDiffInt));
+			specified = current.plusDays(temp);
+		}else{
+			specified = timeFromDayDate(day);
+		}
+		
+		if(splitStrSpace.length == 3){
+			String time = splitStrSpace[2];
+			if(DateTimeIdentifier.is12hTimeFormat(time)){
+				return specified.withHour(timeFrom12hTime(time).getHour()).withMinute(timeFrom12hTime(time).getMinute());
+			}else if(DateTimeIdentifier.is24hTimeFormat(time)){
+				return specified.withHour(timeFrom24hTime(time).getHour()).withMinute(timeFrom24hTime(time).getMinute());
+			}
+		}
+		return specified.withHour(0).withMinute(0);
+	}
+	
+	/**
+	 * 
+	 * @param dateTime
+	 * @return a LocalDateTime object from number date e.g. 12/12/2014
+	 * @throws DateTimeException
+	 */
+	private static LocalDateTime timeFromNumDate(String dateTime) throws DateTimeException{
+		String splitStrSpace[] = dateTime.split("/");
+		int day = Integer.parseInt(splitStrSpace[0]);
+		int month = Integer.parseInt(splitStrSpace[1]);
+		LocalDateTime current = LocalDateTime.now();
+		LocalDateTime specified;
+		if (splitStrSpace.length==3) {
+			int year = Integer.parseInt(splitStrSpace[2]);
+			if ((year<=999 && year>=100) || (year>=0 && year<=9)) {
+				Logging.getInstance().warning("Year entered is not valid.");
+				throw new DateTimeException("invalid year");
+			}
+			year = (year>999) ? year : 2000+year;
+			specified = LocalDateTime.of(year, month, day, 0, 0);
+		} else {
+			specified = LocalDateTime.of(current.getYear(), month, day, 0, 0);
+		}
+		return specified;
+	}
+	
+	private static int getIntFromDay(String day){
+		int dayInt = 0;
+		if(day.equals("monday") || day.equals("mon")){
+			dayInt = 1;
+		}else if(day.equals("tuesday") || day.equals("tue")){
+			dayInt = 2;
+		}else if(day.equals("wednesday") || day.equals("wed")){
+			dayInt = 3;
+		}else if(day.equals("thursday") || day.equals("thu")){
+			dayInt = 4;
+		}else if(day.equals("friday") || day.equals("fri")){
+			dayInt = 5;
+		}else if(day.equals("saturday") || day.equals("sat")){
+			dayInt = 6;
+		}else if(day.equals("sunday") || day.equals("sun")){
+			dayInt = 7;
+		}
+		return dayInt;
+	}
+
+	private static long differenceInDays(String day, LocalDateTime current){
+		DayOfWeek currentDay = current.getDayOfWeek();
+		int currentDayInt = currentDay.getValue();
+		int difference = 0;
+		int dayInt = getIntFromDay(day);
+		if(dayInt == 1){
+			difference = 1 + 7 - currentDayInt;
+		}else if(dayInt == 2){
+			if(2 > currentDayInt){
+				difference = 2 - currentDayInt;
+			}else{
+				difference = 2 + 7 - currentDayInt;
+			}
+		}else if(dayInt == 3){
+			if(3 > currentDayInt){
+				difference = 3 - currentDayInt;
+			}else{
+				difference = 3 + 7 - currentDayInt;
+			}
+		}else if(dayInt == 4){
+			if(4 > currentDayInt){
+				difference = 4 - currentDayInt;
+			}else{
+				difference = 4 + 7 - currentDayInt;
+			}
+		}else if(dayInt == 5){
+			if(5 > currentDayInt){
+				difference = 5 - currentDayInt;
+			}else{
+				difference = 5 + 7 - currentDayInt;
+			}
+		}else if(dayInt == 6){
+			if(6 > currentDayInt){
+				difference = 6 - currentDayInt;
+			}else{
+				difference = 6 + 7 - currentDayInt;
+			}
+		}else if(dayInt == 7){
+			if(7 > currentDayInt){
+				difference = 7 - currentDayInt;
+			}else{
+				difference = 7 + 7 - currentDayInt;
+			}
+		}
+		long temp = Long.valueOf(String.valueOf(difference));
+		return temp;
+	}
+
+	private static int getIntFromMonth(String string){
+		if(string.equals("january") || string.equals("jan")){
+			return 1;
+		}else if(string.equals("february") || string.equals("feb")){
+			return 2;
+		}else if(string.equals("march") || string.equals("mar")){
+			return 3;
+		}else if(string.equals("april") || string.equals("apr")){
+			return 4;
+		}else if(string.equals("may")){
+			return 5;
+		}else if(string.equals("june") || string.equals("jun")){
+			return 6;
+		}else if(string.equals("july") || string.equals("jul")){
+			return 7;
+		}else if(string.equals("august") || string.equals("aug")){
+			return 8;
+		}else if(string.equals("september") || string.equals("sep")){
+			return 9;
+		}else if(string.equals("october") || string.equals("oct")){
+			return 10;
+		}else if(string.equals("november") || string.equals("nov")){
+			return 11;
+		}else if(string.equals("december") || string.equals("dec")){
+			return 12;
+		}
+		return 0;
+	}
+}
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeCreator.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeGetter.java
+	 */
+
+/**
+ * This class returns the suitable LocalDateTime objects to Interpreter according to the task type;
+ */
+
+package interpreter;
+
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class DateTimeGetter {
+
+	/**
+	 * 
+	 * @param userInput
+	 * @return start time of an event
+	 * @throws DateTimeException
+	 */
+	public static LocalDateTime getStartDateTime(String userInput) throws DateTimeException{
+		String startDateTime = null;
+		startDateTime = userInput.substring(userInput.lastIndexOf(" from ")+6, userInput.lastIndexOf(" to "));
+		LocalDateTime startTime = DateTimeCreator.getDateTime(startDateTime);
+		if(DateTimeIdentifier.hasEventDate(userInput)){
+			LocalDateTime eventDate = getEventDate(userInput);
+			LocalDateTime timeStart = LocalDateTime.of(eventDate.getYear(), eventDate.getMonthValue(), eventDate.getDayOfMonth(), startTime.getHour(), startTime.getMinute());
+			return timeStart;
+		}
+		return startTime;
+	}
+
+	/**
+	 * 
+	 * @param userInput
+	 * @return end time of an event
+	 * @throws DateTimeException
+	 */
+	public static LocalDateTime getEndDateTime(String userInput) throws DateTimeException{
+		String endDateTime = null;
+		endDateTime = userInput.substring(userInput.lastIndexOf(" to ")+4, userInput.length());
+		LocalDateTime endTime = DateTimeCreator.getDateTime(endDateTime);
+		if(DateTimeIdentifier.hasEventDate(userInput)){
+			LocalDateTime eventDate = getEventDate(userInput);
+			LocalDateTime timeEnd = LocalDateTime.of(eventDate.getYear(), eventDate.getMonthValue(), eventDate.getDayOfMonth(), endTime.getHour(), endTime.getMinute());
+			return timeEnd;
+		}
+		if(endTime.isBefore(getStartDateTime(userInput))){
+			return endTime.withDayOfMonth(getStartDateTime(userInput).getDayOfMonth());
+		}
+		return endTime;
+	}
+	
+	/**
+	 * 
+	 * @param userInput
+	 * @return a LocalDateTime object that has an event date separated from time e.g "on sunday from 2pm to 4pm";
+	 * @throws DateTimeException
+	 */
+	public static LocalDateTime getEventDate(String userInput) throws DateTimeException{
+		String date = null;
+		Pattern pattern = Pattern.compile("on(\\s.*?\\s)from\\s");
+		Matcher matcher = pattern.matcher(userInput);
+		while(matcher.find()){
+			date = matcher.group(1);
+		}
+		LocalDateTime eventDate = DateTimeCreator.getDateTime(date);
+		return eventDate;
+	}
+
+	/**
+	 * 
+	 * @param userInput
+	 * @return a LocalDateTime object
+	 * @throws DateTimeException
+	 */
+	public static LocalDateTime getScheduledDateTime(String userInput) throws DateTimeException{
+		//return scheduled time from user input
+		String scheduledDateTime = null;
+		scheduledDateTime = userInput.substring(userInput.lastIndexOf(" by ")+4, userInput.length());
+		LocalDateTime scheduledTime = DateTimeCreator.getDateTime(scheduledDateTime);
+		return scheduledTime;
+	}
+
+	/**
+	 * 
+	 * @param userInput
+	 * @return return a LocalDateTime object
+	 * @throws DateTimeException
+	 */
+	public static LocalDateTime getNormalDateTime(String userInput) throws DateTimeException{
+		//return normal time from user input
+		String normalDateTime = null;
+		LocalDateTime normalTime = null;
+		if(userInput.contains("on")){
+			normalDateTime = userInput.substring(userInput.lastIndexOf(" on ")+4, userInput.length());
+			normalTime = DateTimeCreator.getDateTime(normalDateTime);
+		}else if(userInput.contains("at")){
+			normalDateTime = userInput.substring(userInput.lastIndexOf(" at ")+4, userInput.length());
+			normalTime = DateTimeCreator.getDateTime(normalDateTime);
+		}
+		return normalTime;
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeGetter.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeIdentifier.java
+	 */
+
+/**
+ * This class identifies the different date and time format by returning boolean results.
+ */
+package interpreter;
+
+public class DateTimeIdentifier {
+	
+	/**
+	 * 
+	 * @param string
+	 * @return true if the user input has time in this format "on...from...to";
+	 */
+	public static Boolean hasEventDate(String string){
+		if(string.contains(" on ") && string.contains(" from ") && string.contains(" to ")){
+			return true;
+		}
+		return false;
+	}
+	public static Boolean is24hTimeFormat(String string){
+		if(string.length() == 4){
+			try{
+				if(isOnlyNumbers(string)){
+					return true;
+				}
+			}catch(NumberFormatException e){
+				return false;
+			}
+			
+		}
+		return false;
+	}
+	
+	public static Boolean is12hTimeFormat(String string){
+		int length = string.length();
+		String substring = string.substring(length-2, length);
+		if(substring.equals("am") || substring.equals("pm")){
+			return true;
+		}
+		return false;
+	}
+	
+	public static Boolean isDayDateFormat(String string){
+		if(string.equals("tomorrow") || string.equals("tmr") || string.equals("today")){
+			return true;
+		}
+		if(string.equals("monday") || string.equals("tuesday") || string.equals("wednesday") || string.equals("thursday")
+				|| string.equals("friday") || string.equals("saturday") || string.equals("sunday")){
+			return true;
+		}
+		if(string.equals("mon") || string.equals("tue") || string.equals("wed") || string.equals("thu") || string.equals("fri")
+				|| string.equals("sat") || string.equals("sun")){
+			return true;
+		}
+		return false;
+	}
+	
+	public static Boolean isNumberDateFormat(String string){
+		if(string.contains("/")){
+			String splitStrSlash[] = string.split("\\/");
+			try{
+				if(isOnlyNumbers(splitStrSlash[0]) && isOnlyNumbers(splitStrSlash[1]) && isOnlyNumbers(splitStrSlash[2])){
+				return true;
+				}
+			}catch(IndexOutOfBoundsException e){
+				if(isOnlyNumbers(splitStrSlash[0]) && isOnlyNumbers(splitStrSlash[1])){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static Boolean isWordDateFormat(String string){
+		if(string.contains(" ")){
+			String splitStrSpace[] = string.split("\\s");
+			if(splitStrSpace.length == 2){
+				if(isOnlyNumbers(splitStrSpace[0]) && isWordMonth(splitStrSpace[1])){
+					return true;
+				}
+			}else if(splitStrSpace.length == 3){
+				if(isOnlyNumbers(splitStrSpace[0]) && isWordMonth(splitStrSpace[1]) && isOnlyNumbers(splitStrSpace[2])){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static Boolean isOnlyNumbers(String string){
+		try{
+			Integer.parseInt(string);
+			return true;
+		}catch(NumberFormatException nfe){
+			return false;
+		}
+	}
+	
+	public static Boolean isWordMonth(String string){
+		if(string.equals("january") || string.equals("jan") || string.equals("february") || string.equals("feb") || string.equals("march")
+				|| string.equals("mar") || string.equals("april") || string.equals("apr") || string.equals("may") || string.equals("june")
+				|| string.equals("jun") || string.equals("july") || string.equals("jul") || string.equals("august") || string.equals("aug")
+				|| string.equals("september") || string.equals("sep") || string.equals("october") || string.equals("oct")
+				|| string.equals("november") || string.equals("nov") || string.equals("december") || string.equals("dec")){
+			return true;
+		}
+		return false;
+	}
+	
+	public static Boolean isNextWeek(String string){
+		if(string.contains("next ") || string.contains("nx ")){
+			return true;
+		}
+		return false;
+	}
+	
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeIdentifier.java
+
+
+
+
+
+	/**
+	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\Interpreter.java
+	 */
+
+/**
+ * This class handles the input from user and translate the raw input into a task object.
+ *
+ */
+package interpreter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.DateTimeException;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
+import logic.History;
+import commands.Add;
+import commands.Command;
+import commands.Complete;
+import commands.Delete;
+import commands.Redo;
+import commands.Show;
+import commands.Uncomplete;
+import commands.Undo;
+import commands.Update;
+import commands.Show.ShowCommandType;
+import storage.Storage;
+import util.DisplayData;
+import util.Logging;
+import util.Task;
+
+public class Interpreter {
+	/**
+	 * 
+	 * @param command from user
+	 * @return a Task object with all required parameters
+	 * @throws DateTimeException
+	 * This method takes in a string, identifies and return the different parameters as a Task object
+	 * 
+	 */
+	public static Task interpretAdd(String command) throws DateTimeException {
+		String userInput = command.toLowerCase();
+		String userInputOnly = CommandDetails.removeTagString(command);
+		String userInputNoQuotes = userInputOnly;
+		if(userInputOnly.contains("\"")){
+			userInputNoQuotes = CommandDetails.removeDescriptionString(userInputOnly);
+		}
+		String commandDescription = CommandDetails
+				.getDescription(userInputOnly);
+		ArrayList<String> commandTag = CommandDetails.getTag(userInput);
+		String typeOfTask = CommandDetails.getTypeOfTask(userInputNoQuotes);
+		if (typeOfTask.equals("task")) {
+			LocalDateTime normalTime = DateTimeGetter
+					.getNormalDateTime(userInputNoQuotes.toLowerCase());
+			Task task = new Task(commandDescription, commandTag, normalTime);
+			Logging.getInstance().info("Scheduled task is successfuly identified and created.");
+			return task;
+		} else if (typeOfTask.equals("scheduled task")) {
+			LocalDateTime scheduledTime = DateTimeGetter
+					.getScheduledDateTime(userInputNoQuotes.toLowerCase());
+			Task task = new Task(commandDescription, commandTag, scheduledTime);
+			Logging.getInstance().info("Scheduled task is successfuly identified and created.");
+			return task;
+		} else if (typeOfTask.equals("event")) {
+			LocalDateTime startTime = DateTimeGetter
+					.getStartDateTime(userInputNoQuotes.toLowerCase());
+			LocalDateTime endTime = DateTimeGetter.getEndDateTime(userInputNoQuotes
+					.toLowerCase());
+			Task task = new Task(commandDescription, commandTag, startTime,
+					endTime);
+			Logging.getInstance().info("Event task is successfuly identified and created.");
+			return task;
+		} else if (typeOfTask.equals("floating")) {
+			Task task = new Task(commandDescription, commandTag);
+			Logging.getInstance().info("Floating task is successfuly identified and created.");
+			return task;
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param task
+	 * @return a string of the current task for Update object to read in
+	 * The task object will be converted into a string that resembles the line of user input with all the parameters;
+	 * The returned string will be used when user requires an update of task;
+	 * Update object takes in the string and proceed to its operations; 
+	 */
+	public static String convertTaskToAddCommand(Task task) {
+		String result = "add";
+		result = result + " " + task.getDescription();
+		if (task.isDeadLineTask()) {
+			LocalDateTime scheduledDateTime = task.getDeadline();
+			String formattedScheduleTime = getTimeExpression(scheduledDateTime);
+			result = result + " by " + formattedScheduleTime;
+		}
+		if (task.isEvent()) {
+			LocalDateTime startDateTime = task.getStartTime();
+			LocalDateTime endDateTime = task.getEndTime();
+			String formattedStartTime = getTimeExpression(startDateTime);
+			String formattedEndTime = getTimeExpression(endDateTime);
+			result = result + " from " + formattedStartTime + " to "
+					+ formattedEndTime;
+		}
+		int numOfLabels = task.getNumLabels();
+		for (int i = 0; i < numOfLabels; i++) {
+			result = result + " #" + task.getLabels().get(i);
+		}
+
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param time
+	 * @return a string of the time
+	 * LocalDateTime is converted back to string of a specific format;
+	 */
+	public static String getTimeExpression(LocalDateTime time) {
+		DateTimeFormatter formatter = DateTimeFormatter
+				.ofPattern("dd/MM/yyyy HHmm");
+		DateTimeFormatter formatterWithoutTime = DateTimeFormatter
+				.ofPattern("dd/MM/yyyy");
+		String expr;
+		if (time.getHour() == 0 && time.getMinute() == 0) {
+			expr = time.format(formatterWithoutTime);
+		} else {
+			expr = time.format(formatter);
+		}
+		return expr;
+	}
+
+	/**
+	 * 
+	 * @param event
+	 * @param displayData
+	 * @param storage
+	 * @param history
+	 * @return a Command object for controller to use;
+	 * This command object is created when hot keys are used;
+	 */
+	public static Command getCommand(KeyEvent event, DisplayData displayData,
+			Storage storage, History history) {
+		if (event.isControlDown() && event.getCode() == KeyCode.Z) {
+			return new Undo(displayData, storage, history);
+		} else if (event.isControlDown() && event.getCode() == KeyCode.Y) {
+			return new Redo(displayData, storage, history);
+		}
+		return null;
+
+	}
+
+	/**
+	 * 
+	 * @param userInput
+	 * @param displayData
+	 * @param storage
+	 * @param history
+	 * @param duringUpdate
+	 * @return a Command object for controller to use;
+	 * This command object is created for all commands;
+	 */
+	public static Command getCommand(String userInput, DisplayData displayData,
+			Storage storage, History history, boolean duringUpdate) {
+		String[] splitInputTokens = userInput.split(" ", 2);
+		String commandKeyword = splitInputTokens[0].toLowerCase();
+		switch (commandKeyword) {
+		case "add":
+			return new Add(displayData, storage, interpretAdd(userInput),
+					duringUpdate);
+		case "delete":
+		case "del":
+		case "d":
+			return new Delete(displayData, storage, getMassCommandTaskList(displayData, userInput));
+		case "update":
+		case "u":
+			return new Update(displayData, storage, 
+					displayData.getListOfTasks().get(Integer.parseInt(getParameter(userInput)) - 1));
+		case "complete":
+		case "c":
+			return new Complete(displayData, storage, getMassCommandTaskList(displayData, userInput));
+		case "uncomplete":
+		case "unc":
+			return new Uncomplete(displayData, storage, getMassCommandTaskList(displayData, userInput));
+		case "undo":
+			return new Undo(displayData, storage, history);
+		case "redo":
+			return new Redo(displayData, storage, history);
+		default:
+			return createShow(displayData, storage, userInput);
+		}
+	}
+
+	/**
+	 * 
+	 * @param displayData
+	 * @param storage
+	 * @param userInput
+	 * @return a Show object for controller to display data when user wants to search for a specific keyword/date or done tasks;
+	 */
+	public static Show createShow(DisplayData displayData, Storage storage,
+			String userInput) {
+		ShowCommandType type = interpretShow(userInput);
+		switch (type) {
+		case ALL:
+			return new Show(displayData, storage, type);
+		case DONE:
+			return new Show(displayData, storage, type);
+		case FLOATING:
+			return new Show(displayData, storage, type);
+		case DATE:
+			LocalDate date = DateTimeCreator.getDateTime(
+					Interpreter.getParameter(userInput)).toLocalDate();
+			return new Show(displayData, storage, type, date);
+		case LABEL:
+			return new Show(displayData, storage, type, getParameter(userInput)
+					.substring(1));
+		case KEYWORD:
+		default:
+			return new Show(displayData, storage, type, getParameter(userInput));
+
+		}
+	}
+
+	public static ShowCommandType interpretShow(String userInput) {
+		String showCommandParameter = getParameter(userInput).toLowerCase();
+		switch (showCommandParameter) {
+		case "all":
+		case "":
+			return ShowCommandType.ALL;
+		case "done":
+			return ShowCommandType.DONE;
+		case "floating":
+			return ShowCommandType.FLOATING;
+		default:
+			if (DateTimeIdentifier.isDayDateFormat(showCommandParameter)
+					|| DateTimeIdentifier
+							.isWordDateFormat(showCommandParameter)
+					|| DateTimeIdentifier
+							.isNumberDateFormat(showCommandParameter)) {
+				return ShowCommandType.DATE;
+			}
+
+			if (!showCommandParameter.isEmpty()
+					&& showCommandParameter.charAt(0) == '#') {
+				return ShowCommandType.LABEL;
+			} else {
+				return ShowCommandType.KEYWORD;
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param userInput
+	 * @return a string without the command word;
+	 */
+	public static String getParameter(String userInput) {
+		if (hasCommandKeyword(userInput)) {
+			String[] splitInputTokens = userInput.split(" ", 2);
+			return splitInputTokens[1];
+		}
+		return userInput;
+
+	}
+	
+	/**
+	 * 
+	 * @param displayData
+	 * @param userInput
+	 * @return an arraylist of tasks when mass commands are used;
+	 */
+	public static ArrayList<Task> getMassCommandTaskList(
+			DisplayData displayData, String userInput) {
+		ArrayList<Integer> indexList = new ArrayList<Integer>();
+		String indexString = Interpreter.getParameter(userInput);
+		String[] splitIndex = indexString.split(" ");
+		for (String indexGroup : splitIndex) {
+			try {
+				int index = Integer.parseInt(indexGroup) - 1;
+				if (!indexList.contains(index)) {
+					indexList.add(index);
+				}
+			} catch (NumberFormatException nfe) {
+				String[] rangeIndex = indexGroup.split("-", 2);
+				for (int i = Integer.parseInt(rangeIndex[0]) - 1; i <= Integer
+						.parseInt(rangeIndex[1]) - 1; i++) {
+					if (!indexList.contains(i)) {
+						indexList.add(i);
+					}
+				}
+			}
+		}
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		for (int index : indexList) {
+			Task task = displayData.getListOfTasks().get(index);
+			tasks.add(task);
+		}
+		return tasks;
+	}
+
+	private static boolean hasCommandKeyword(String userInput) {
+		String[] splitInputTokens = userInput.split(" ", 2);
+		String commandKeyword = splitInputTokens[0].toLowerCase();
+		switch (commandKeyword) {
+		case "add":
+		case "delete":
+		case "del":
+		case "d":
+		case "update":
+		case "u":
+		case "uncomplete":
+		case "unc":
+		case "complete":
+		case "c":
+		case "undo":
+		case "redo":
+		case "show":
+			return true;
+		default:
+			return false;
+		}
+	}
+}
+
+	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\Interpreter.java
+
+
+
+
+
