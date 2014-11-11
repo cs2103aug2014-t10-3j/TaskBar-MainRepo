@@ -1,3 +1,4 @@
+//@author A0116756Y
 /**
  * This is a component test for the Logic component of ET.
  * It simulates two user operations in sequence:

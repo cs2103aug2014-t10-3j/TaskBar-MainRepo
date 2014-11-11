@@ -3,7 +3,7 @@
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\CommandDetails.java
+	 * origin: src\logic\interpreter\CommandDetails.java
 	 */
 
 /**
@@ -14,7 +14,7 @@
  * Tags should come after "#";
  * 
  */
-package interpreter;
+package logic.interpreter;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -187,20 +187,20 @@ public class CommandDetails {
 		return false;
 	}
 }
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\CommandDetails.java
+	// End of segment: src\logic\interpreter\CommandDetails.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeCreator.java
+	 * origin: src\logic\interpreter\DateTimeCreator.java
 	 */
 
 /**
  * This class provides methods to create LocalDateTime objects for DateTimeGetter class to use;
  */
-package interpreter;
+package logic.interpreter;
 
 
 import java.time.DateTimeException;
@@ -593,21 +593,21 @@ public class DateTimeCreator {
 		return 0;
 	}
 }
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeCreator.java
+	// End of segment: src\logic\interpreter\DateTimeCreator.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeGetter.java
+	 * origin: src\logic\interpreter\DateTimeGetter.java
 	 */
 
 /**
  * This class returns the suitable LocalDateTime objects to Interpreter according to the task type;
  */
 
-package interpreter;
+package logic.interpreter;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -707,20 +707,20 @@ public class DateTimeGetter {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeGetter.java
+	// End of segment: src\logic\interpreter\DateTimeGetter.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeIdentifier.java
+	 * origin: src\logic\interpreter\DateTimeIdentifier.java
 	 */
 
 /**
  * This class identifies the different date and time format by returning boolean results.
  */
-package interpreter;
+package logic.interpreter;
 
 public class DateTimeIdentifier {
 	
@@ -834,21 +834,21 @@ public class DateTimeIdentifier {
 	
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\DateTimeIdentifier.java
+	// End of segment: src\logic\interpreter\DateTimeIdentifier.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\Interpreter.java
+	 * origin: src\logic\interpreter\Interpreter.java
 	 */
 
 /**
  * This class handles the input from user and translate the raw input into a task object.
  *
  */
-package interpreter;
+package logic.interpreter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -859,16 +859,16 @@ import java.util.ArrayList;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import logic.History;
-import commands.Add;
-import commands.Command;
-import commands.Complete;
-import commands.Delete;
-import commands.Redo;
-import commands.Show;
-import commands.Uncomplete;
-import commands.Undo;
-import commands.Update;
-import commands.Show.ShowCommandType;
+import logic.commands.Add;
+import logic.commands.Command;
+import logic.commands.Complete;
+import logic.commands.Delete;
+import logic.commands.Redo;
+import logic.commands.Show;
+import logic.commands.Uncomplete;
+import logic.commands.Undo;
+import logic.commands.Update;
+import logic.commands.Show.ShowCommandType;
 import storage.Storage;
 import util.DisplayData;
 import util.Logging;
@@ -961,7 +961,7 @@ public class Interpreter {
 	 * @return a string of the time
 	 * LocalDateTime is converted back to string of a specific format;
 	 */
-	public static String getTimeExpression(LocalDateTime time) {
+	private static String getTimeExpression(LocalDateTime time) {
 		DateTimeFormatter formatter = DateTimeFormatter
 				.ofPattern("dd/MM/yyyy HHmm");
 		DateTimeFormatter formatterWithoutTime = DateTimeFormatter
@@ -1168,7 +1168,183 @@ public class Interpreter {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\interpreter\Interpreter.java
+	// End of segment: src\logic\interpreter\Interpreter.java
+
+
+
+
+
+	/**
+	 * origin: test\interpreter\CommandDetailsTest.java
+	 */
+
+package interpreter;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import logic.interpreter.CommandDetails;
+
+public class CommandDetailsTest {
+	
+	String input = "add extra lesson on monday 8am #mondaybluz #school";
+	
+
+	@Test
+	public void testGetDescription() {
+		assertEquals("extra lesson", CommandDetails.getDescription(input));
+	}
+
+	@Test
+	public void testRemoveImportanceTagString() {
+		assertEquals("add extra lesson on monday 8am", CommandDetails.removeTagString(input));
+	}
+
+	@Test
+	public void testGetTag() {
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add("mondaybluz");
+		tags.add("school");
+		assertEquals(tags, CommandDetails.getTag(input));
+	}
+
+	@Test
+	public void testGetTypeOfTask() {
+		assertEquals("task", CommandDetails.getTypeOfTask(input));
+	}
+
+}
+
+	// End of segment: test\interpreter\CommandDetailsTest.java
+
+
+
+
+
+	/**
+	 * origin: test\interpreter\DateTimeCreatorTest.java
+	 */
+
+package interpreter;
+
+import static org.junit.Assert.*;
+
+import java.time.LocalDateTime;
+
+import logic.interpreter.DateTimeCreator;
+
+import org.junit.Test;
+
+public class DateTimeCreatorTest {
+	
+	String dateTime1 = "1 dec 830am";
+	String dateTime2 = "1/12/2014 0830";
+	String dateTime3 = "2 december 2014 1159pm";
+	String dateTime4 = "2/12 2359";
+	String dateTime5 = "1 dec 2014 12am"; //borderline case, since 12am = 00:00
+	LocalDateTime time1 = LocalDateTime.of(2014, 12, 1, 8, 30);
+	LocalDateTime time2 = LocalDateTime.of(2014, 12, 2, 23, 59);
+	LocalDateTime time3 = LocalDateTime.of(2014, 12, 1, 0, 0);
+
+	@Test
+	public void testGetDateTime() {
+		assertEquals(time1, DateTimeCreator.getDateTime(dateTime1).withSecond(0).withNano(0));
+		assertEquals(time1, DateTimeCreator.getDateTime(dateTime2).withSecond(0).withNano(0));
+		assertEquals(time2, DateTimeCreator.getDateTime(dateTime3).withSecond(0).withNano(0));
+		assertEquals(time2, DateTimeCreator.getDateTime(dateTime4).withSecond(0).withNano(0));
+		assertEquals(time3, DateTimeCreator.getDateTime(dateTime5).withSecond(0).withNano(0));
+		
+	}
+
+}
+
+	// End of segment: test\interpreter\DateTimeCreatorTest.java
+
+
+
+
+
+	/**
+	 * origin: test\interpreter\DateTimeIdentifierTest.java
+	 */
+
+package interpreter;
+
+import static org.junit.Assert.*;
+import logic.interpreter.DateTimeIdentifier;
+
+import org.junit.Test;
+
+public class DateTimeIdentifierTest {
+
+	@Test
+	public void testHasEventDate() {
+		String str = "add task on sunday from 2pm to 4pm";
+		assertEquals(true, DateTimeIdentifier.hasEventDate(str));
+	}
+
+	@Test
+	public void testIs24hTimeFormat() {
+		String str2 = "2359";
+		assertEquals(true, DateTimeIdentifier.is24hTimeFormat(str2));
+	}
+
+	@Test
+	public void testIs12hTimeFormat() {
+		String str = "12pm";
+		assertEquals(true, DateTimeIdentifier.is12hTimeFormat(str));
+	}
+
+	@Test
+	public void testIsDayDateFormat() {
+		String str = "today";
+		assertEquals(true, DateTimeIdentifier.isDayDateFormat(str));
+		String str2 = "tmr";
+		assertEquals(true, DateTimeIdentifier.isDayDateFormat(str2));
+		String str3 = "monday";
+		assertEquals(true, DateTimeIdentifier.isDayDateFormat(str3));
+		String str4 = "1/12/2014";
+		assertEquals(false, DateTimeIdentifier.isDayDateFormat(str4));
+	}
+
+}
+
+	// End of segment: test\interpreter\DateTimeIdentifierTest.java
+
+
+
+
+
+	/**
+	 * origin: test\interpreter\InterpreterTest.java
+	 */
+
+package interpreter;
+
+import static org.junit.Assert.*;
+import logic.interpreter.Interpreter;
+
+import org.junit.Test;
+
+import util.Task;
+
+public class InterpreterTest {
+
+	@Test
+	public void testConvertTaskToAddCommand() {
+		String str = "add complete assignment by 1/12/2014 2359 #school";
+		Task task = new Task();
+		task = Interpreter.interpretAdd(str);
+		
+		assertEquals("add complete assignment by 01/12/2014 2359 #school", Interpreter.convertTaskToAddCommand(task));
+	}
+
+}
+
+	// End of segment: test\interpreter\InterpreterTest.java
 
 
 

@@ -3,10 +3,10 @@
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Add.java
+	 * origin: src\logic\commands\Add.java
 	 */
 
-package commands;
+package logic.commands;
 
 import java.time.DateTimeException;
 
@@ -80,14 +80,14 @@ public class Add extends UndoableCommand {
 	
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Add.java
+	// End of segment: src\logic\commands\Add.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Command.java
+	 * origin: src\logic\commands\Command.java
 	 */
 
 /**
@@ -95,7 +95,7 @@ public class Add extends UndoableCommand {
  * used in ET. Besides the abstract execute() method, it provides a few 
  * variations of setDisplayData() for more efficient configuring of DisplayData.
  */
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 
@@ -153,17 +153,17 @@ public abstract class Command {
 
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Command.java
+	// End of segment: src\logic\commands\Command.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Complete.java
+	 * origin: src\logic\commands\Complete.java
 	 */
 
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 
@@ -245,17 +245,17 @@ public class Complete extends UndoableCommand {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Complete.java
+	// End of segment: src\logic\commands\Complete.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Delete.java
+	 * origin: src\logic\commands\Delete.java
 	 */
 
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 
@@ -337,17 +337,17 @@ public class Delete extends UndoableCommand {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Delete.java
+	// End of segment: src\logic\commands\Delete.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Redo.java
+	 * origin: src\logic\commands\Redo.java
 	 */
 
-package commands;
+package logic.commands;
 
 import logic.History;
 import storage.Storage;
@@ -374,17 +374,17 @@ public class Redo extends Command {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Redo.java
+	// End of segment: src\logic\commands\Redo.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Show.java
+	 * origin: src\logic\commands\Show.java
 	 */
 
-package commands;
+package logic.commands;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -473,17 +473,17 @@ public class Show extends Command {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Show.java
+	// End of segment: src\logic\commands\Show.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Uncomplete.java
+	 * origin: src\logic\commands\Uncomplete.java
 	 */
 
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 
@@ -565,17 +565,17 @@ public class Uncomplete extends UndoableCommand {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Uncomplete.java
+	// End of segment: src\logic\commands\Uncomplete.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Undo.java
+	 * origin: src\logic\commands\Undo.java
 	 */
 
-package commands;
+package logic.commands;
 
 import logic.History;
 import storage.Storage;
@@ -604,14 +604,14 @@ public class Undo extends Command {
 
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Undo.java
+	// End of segment: src\logic\commands\Undo.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\UndoableCommand.java
+	 * origin: src\logic\commands\UndoableCommand.java
 	 */
 
 /**
@@ -619,7 +619,7 @@ public class Undo extends Command {
  * It also provides a getDescriptions() utility method to read descriptions of 
  * multiple Tasks at once. 
  */
-package commands;
+package logic.commands;
 
 import java.util.ArrayList;
 
@@ -647,19 +647,19 @@ public abstract class UndoableCommand extends Command{
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\UndoableCommand.java
+	// End of segment: src\logic\commands\UndoableCommand.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Update.java
+	 * origin: src\logic\commands\Update.java
 	 */
 
-package commands;
+package logic.commands;
 
-import interpreter.Interpreter;
+import logic.interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
 import util.Logging;
@@ -707,14 +707,14 @@ public class Update extends UndoableCommand {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\commands\Update.java
+	// End of segment: src\logic\commands\Update.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\Controller.java
+	 * origin: src\logic\Controller.java
 	 */
 
 /**
@@ -728,11 +728,11 @@ package logic;
 import java.io.IOException;
 import java.time.DateTimeException;
 
-import interpreter.Interpreter;
 import javafx.scene.input.KeyEvent;
-import commands.Command;
-import commands.UndoableCommand;
-import commands.Update;
+import logic.commands.Command;
+import logic.commands.UndoableCommand;
+import logic.commands.Update;
+import logic.interpreter.Interpreter;
 import storage.Storage;
 import util.DisplayData;
 import util.Logging;
@@ -851,14 +851,14 @@ public class Controller {
 
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\Controller.java
+	// End of segment: src\logic\Controller.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\History.java
+	 * origin: src\logic\History.java
 	 */
 
 /**
@@ -869,9 +869,9 @@ package logic;
 
 import java.util.Stack;
 
-import commands.Add;
-import commands.UndoableCommand;
-import commands.Update;
+import logic.commands.Add;
+import logic.commands.UndoableCommand;
+import logic.commands.Update;
 
 public class History {
 	private static History history;
@@ -939,14 +939,14 @@ public class History {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\logic\History.java
+	// End of segment: src\logic\History.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\DisplayData.java
+	 * origin: src\util\DisplayData.java
 	 */
 
 /**
@@ -1023,14 +1023,14 @@ public class DisplayData {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\DisplayData.java
+	// End of segment: src\util\DisplayData.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Logging.java
+	 * origin: src\util\Logging.java
 	 */
 
 /**
@@ -1076,14 +1076,14 @@ public class Logging {
 
 
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Logging.java
+	// End of segment: src\util\Logging.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Task.java
+	 * origin: src\util\Task.java
 	 */
 
 /**
@@ -1227,7 +1227,366 @@ public class Task {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\util\Task.java
+	// End of segment: src\util\Task.java
+
+
+
+
+
+	/**
+	 * origin: test\commands\AddTest.java
+	 */
+
+package commands;
+import static org.junit.Assert.*;
+import logic.commands.Add;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
+
+public class AddTest {
+	DisplayData displayData;
+	Storage storage;
+	Task task;
+	boolean isUpdating;
+	
+	Add add;
+	
+	@Before
+	public void setUp() throws Exception {
+		displayData = new DisplayData();
+		storage = Storage.getInstance();
+		task = new Task();
+		isUpdating = false;
+		add = new Add(displayData, storage, task, isUpdating);
+	}
+
+	@Test
+	public void testAdd() {
+		add.execute();
+		assertTrue(storage.getAllNotDoneTasks().contains(task));
+		add.undo();
+		assertTrue(!storage.getAllNotDoneTasks().contains(task));
+		add.redo();
+		assertTrue(storage.getAllNotDoneTasks().contains(task));
+	}
+	
+	@After
+	public void tearDown() throws Exception{
+		if (storage.getAllDoneTasks().contains(task)
+				|| storage.getAllNotDoneTasks().contains(task)){
+			storage.deleteTask(task);
+		}
+	}
+
+}
+
+	// End of segment: test\commands\AddTest.java
+
+
+
+
+
+	/**
+	 * origin: test\commands\CompleteTest.java
+	 */
+
+package commands;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import logic.commands.Complete;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
+
+public class CompleteTest {
+	DisplayData displayData;
+	Storage storage;
+	ArrayList<Task> tasks;
+
+	Complete complete;
+
+	@Before
+	public void setUp() throws Exception {
+		displayData = new DisplayData();
+		storage = Storage.getInstance();
+		tasks = new ArrayList<Task>();
+		tasks.add(new Task());
+		storage.addTask(tasks.get(0));
+
+		complete = new Complete(displayData, storage, tasks);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		if (storage.getAllDoneTasks().contains(tasks.get(0))
+				|| storage.getAllNotDoneTasks().contains(tasks.get(0))){
+			storage.deleteTask(tasks.get(0));
+		}
+	}
+
+	@Test
+	public void test() {
+		complete.execute();
+		assertTrue(storage.getAllDoneTasks().contains(tasks.get(0)));
+		complete.undo();
+		assertTrue(!storage.getAllDoneTasks().contains(tasks.get(0)));
+		complete.redo();
+		assertTrue(storage.getAllDoneTasks().contains(tasks.get(0)));
+	}
+
+}
+
+	// End of segment: test\commands\CompleteTest.java
+
+
+
+
+
+	/**
+	 * origin: test\commands\DeleteTest.java
+	 */
+
+package commands;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import logic.commands.Delete;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
+
+public class DeleteTest {
+	DisplayData displayData;
+	Storage storage;
+	ArrayList<Task> tasks;
+	
+	Delete delete;
+	@Before
+	public void setUp() throws Exception {
+		displayData = new DisplayData();
+		storage = Storage.getInstance();
+		tasks = new ArrayList<Task>();
+		tasks.add(new Task());
+		storage.addTask(tasks.get(0));
+		
+		delete = new Delete(displayData, storage, tasks);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		if (storage.getAllDoneTasks().contains(tasks.get(0))
+				|| storage.getAllNotDoneTasks().contains(tasks.get(0))){
+			storage.deleteTask(tasks.get(0));
+		}
+	}
+
+	@Test
+	public void test() {
+		delete.execute();
+		assertTrue(!storage.getAllNotDoneTasks().contains(tasks.get(0)));
+		delete.undo();
+		assertTrue(storage.getAllNotDoneTasks().contains(tasks.get(0)));
+		delete.redo();
+		assertTrue(!storage.getAllNotDoneTasks().contains(tasks.get(0)));
+	}
+
+}
+
+	// End of segment: test\commands\DeleteTest.java
+
+
+
+
+
+	/**
+	 * origin: test\commands\UncompleteTest.java
+	 */
+
+package commands;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import logic.commands.Uncomplete;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
+
+public class UncompleteTest {
+	DisplayData displayData;
+	Storage storage;
+	ArrayList<Task> tasks;
+
+	Uncomplete uncomplete;
+	@Before
+	public void setUp() throws Exception {
+		displayData = new DisplayData();
+		storage = Storage.getInstance();
+		tasks = new ArrayList<Task>();
+		tasks.add(new Task());
+		tasks.get(0).setDone(true);
+		storage.addTask(tasks.get(0));
+
+		uncomplete = new Uncomplete(displayData, storage, tasks);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		if (storage.getAllDoneTasks().contains(tasks.get(0))
+				|| storage.getAllNotDoneTasks().contains(tasks.get(0))){
+			storage.deleteTask(tasks.get(0));
+		}
+	}
+
+	@Test
+	public void test() {
+		uncomplete.execute();
+		assertTrue(storage.getAllNotDoneTasks().contains(tasks.get(0)));
+		uncomplete.undo();
+		assertTrue(!storage.getAllNotDoneTasks().contains(tasks.get(0)));
+		uncomplete.redo();
+		assertTrue(storage.getAllNotDoneTasks().contains(tasks.get(0)));
+	}
+
+}
+
+	// End of segment: test\commands\UncompleteTest.java
+
+
+
+
+
+	/**
+	 * origin: test\commands\UpdateTest.java
+	 */
+
+package commands;
+
+import static org.junit.Assert.*;
+import logic.commands.Update;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import storage.Storage;
+import util.DisplayData;
+import util.Task;
+
+public class UpdateTest {
+	DisplayData displayData;
+	Storage storage;
+	Task task;
+	
+	Update update;
+	
+	@Before
+	public void setUp() throws Exception {
+		displayData = new DisplayData();
+		storage = Storage.getInstance();
+		task = new Task();
+		storage.addTask(task);
+
+		update = new Update(displayData, storage, task);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		if (storage.getAllDoneTasks().contains(task)
+				|| storage.getAllNotDoneTasks().contains(task)){
+			storage.deleteTask(task);
+		}
+	}
+
+	@Test
+	public void test() {
+		update.execute();
+		assertTrue(!storage.getAllNotDoneTasks().contains(task));
+		update.undo();
+		assertTrue(storage.getAllNotDoneTasks().contains(task));
+		update.redo();
+		assertTrue(!storage.getAllNotDoneTasks().contains(task));
+	}
+
+}
+
+	// End of segment: test\commands\UpdateTest.java
+
+
+
+
+
+	/**
+	 * origin: test\logic\ControllerTest.java
+	 */
+
+/**
+ * This is a component test for the Logic component of ET.
+ * It simulates two user operations in sequence:
+ * 1. an "add" command is input by the user. 
+ * 		-- then verifies that the task with the correct description has been add.
+ * 2. an "undo" command is input by the user. 
+ * 		-- then verifies that the task has been removed.
+ */
+package logic;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import util.DisplayData;
+
+public class ControllerTest {
+	Controller controller;
+	DisplayData displayData;
+	String taskDescription = "testing task";
+	String undoInput = "undo";
+	
+	@Before
+	public void setUp() throws Exception {
+		controller = new Controller();
+		controller.loadAllTasks();
+	}
+
+	@Test
+	public void test() {
+		displayData = controller.handleEnter("add " + taskDescription);
+		assertTrue(displayData.getPrompt().equals("Task successfully added!"));
+		displayData = controller.handleEnter(undoInput);
+		assertTrue(displayData.getPrompt().equals("Undo: Add task \"" + taskDescription + "\""));
+	}
+
+}
+
+	// End of segment: test\logic\ControllerTest.java
 
 
 

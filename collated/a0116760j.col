@@ -3,7 +3,7 @@
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\ColorCodedRow.java
+	 * origin: src\gui\ColorCodedRow.java
 	 */
 
 package gui;
@@ -17,7 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
 /**
- * A customized <code>RowFactory</code> class that sets up
+ * A customized <code>RowFactory</code> that sets up
  * the color coding system for the <code>TableView</code>
  * according to urgency of tasks.  <p>
  * The styles of the color coded row is described in the CSS
@@ -62,14 +62,14 @@ public class ColorCodedRow<T> implements Callback<TableView<T>, TableRow<T>> {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\ColorCodedRow.java
+	// End of segment: src\gui\ColorCodedRow.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIController.java
+	 * origin: src\gui\GUIController.java
 	 */
 
 package gui;
@@ -284,14 +284,14 @@ public class GUIController implements Initializable{
 	
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIController.java
+	// End of segment: src\gui\GUIController.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIUtility.java
+	 * origin: src\gui\GUIUtility.java
 	 */
 
 package gui;
@@ -517,14 +517,14 @@ public class GUIUtility {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\GUIUtility.java
+	// End of segment: src\gui\GUIUtility.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\Main.java
+	 * origin: src\gui\Main.java
 	 */
 
 
@@ -593,14 +593,14 @@ public class Main extends Application {
 	}
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\Main.java
+	// End of segment: src\gui\Main.java
 
 
 
 
 
 	/**
-	 * origin: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\TableData.java
+	 * origin: src\gui\TableData.java
 	 */
 
 package gui;
@@ -797,7 +797,7 @@ public class TableData {
 
 }
 
-	// End of segment: D:\Academic\Year 2 - Sem 1\CS2103T\ET\src\gui\TableData.java
+	// End of segment: src\gui\TableData.java
 
 
 
